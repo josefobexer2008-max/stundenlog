@@ -1,0 +1,1016 @@
+<title>Maturaprojekt Stundenlog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --paper: #F5F6F1;
+    --sheet: #FFFFFF;
+    --ink: #1D2430;
+    --muted: #5E6776;
+    --rule: #DCE0E4;
+    --grid: rgba(40, 80, 160, 0.07);
+    --blue: #2447A8;
+    --blue-soft: #E4EAF8;
+    --marker: #F3D34A;
+    --marker-ink: #3A2F00;
+    --good: #2F7D4F;
+    --warn: #B5611B;
+    --danger: #B3261E;
+    --cat-1: #2447A8; --cat-2: #3E8E7E; --cat-3: #C0752B;
+    --cat-4: #8A4FB0; --cat-5: #C2476B; --cat-6: #6B7A8F;
+    --cat-7: #7A8F2A; --cat-8: #1F7FA8; --cat-9: #9C6A3C;
+    --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #12161D; --sheet: #1A1F28; --ink: #E6E9EE; --muted: #9AA3B2;
+      --rule: #2C3340; --grid: rgba(140, 170, 255, 0.05);
+      --blue: #8FA8F0; --blue-soft: #232D45; --marker: #E8C93A; --marker-ink: #231C00;
+      --good: #6CC291; --warn: #E0955A; --danger: #F08A82;
+      --cat-1: #8FA8F0; --cat-2: #6CC0AE; --cat-3: #E3A15F;
+      --cat-4: #BD8FE0; --cat-5: #EC86A2; --cat-6: #98A6B8;
+      --cat-7: #B9CC6A; --cat-8: #6DC0E6; --cat-9: #D6A677;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #12161D; --sheet: #1A1F28; --ink: #E6E9EE; --muted: #9AA3B2;
+    --rule: #2C3340; --grid: rgba(140, 170, 255, 0.05);
+    --blue: #8FA8F0; --blue-soft: #232D45; --marker: #E8C93A; --marker-ink: #231C00;
+    --good: #6CC291; --warn: #E0955A; --danger: #F08A82;
+    --cat-1: #8FA8F0; --cat-2: #6CC0AE; --cat-3: #E3A15F;
+    --cat-4: #BD8FE0; --cat-5: #EC86A2; --cat-6: #98A6B8;
+      --cat-7: #B9CC6A; --cat-8: #6DC0E6; --cat-9: #D6A677;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 22px 22px;
+    color: var(--ink);
+    font: 15px/1.5 var(--f-body);
+    padding-inline: 16px;
+    padding-block: 20px 48px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
+  h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; line-height: 1.1; }
+  h2 { font-size: 1.15rem; font-weight: 700; }
+  .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+  .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+
+  header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  header.top .sub { color: var(--muted); margin-top: 4px; }
+  .sync { font-size: 0.8rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+  .sync::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .sync.on::before { background: var(--good); }
+
+  .sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; }
+  .grid-main { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: start; }
+  .col { display: grid; gap: 20px; min-width: 0; }
+  @media (max-width: 860px) { .grid-main { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Stoppuhr */
+  .timer { display: grid; gap: 14px; }
+  .timer.running { border-color: var(--marker); box-shadow: 0 0 0 3px color-mix(in srgb, var(--marker) 35%, transparent); }
+  .clock { font-family: var(--f-mono); font-size: clamp(2.4rem, 9vw, 3.6rem); font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .timer.running .clock { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--marker) 70%, transparent) 55%); display: inline-block; padding-inline: 4px; }
+  .timer-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+
+  /* Formulare */
+  .fields { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .fields .wide { grid-column: 1 / -1; }
+  label.f { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+  input, select, textarea {
+    font: inherit; font-size: 0.95rem; color: var(--ink); background: var(--paper);
+    border: 1px solid var(--rule); border-radius: 4px; padding: 8px 10px; width: 100%; min-width: 0;
+  }
+  textarea { resize: vertical; min-height: 64px; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 2px solid var(--blue); outline-offset: 1px;
+  }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button {
+    font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-radius: 4px;
+    padding: 8px 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink);
+  }
+  button:hover { border-color: var(--muted); }
+  button.primary { background: var(--blue); border-color: var(--blue); color: var(--sheet); }
+  button.primary:hover { filter: brightness(1.08); }
+  button.go { background: var(--marker); border-color: var(--marker); color: var(--marker-ink); font-size: 1rem; padding: 10px 20px; }
+  button.ghost { background: transparent; border-color: transparent; color: var(--muted); padding: 6px 8px; }
+  button.ghost:hover { color: var(--ink); }
+  button.danger { color: var(--danger); }
+  .hint { font-size: 0.8rem; color: var(--muted); }
+  .toast { font-size: 0.85rem; color: var(--good); min-height: 1.3em; }
+  .toast.err { color: var(--danger); }
+
+  /* Fortschritt */
+  .progress-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .big { font-family: var(--f-display); font-size: 2.6rem; font-weight: 700; line-height: 1; }
+  .big small { font-family: var(--f-body); font-size: 0.95rem; font-weight: 500; color: var(--muted); }
+  .bar { height: 12px; background: var(--blue-soft); border-radius: 2px; overflow: hidden; margin-top: 12px; position: relative; }
+  .bar > span { display: block; height: 100%; background: var(--blue); }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+  .facts div { display: grid; gap: 2px; }
+  .facts .v { font-family: var(--f-mono); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+
+  .rows { display: grid; gap: 10px; margin-top: 12px; }
+  .hrow { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 4.2rem; gap: 10px; align-items: center; font-size: 0.88rem; }
+  .hrow .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hrow .track { height: 8px; background: var(--blue-soft); border-radius: 2px; overflow: hidden; }
+  .hrow .track span { display: block; height: 100%; }
+  .hrow .val { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+  svg.chart { width: 100%; height: auto; display: block; margin-top: 8px; }
+  svg.chart text { fill: var(--muted); font-family: var(--f-mono); font-size: 10px; }
+  svg.chart .gridline { stroke: var(--rule); stroke-width: 1; }
+  svg.chart .b { fill: var(--blue); }
+  svg.chart .b.now { fill: var(--marker); }
+  svg.chart .vlabel { fill: var(--ink); }
+
+  /* Protokoll */
+  .log-head { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filters select { width: auto; font-size: 0.85rem; padding: 6px 8px; }
+  .month { margin-top: 18px; }
+  .month-head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
+  .month-head h3 { font-size: 1rem; }
+  .entry { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr) auto; gap: 4px 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+  .entry .d { font-family: var(--f-mono); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+  .entry .d .t { color: var(--muted); font-size: 0.78rem; display: block; }
+  .entry .body { min-width: 0; }
+  .entry .note { overflow-wrap: anywhere; }
+  .entry .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; font-size: 0.78rem; color: var(--muted); align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; background: var(--blue-soft); color: var(--ink); }
+  .chip i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .entry .dur { font-family: var(--f-mono); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+  .entry .acts { display: flex; gap: 2px; justify-content: flex-end; margin-top: 2px; }
+  .entry .acts button { font-size: 0.78rem; padding: 2px 6px; }
+  .entry.example { opacity: 0.72; }
+  .banner { background: var(--blue-soft); border-radius: 4px; padding: 10px 12px; font-size: 0.88rem; margin-top: 12px; }
+  .empty { color: var(--muted); padding: 16px 0; }
+
+  details.settings summary { cursor: pointer; font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; }
+  details.settings[open] summary { margin-bottom: 14px; }
+  @media (prefers-reduced-motion: no-preference) { .bar > span, .hrow .track span { transition: width .4s ease; } }
+  .whoami { display: grid; justify-items: end; gap: 6px; }
+  label.me { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; }
+  label.me select { width: auto; background: var(--sheet); font-weight: 600; }
+  label.me.unset select { border-color: var(--marker); box-shadow: 0 0 0 3px color-mix(in srgb, var(--marker) 40%, transparent); }
+  h2 .for { font-family: var(--f-body); font-weight: 500; font-size: 0.9rem; color: var(--muted); }
+  .hrow.person { grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 7.5rem; }
+  .hrow.person.me .name { font-weight: 600; }
+  .hrow.person .val small { color: var(--muted); }
+  @media (max-width: 520px) {
+    .whoami { justify-items: start; }
+    .hrow.person { grid-template-columns: minmax(0, 5.5rem) minmax(0, 1fr) 6.8rem; }
+    .entry { grid-template-columns: minmax(0, 1fr) auto; }
+    .entry .d { grid-column: 1 / -1; display: flex; gap: 8px; }
+    .entry .d .t { display: inline; }
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hrow { grid-template-columns: minmax(0, 6.5rem) minmax(0, 1fr) 3.8rem; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="label">Arbeitsprotokoll</div>
+      <h1 id="projTitle">Maturaprojekt</h1>
+      <div class="sub" id="projSub"></div>
+    </div>
+    <div class="whoami">
+      <label class="me" id="meBox">Ich bin
+        <select id="meSel"></select>
+      </label>
+      <span class="sync" id="sync">Lade …</span>
+    </div>
+  </header>
+
+  <div class="grid-main">
+    <div class="col">
+      <!-- Stoppuhr -->
+      <section class="sheet timer" id="timerBox" aria-labelledby="timerH">
+        <div class="timer-row">
+          <h2 id="timerH">Stoppuhr <span class="for" id="timerFor"></span></h2>
+          <span class="hint" id="timerSince">Läuft nicht</span>
+        </div>
+        <div class="clock" id="clock" aria-live="off">0:00:00</div>
+        <div class="fields">
+          <label class="f wide">Kategorie
+            <select id="tCat"></select>
+          </label>
+          <label class="f wide">Woran arbeitest du?
+            <input id="tNote" type="text" placeholder="z. B. Schnitt A-A zeichnen">
+          </label>
+        </div>
+        <div class="btns">
+          <button class="go" id="tStart" type="button">Start</button>
+          <button class="primary" id="tStop" type="button" hidden>Stopp &amp; eintragen</button>
+          <button class="ghost danger" id="tDiscard" type="button" hidden>Verwerfen</button>
+        </div>
+      </section>
+
+      <!-- Manuell -->
+      <section class="sheet" aria-labelledby="formH">
+        <form id="entryForm" novalidate>
+          <div class="timer-row" style="margin-bottom:14px">
+            <h2 id="formH">Stunden nachtragen</h2>
+            <button class="ghost" type="button" id="cancelEdit" hidden>Bearbeiten abbrechen</button>
+          </div>
+          <div class="fields">
+            <label class="f">Datum <input id="fDate" type="date" required></label>
+            <label class="f">Von <input id="fStart" type="time"></label>
+            <label class="f">Bis <input id="fEnd" type="time"></label>
+            <label class="f">Dauer (h:mm) <input id="fDur" type="text" inputmode="numeric" placeholder="1:30"></label>
+            <label class="f">Wer <select id="fPerson"></select></label>
+            <label class="f">Kategorie <select id="fCat"></select></label>
+            <label class="f wide">Tätigkeit <textarea id="fNote" placeholder="Was wurde gemacht? Das steht später so im Protokoll."></textarea></label>
+          </div>
+          <div class="btns" style="margin-top:14px">
+            <button class="primary" type="submit" id="saveBtn">Eintragen</button>
+            <span class="hint">Von/Bis ausfüllen – oder nur die Dauer.</span>
+          </div>
+          <div class="toast" id="formMsg" role="status"></div>
+        </form>
+      </section>
+
+      <!-- Protokoll -->
+      <section class="sheet" aria-labelledby="logH">
+        <div class="log-head">
+          <h2 id="logH">Protokoll</h2>
+          <div class="filters">
+            <select id="filterPerson" aria-label="Nach Person filtern"></select>
+            <select id="filterCat" aria-label="Nach Kategorie filtern"></select>
+          </div>
+        </div>
+        <div id="exampleBanner" class="banner" hidden>Das sind <strong>Beispieleinträge</strong>, damit du siehst, wie es aussieht. Sie verschwinden, sobald du den ersten eigenen Eintrag machst.</div>
+        <div id="log"></div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="sheet" aria-labelledby="progH">
+        <div class="progress-head">
+          <h2 id="progH">Fortschritt</h2>
+          <span class="label" id="progPct"></span>
+        </div>
+        <div style="margin-top:10px" class="big"><span id="totalH" class="num">0</span> <small id="goalTxt">von 180 h</small></div>
+        <div class="bar" role="progressbar" aria-labelledby="progH" id="progBar" aria-valuemin="0" aria-valuemax="100"><span id="progFill" style="width:0%"></span></div>
+        <div class="facts">
+          <div><span class="label">Diese Woche</span><span class="v" id="fWeek">0:00</span></div>
+          <div><span class="label">Einträge</span><span class="v" id="fCount">0</span></div>
+          <div><span class="label">Ø pro Woche</span><span class="v" id="fAvg">0:00</span></div>
+        </div>
+        <p class="hint" id="paceTxt" style="margin-bottom:0"></p>
+      </section>
+
+      <section class="sheet" aria-labelledby="weekH">
+        <h2 id="weekH">Team · letzte 10 Kalenderwochen</h2>
+        <div id="weekChart"></div>
+      </section>
+
+      <section class="sheet" aria-labelledby="catH">
+        <h2 id="catH">Team · nach Kategorie</h2>
+        <div class="rows" id="catRows"></div>
+      </section>
+
+      <section class="sheet" aria-labelledby="personH" id="personBox">
+        <h2 id="personH">Team – Stunden pro Person</h2>
+        <p class="hint" id="personHint" hidden>Tragt unter „Projekt einrichten“ eure Namen ein – dann kann jede Person oben bei „Ich bin“ sich selbst auswählen.</p>
+        <div class="rows" id="personRows"></div>
+      </section>
+
+      <section class="sheet" aria-labelledby="expH">
+        <h2 id="expH">Export &amp; Sicherung</h2>
+        <p class="hint">Die Excel-Datei enthält eine Übersicht, alle Einträge und ein eigenes Blatt pro Person – ideal als Anhang für das Arbeitsprotokoll.</p>
+        <div class="btns">
+          <button type="button" class="primary" id="expXlsx">Als Excel-Tabelle exportieren</button>
+          <button type="button" id="expJson">Sicherung (JSON)</button>
+          <label class="f" style="display:inline-block">
+            <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Sicherung importieren</span>
+            <input type="file" id="impJson" accept="application/json,.json" hidden>
+            <button type="button" id="impBtn">Sicherung importieren</button>
+          </label>
+        </div>
+        <div class="toast" id="expMsg" role="status"></div>
+      </section>
+
+      <section class="sheet" aria-labelledby="teamH" id="teamBox">
+        <h2 id="teamH">Team verbinden</h2>
+        <div id="teamOff">
+          <p class="hint">Damit alle vier gemeinsam eintragen, verbindet die App mit einer Google-Tabelle. Die Anleitung steht in der README. Wer einen Einladungslink bekommen hat, muss hier nichts tun.</p>
+          <form id="teamForm" class="fields" novalidate>
+            <label class="f wide">Web-App-Adresse der Google-Tabelle <input id="gUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec"></label>
+            <label class="f wide">Team-Code <input id="gKey" type="text" autocomplete="off"></label>
+            <div class="btns wide"><button class="primary" type="submit" id="gConnect">Verbinden</button></div>
+          </form>
+        </div>
+        <div id="teamOn" hidden>
+          <p class="hint" style="margin-top:8px">Verbunden mit eurer Google-Tabelle. Schick diesen Einladungslink an dein Team – wer ihn öffnet, ist sofort verbunden:</p>
+          <input id="gInvite" type="text" readonly aria-label="Einladungslink">
+          <div class="btns" style="margin-top:8px">
+            <button type="button" id="gCopy">Link kopieren</button>
+            <button type="button" id="gUpload" hidden></button>
+            <button type="button" class="ghost danger" id="gDisconnect">Trennen</button>
+          </div>
+        </div>
+        <div class="toast" id="teamMsg" role="status"></div>
+      </section>
+
+      <section class="sheet">
+        <details class="settings" id="settingsBox">
+          <summary>Projekt einrichten</summary>
+          <form id="settingsForm" class="fields" novalidate>
+            <label class="f wide">Projekttitel <input id="sTitle" type="text" placeholder="z. B. Maturaprojekt Doppelhaushälfte"></label>
+            <label class="f">Zielstunden pro Person <input id="sGoal" type="number" min="1" step="1"></label>
+            <label class="f">Abgabetermin <input id="sDue" type="date"></label>
+            <label class="f wide">Teammitglieder (mit Komma getrennt) <input id="sPeople" type="text" placeholder="Anna, Ben, Lea, Tom"></label>
+            <p class="hint wide" style="margin:0">Wenn ihr einen Namen ändert, werden die bisherigen Einträge dieser Person automatisch mit umbenannt.</p>
+            <label class="f wide">Kategorien (mit Komma getrennt) <input id="sCats" type="text"></label>
+            <div class="btns wide"><button class="primary" type="submit">Speichern</button><span class="toast" id="setMsg" role="status"></span></div>
+          </form>
+        </details>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const DEFAULT_SETTINGS = {
+    title: "Maturaprojekt",
+    goal: 125,
+    due: "",
+    people: ["Person 1", "Person 2", "Person 3", "Person 4"],
+    cats: ["Recherche", "Entwurf & Planung", "CAD-Pläne", "Statik & Berechnungen", "Kosten & Ausschreibung", "Dokumentation schreiben", "Betreuungsgespräch", "Teamsitzung", "Präsentation"],
+  };
+  const LS_KEY = "matura-stundenlog-v1";
+  const LS_TIMER = "matura-stundenlog-timers";
+  const LS_ME = "matura-stundenlog-me";
+  const me = () => { const m = lsGet(LS_ME); return state.settings.people.includes(m) ? m : ""; };
+
+  // ---------- Hilfsfunktionen ----------
+  const pad = (n) => String(n).padStart(2, "0");
+  const isoDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const hhmm = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const fmtMin = (m) => `${Math.floor(m / 60)}:${pad(Math.round(m % 60))}`;
+  const fmtH = (m) => (m / 60).toLocaleString("de-AT", { maximumFractionDigits: 1 });
+  const parseDate = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+  const toMin = (t) => { if (!t) return null; const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const parseDur = (s) => {
+    s = (s || "").trim().replace(",", ".");
+    if (!s) return null;
+    if (/^\d+:\d{1,2}$/.test(s)) { const [h, m] = s.split(":").map(Number); return h * 60 + m; }
+    if (/^\d+(\.\d+)?$/.test(s)) return Math.round(parseFloat(s) * 60);
+    return NaN;
+  };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  function isoWeek(d) {
+    const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const day = t.getUTCDay() || 7;
+    t.setUTCDate(t.getUTCDate() + 4 - day);
+    const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+    return { year: t.getUTCFullYear(), week: Math.ceil(((t - y0) / 864e5 + 1) / 7) };
+  }
+  function mondayOf(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
+  const lsGet = (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+  const lsSet = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+  function flash(el, msg, err) { el.textContent = msg; el.classList.toggle("err", !!err); clearTimeout(el._t); el._t = setTimeout(() => (el.textContent = ""), 4000); }
+
+  // ---------- Speicher: geteilte Datenbank im Artifact, sonst Browser ----------
+  let state = { entries: [], settings: { ...DEFAULT_SETTINGS } };
+  let store = null;
+
+  function localStore() {
+    const load = () => { const d = lsGet(LS_KEY) || {}; state.entries = d.entries || []; state.settings = { ...DEFAULT_SETTINGS, ...(d.settings || {}) }; };
+    const save = () => lsSet(LS_KEY, { entries: state.entries, settings: state.settings });
+    return {
+      mode: "local",
+      start(cb) { load(); cb(); },
+      async add(e) { state.entries.push(e); save(); render(); },
+      async update(e) { state.entries = state.entries.map((x) => (x.id === e.id ? e : x)); save(); render(); },
+      async remove(id) { state.entries = state.entries.filter((x) => x.id !== id); save(); render(); },
+      async saveSettings(s) { state.settings = s; save(); render(); },
+    };
+  }
+
+  function dbStore(db) {
+    const col = db.collection("entries");
+    const setDoc = db.doc("config/project");
+    const strip = ({ id, ...rest }) => rest;
+    return {
+      mode: "db",
+      start(cb) {
+        col.onSnapshot((snap) => { state.entries = snap.docs.map((d) => ({ ...d.data(), id: d.id })); cb(); },
+          () => { $("sync").textContent = "Verbindung getrennt – neu laden"; $("sync").classList.remove("on"); });
+        setDoc.onSnapshot((snap) => { state.settings = { ...DEFAULT_SETTINGS, ...(snap.exists ? snap.data() : {}) }; cb(); }, () => {});
+      },
+      add: (e) => col.doc(e.id).set(strip(e)),
+      update: (e) => col.doc(e.id).set(strip(e)),
+      remove: (id) => col.doc(id).delete(),
+      saveSettings: (s) => setDoc.set(s),
+    };
+  }
+
+  function setSync(on, text) { const s = $("sync"); s.textContent = text; s.classList.toggle("on", on); }
+
+  // Google-Tabelle über ein Apps-Script-Web-App (siehe google-apps-script/Code.gs)
+  const LS_SHEET = "matura-stundenlog-sheet";
+  async function sheetCall(cfg, body) {
+    const res = body
+      ? await fetch(cfg.url, { method: "POST", body: JSON.stringify({ ...body, key: cfg.key }) })
+      : await fetch(`${cfg.url}?action=list&key=${encodeURIComponent(cfg.key)}`);
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || "Fehler");
+    return d;
+  }
+  function sheetStore(cfg) {
+    let pending = 0, seeded = false, cb = () => {};
+    async function refresh() {
+      try {
+        const d = await sheetCall(cfg);
+        if (pending === 0) state.entries = d.entries;
+        if (d.settings) state.settings = { ...DEFAULT_SETTINGS, ...d.settings };
+        else if (!seeded) { seeded = true; sheetCall(cfg, { action: "settings", settings: state.settings }).catch(() => {}); }
+        setSync(true, "Live mit der Team-Tabelle verbunden");
+        cb();
+      } catch (err) {
+        setSync(false, `Keine Verbindung zur Tabelle (${err.message}) – versuche es gleich wieder`);
+      }
+    }
+    async function write(body, apply, revert) {
+      apply(); render(); pending++;
+      try { await sheetCall(cfg, body); }
+      catch (err) { revert(); render(); throw err; }
+      finally { pending--; }
+      if (pending === 0) refresh();
+    }
+    return {
+      mode: "sheet",
+      refresh,
+      start(fn) {
+        cb = fn; refresh();
+        setInterval(() => { if (document.visibilityState === "visible" && pending === 0) refresh(); }, 30000);
+        document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
+      },
+      add(e) { return write({ action: "add", entry: e }, () => state.entries.push(e), () => (state.entries = state.entries.filter((x) => x.id !== e.id))); },
+      update(e) {
+        const before = state.entries;
+        return write({ action: "update", entry: e }, () => (state.entries = before.map((x) => (x.id === e.id ? e : x))), () => (state.entries = before));
+      },
+      remove(id) {
+        const before = state.entries;
+        return write({ action: "remove", id }, () => (state.entries = before.filter((x) => x.id !== id)), () => (state.entries = before));
+      },
+      saveSettings(s) {
+        const before = state.settings;
+        return write({ action: "settings", settings: s }, () => (state.settings = s), () => (state.settings = before));
+      },
+    };
+  }
+
+  function readInvite() {
+    try {
+      const q = new URLSearchParams(location.search);
+      if (q.get("sheet") && q.get("key")) {
+        lsSet(LS_SHEET, { url: q.get("sheet"), key: q.get("key") });
+        history.replaceState(null, "", location.pathname + location.hash);
+      }
+    } catch {}
+  }
+
+  async function initStore() {
+    readInvite();
+    const cfg = lsGet(LS_SHEET);
+    if (cfg && cfg.url && cfg.key) {
+      store = sheetStore(cfg);
+      setSync(false, "Verbinde mit der Team-Tabelle …");
+      renderTeam(cfg);
+      store.start(render);
+      return;
+    }
+    let db = null;
+    if (window.claude && typeof window.claude.use === "function") {
+      try { db = await window.claude.use("db"); } catch { db = null; }
+    }
+    store = db ? dbStore(db) : localStore();
+    setSync(!!db, db ? "Gespeichert & mit dem Team geteilt" : "Nur in diesem Browser gespeichert");
+    renderTeam(null);
+    store.start(render);
+  }
+
+  // ---------- Team verbinden ----------
+  function inviteLink(cfg) {
+    return `${location.origin}${location.pathname}?sheet=${encodeURIComponent(cfg.url)}&key=${encodeURIComponent(cfg.key)}`;
+  }
+  function renderTeam(cfg) {
+    $("teamOff").hidden = !!cfg; $("teamOn").hidden = !cfg;
+    if (!cfg) return;
+    $("gInvite").value = inviteLink(cfg);
+    const local = (lsGet(LS_KEY) || {}).entries || [];
+    $("gUpload").hidden = !local.length;
+    $("gUpload").textContent = `${local.length} Einträge aus diesem Browser in die Tabelle übertragen`;
+  }
+  $("teamForm").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const cfg = { url: $("gUrl").value.trim(), key: $("gKey").value.trim() };
+    if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(cfg.url)) return flash($("teamMsg"), "Die Adresse muss mit https://script.google.com/ beginnen und auf /exec enden.", true);
+    if (!cfg.key) return flash($("teamMsg"), "Bitte den Team-Code eingeben, der im Skript steht.", true);
+    $("gConnect").disabled = true;
+    try {
+      await sheetCall(cfg);
+      lsSet(LS_SHEET, cfg);
+      location.reload();
+    } catch (err) {
+      flash($("teamMsg"), `Verbindung fehlgeschlagen: ${err.message === "Failed to fetch" ? "Adresse nicht erreichbar – ist die Web-App für „Jeder“ freigegeben?" : err.message}`, true);
+    } finally { $("gConnect").disabled = false; }
+  });
+  $("gCopy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText($("gInvite").value); flash($("teamMsg"), "Link kopiert."); }
+    catch { $("gInvite").select(); flash($("teamMsg"), "Link markiert – jetzt mit Strg+C / Kopieren kopieren."); }
+  });
+  $("gUpload").addEventListener("click", async () => {
+    const local = (lsGet(LS_KEY) || {}).entries || [];
+    const have = new Set(state.entries.map((e) => e.id));
+    let n = 0;
+    try {
+      for (const e of local) if (!have.has(e.id)) { await store.add(e); n++; }
+      lsSet(LS_KEY, { ...(lsGet(LS_KEY) || {}), entries: [] });
+      $("gUpload").hidden = true;
+      flash($("teamMsg"), `${n} Einträge übertragen.`);
+    } catch { flash($("teamMsg"), `Übertragung abgebrochen nach ${n} Einträgen – bitte nochmal versuchen.`, true); }
+  });
+  $("gDisconnect").addEventListener("click", (ev) => {
+    const b = ev.currentTarget;
+    if (!b.dataset.confirm) { b.dataset.confirm = "1"; b.textContent = "Wirklich trennen? (Daten bleiben in der Tabelle)"; setTimeout(() => { delete b.dataset.confirm; b.textContent = "Trennen"; }, 5000); return; }
+    lsSet(LS_SHEET, null); location.reload();
+  });
+
+  // ---------- Beispieldaten (nur Anzeige, nie gespeichert) ----------
+  function exampleEntries() {
+    const today = new Date();
+    const d = (off) => { const x = new Date(today); x.setDate(x.getDate() - off); return isoDate(x); };
+    const ps = state.settings.people, p = (i) => ps[i % ps.length] || "Ich";
+    const c = state.settings.cats;
+    return [
+      { id: "ex1", date: d(1), start: "15:00", end: "17:30", minutes: 150, person: p(0), category: c[0], note: "Bebauungsplan und OIB-Richtlinien für das Grundstück gesichtet", example: true },
+      { id: "ex2", date: d(3), start: "13:15", end: "14:00", minutes: 45, person: p(1), category: c[6] || c[0], note: "Besprechung mit dem Betreuer: Raumprogramm abgestimmt", example: true },
+      { id: "ex3", date: d(6), start: "09:00", end: "12:00", minutes: 180, person: p(2), category: c[1] || c[0], note: "Grundriss-Varianten Erdgeschoss skizziert", example: true },
+      { id: "ex4", date: d(10), start: "16:00", end: "18:00", minutes: 120, person: p(3), category: c[2] || c[0], note: "Einreichplan Obergeschoss im CAD gezeichnet", example: true },
+    ];
+  }
+
+  // ---------- Rendering ----------
+  const catColor = (cat) => { const i = state.settings.cats.indexOf(cat); return `var(--cat-${(i < 0 ? 5 : i % 9) + 1})`; };
+  function fillSelect(el, items, { all, keep } = {}) {
+    const prev = el.value;
+    el.innerHTML = (all ? `<option value="">${esc(all)}</option>` : "") + items.map((x) => `<option>${esc(x)}</option>`).join("");
+    if (keep && prev && [...el.options].some((o) => o.value === prev)) el.value = prev;
+  }
+
+  function render() {
+    const s = state.settings;
+    const real = state.entries.slice().sort((a, b) => (b.date + (b.start || "")).localeCompare(a.date + (a.start || "")));
+    const showExamples = real.length === 0;
+    const list = showExamples ? exampleEntries() : real;
+
+    $("projTitle").textContent = s.title || "Maturaprojekt";
+    document.title = (s.title ? s.title + " · " : "") + "Stundenlog";
+    const due = s.due ? parseDate(s.due) : null;
+    const daysLeft = due ? Math.ceil((due - new Date(new Date().toDateString())) / 864e5) : null;
+    $("projSub").textContent = [s.people.length > 1 ? `Team: ${s.people.join(", ")}` : "", due ? `Abgabe ${due.toLocaleDateString("de-AT")} · ${daysLeft >= 0 ? `noch ${daysLeft} Tage` : "Termin vorbei"}` : ""].filter(Boolean).join("  ·  ") || "Jede Stunde zählt – hier landet sie.";
+
+    [["fPerson", s.people], ["tCat", s.cats], ["fCat", s.cats]].forEach(([id, items]) => fillSelect($(id), items, { keep: true }));
+    const my = me();
+    $("meSel").innerHTML = `<option value="">– bitte wählen –</option>` + s.people.map((x) => `<option${x === my ? " selected" : ""}>${esc(x)}</option>`).join("");
+    $("meBox").classList.toggle("unset", !my);
+    if (!editingId && my && $("fPerson").value !== my && !$("fPerson").dataset.touched) $("fPerson").value = my;
+    $("timerFor").textContent = my ? `· ${my}` : "";
+    $("personHint").hidden = !s.people.every((x) => /^Person \d+$/.test(x));
+    fillSelect($("filterPerson"), s.people, { all: "Alle Personen", keep: true });
+    fillSelect($("filterCat"), s.cats, { all: "Alle Kategorien", keep: true });
+    $("filterPerson").hidden = s.people.length < 2;
+
+    // Kennzahlen: persönlich, wenn "Ich bin" gewählt ist, sonst fürs ganze Team
+    const mine = my ? list.filter((e) => e.person === my) : list;
+    $("progH").textContent = my ? `Mein Fortschritt` : "Team-Fortschritt";
+    const total = mine.reduce((a, e) => a + e.minutes, 0);
+    const goalH = (Number(s.goal) || 0) * (my ? 1 : s.people.length);
+    const goalMin = goalH * 60;
+    const pct = goalMin ? Math.min(100, (total / goalMin) * 100) : 0;
+    $("totalH").textContent = fmtH(total);
+    $("goalTxt").textContent = goalMin ? `von ${goalH} h` : "Stunden";
+    $("progFill").style.width = pct.toFixed(1) + "%";
+    $("progBar").setAttribute("aria-valuenow", pct.toFixed(0));
+    $("progPct").textContent = goalMin ? `${pct.toFixed(0)} %` : "";
+    const mon = mondayOf(new Date());
+    const weekMin = mine.filter((e) => parseDate(e.date) >= mon).reduce((a, e) => a + e.minutes, 0);
+    $("fWeek").textContent = fmtMin(weekMin);
+    $("fCount").textContent = mine.length;
+    let avg = 0;
+    if (mine.length) {
+      const first = mine.reduce((m, e) => (e.date < m ? e.date : m), mine[0].date);
+      const weeks = Math.max(1, Math.ceil((new Date() - mondayOf(parseDate(first))) / (7 * 864e5)));
+      avg = total / weeks;
+    }
+    $("fAvg").textContent = fmtMin(avg);
+    let pace = "";
+    if (goalMin && total >= goalMin) pace = "Ziel erreicht – stark!";
+    else if (goalMin && daysLeft > 0) {
+      const perWeek = (goalMin - total) / (daysLeft / 7);
+      pace = `Für das Ziel ${my ? "brauchst du" : "braucht ihr"} noch ca. ${fmtMin(perWeek)} h pro Woche bis zur Abgabe.`;
+    } else if (goalMin) pace = `Noch ${fmtH(goalMin - total)} h bis zum Ziel. Trag unter „Projekt einrichten“ den Abgabetermin ein, dann siehst du dein Wochenpensum.`;
+    $("paceTxt").textContent = pace;
+
+    renderWeeks(list);
+    renderRows($("catRows"), s.cats.map((c) => [c, sum(list, "category", c), catColor(c)]).concat(extra(list, "category", s.cats)));
+    renderPeople(list, my);
+    renderLog(list, showExamples);
+  }
+  function renderPeople(list, my) {
+    const s = state.settings, goal = Number(s.goal) || 0;
+    const rows = s.people.map((p) => [p, sum(list, "person", p)]).concat(extra(list, "person", s.people));
+    const scale = Math.max(goal * 60, 1, ...rows.map((r) => r[1]));
+    const teamMin = rows.reduce((a, r) => a + r[1], 0);
+    $("personRows").innerHTML = rows.map(([name, m], i) => {
+      const pct = goal ? Math.round((m / (goal * 60)) * 100) : null;
+      const col = `var(--cat-${(i % 6) + 1})`;
+      return `<div class="hrow person${name === my ? " me" : ""}"><span class="name" title="${esc(name)}">${esc(name)}${name === my ? " (du)" : ""}</span><span class="track"><span style="width:${Math.min(100, (m / scale) * 100)}%;background:${col}"></span></span><span class="val">${fmtH(m)} h${pct != null ? ` <small>${pct} %</small>` : ""}</span></div>`;
+    }).join("") + `<div class="hrow person" style="border-top:1px solid var(--rule);padding-top:8px"><span class="name"><strong>Team gesamt</strong></span><span></span><span class="val"><strong>${fmtH(teamMin)} h</strong>${goal ? ` <small>von ${goal * s.people.length}</small>` : ""}</span></div>`;
+  }
+  const sum = (list, key, v) => list.filter((e) => e[key] === v).reduce((a, e) => a + e.minutes, 0);
+  function extra(list, key, known) {
+    const other = [...new Set(list.map((e) => e[key]).filter((v) => !known.includes(v)))];
+    return other.map((v) => [v || "—", sum(list, key, v), "var(--cat-6)"]);
+  }
+  function renderRows(el, rows) {
+    const max = Math.max(1, ...rows.map((r) => r[1]));
+    el.innerHTML = rows.map(([name, m, col]) =>
+      `<div class="hrow"><span class="name" title="${esc(name)}">${esc(name)}</span><span class="track"><span style="width:${(m / max) * 100}%;background:${col}"></span></span><span class="val">${fmtMin(m)}</span></div>`).join("");
+  }
+
+  function renderWeeks(list) {
+    const N = 10, W = 340, H = 150, padL = 26, padB = 20, padT = 14;
+    const mon = mondayOf(new Date());
+    const weeks = [];
+    for (let i = N - 1; i >= 0; i--) { const start = new Date(mon); start.setDate(start.getDate() - i * 7); weeks.push({ start, min: 0 }); }
+    list.forEach((e) => {
+      const d = parseDate(e.date);
+      const w = weeks.find((w) => d >= w.start && d < new Date(w.start.getFullYear(), w.start.getMonth(), w.start.getDate() + 7));
+      if (w) w.min += e.minutes;
+    });
+    const maxH = Math.max(2, Math.ceil(Math.max(...weeks.map((w) => w.min)) / 60 / 2) * 2);
+    const y = (h) => padT + (H - padT - padB) * (1 - h / maxH);
+    const bw = (W - padL) / N;
+    let g = "";
+    [0, maxH / 2, maxH].forEach((h) => { g += `<line class="gridline" x1="${padL}" x2="${W}" y1="${y(h)}" y2="${y(h)}"></line><text x="${padL - 5}" y="${y(h) + 3}" text-anchor="end">${h}h</text>`; });
+    weeks.forEach((w, i) => {
+      const h = w.min / 60, x = padL + i * bw + bw * 0.18, bwid = bw * 0.64;
+      const top = y(h), isNow = i === N - 1;
+      if (w.min > 0) g += `<rect class="b${isNow ? " now" : ""}" x="${x}" y="${top}" width="${bwid}" height="${y(0) - top}" rx="1"><title>KW ${isoWeek(w.start).week}: ${fmtMin(w.min)} h</title></rect>`;
+      if (w.min > 0) g += `<text class="vlabel" x="${x + bwid / 2}" y="${top - 3}" text-anchor="middle">${fmtH(w.min)}</text>`;
+      g += `<text x="${x + bwid / 2}" y="${H - 5}" text-anchor="middle">${isoWeek(w.start).week}</text>`;
+    });
+    $("weekChart").innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Stunden pro Kalenderwoche">${g}</svg><div class="hint">Zahlen unten = Kalenderwoche (KW), markiert = aktuelle Woche</div>`;
+  }
+
+  function renderLog(list, examples) {
+    const fp = $("filterPerson").value, fc = $("filterCat").value;
+    const shown = list.filter((e) => (!fp || e.person === fp) && (!fc || e.category === fc));
+    $("exampleBanner").hidden = !examples;
+    if (!shown.length) { $("log").innerHTML = `<div class="empty">Keine Einträge für diesen Filter.</div>`; return; }
+    const months = new Map();
+    shown.forEach((e) => { const k = e.date.slice(0, 7); if (!months.has(k)) months.set(k, []); months.get(k).push(e); });
+    const multi = state.settings.people.length > 1;
+    let html = "";
+    for (const [k, es] of months) {
+      const label = parseDate(k + "-01").toLocaleDateString("de-AT", { month: "long", year: "numeric" });
+      const m = es.reduce((a, e) => a + e.minutes, 0);
+      html += `<div class="month"><div class="month-head"><h3>${esc(label)}</h3><span class="num">${fmtMin(m)} h</span></div>`;
+      es.forEach((e) => {
+        const dd = parseDate(e.date);
+        const wd = dd.toLocaleDateString("de-AT", { weekday: "short" });
+        html += `<div class="entry${e.example ? " example" : ""}" data-id="${esc(e.id)}">
+          <div class="d">${wd} ${pad(dd.getDate())}.${pad(dd.getMonth() + 1)}.<span class="t">${e.start && e.end ? `${esc(e.start)}–${esc(e.end)}` : ""}</span></div>
+          <div class="body"><div class="note">${esc(e.note) || '<span class="muted">(ohne Beschreibung)</span>'}</div>
+            <div class="meta"><span class="chip"><i style="background:${catColor(e.category)}"></i>${esc(e.category)}</span>${multi ? `<span>${esc(e.person)}</span>` : ""}${e.example ? "<span>Beispiel</span>" : ""}</div></div>
+          <div><div class="dur">${fmtMin(e.minutes)}</div>${e.example ? "" : `<div class="acts"><button class="ghost" data-act="edit" type="button">Bearbeiten</button><button class="ghost danger" data-act="del" type="button">Löschen</button></div>`}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    $("log").innerHTML = html;
+  }
+
+  // ---------- Protokoll-Aktionen ----------
+  $("log").addEventListener("click", async (ev) => {
+    const btn = ev.target.closest("button[data-act]");
+    if (!btn) return;
+    const id = btn.closest(".entry").dataset.id;
+    const e = state.entries.find((x) => x.id === id);
+    if (!e) return;
+    if (btn.dataset.act === "edit") startEdit(e);
+    if (btn.dataset.act === "del") {
+      if (btn.dataset.confirm) { await store.remove(id); }
+      else { btn.dataset.confirm = "1"; btn.textContent = "Wirklich löschen?"; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.confirm; btn.textContent = "Löschen"; } }, 4000); }
+    }
+  });
+  $("filterPerson").addEventListener("change", render);
+  $("filterCat").addEventListener("change", render);
+
+  // ---------- Formular ----------
+  let editingId = null;
+  function resetForm() {
+    editingId = null;
+    $("entryForm").reset();
+    delete $("fPerson").dataset.touched;
+    $("fDate").value = isoDate(new Date());
+    $("saveBtn").textContent = "Eintragen";
+    $("cancelEdit").hidden = true;
+    if (state.settings.people[0]) $("fPerson").value = me() || state.settings.people[0];
+  }
+  function startEdit(e) {
+    editingId = e.id;
+    $("fDate").value = e.date; $("fStart").value = e.start || ""; $("fEnd").value = e.end || "";
+    $("fDur").value = fmtMin(e.minutes); $("fNote").value = e.note || "";
+    $("fPerson").value = e.person; $("fCat").value = e.category;
+    $("saveBtn").textContent = "Änderungen speichern";
+    $("cancelEdit").hidden = false;
+    $("entryForm").scrollIntoView({ behavior: "smooth", block: "start" });
+    $("fNote").focus({ preventScroll: true });
+  }
+  $("cancelEdit").addEventListener("click", resetForm);
+  $("fPerson").addEventListener("change", () => ($("fPerson").dataset.touched = "1"));
+  const autoDur = () => {
+    const a = toMin($("fStart").value), b = toMin($("fEnd").value);
+    if (a != null && b != null) { let d = b - a; if (d < 0) d += 1440; $("fDur").value = fmtMin(d); }
+  };
+  $("fStart").addEventListener("change", autoDur);
+  $("fEnd").addEventListener("change", autoDur);
+
+  $("entryForm").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const msg = $("formMsg");
+    if (!$("fDate").value) return flash(msg, "Bitte ein Datum wählen.", true);
+    let minutes = parseDur($("fDur").value);
+    const a = toMin($("fStart").value), b = toMin($("fEnd").value);
+    if ((minutes == null || Number.isNaN(minutes)) && a != null && b != null) { minutes = b - a; if (minutes < 0) minutes += 1440; }
+    if (minutes == null) return flash(msg, "Bitte Von/Bis oder eine Dauer angeben (z. B. 1:30 oder 1,5).", true);
+    if (Number.isNaN(minutes) || minutes <= 0) return flash(msg, "Die Dauer bitte als h:mm (1:30) oder in Stunden (1,5) eingeben.", true);
+    if (minutes > 24 * 60) return flash(msg, "Ein Eintrag kann höchstens 24 Stunden lang sein.", true);
+    const entry = {
+      id: editingId || uid(),
+      date: $("fDate").value, start: $("fStart").value, end: $("fEnd").value, minutes,
+      person: $("fPerson").value, category: $("fCat").value, note: $("fNote").value.trim(),
+      createdAt: editingId ? (state.entries.find((x) => x.id === editingId)?.createdAt || Date.now()) : Date.now(),
+    };
+    try {
+      await (editingId ? store.update(entry) : store.add(entry));
+      flash(msg, editingId ? "Änderungen gespeichert." : `${fmtMin(minutes)} h eingetragen.`);
+      resetForm();
+    } catch (err) { flash(msg, "Speichern fehlgeschlagen – bitte nochmal versuchen.", true); }
+  });
+
+  // ---------- Stoppuhr (eine pro Person, falls ihr ein Gerät teilt) ----------
+  let tick = null;
+  const allTimers = () => lsGet(LS_TIMER) || {};
+  function timerState() { const m = me(); return m ? allTimers()[m] || null : null; }
+  function setTimer(t) { const m = me(); if (!m) return; const all = allTimers(); if (t) all[m] = t; else delete all[m]; lsSet(LS_TIMER, all); }
+  function renderTimer() {
+    const t = timerState();
+    const running = !!t;
+    $("timerBox").classList.toggle("running", running);
+    $("tStart").hidden = running; $("tStop").hidden = !running; $("tDiscard").hidden = !running;
+    clearInterval(tick);
+    if (running) {
+      $("tCat").value = t.category; $("tNote").value = t.note || "";
+      const upd = () => {
+        const s = Math.floor((Date.now() - t.startedAt) / 1000);
+        $("clock").textContent = `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
+      };
+      upd(); tick = setInterval(upd, 1000);
+      $("timerSince").textContent = `Läuft seit ${hhmm(new Date(t.startedAt))}`;
+    } else {
+      $("clock").textContent = "0:00:00";
+      $("timerSince").textContent = me() ? "Läuft nicht" : "Wähle oben bei „Ich bin“ deinen Namen";
+    }
+  }
+  $("tStart").addEventListener("click", () => {
+    if (!me()) { $("timerSince").textContent = "Wähle zuerst oben bei „Ich bin“ deinen Namen."; $("meSel").focus(); return; }
+    setTimer({ startedAt: Date.now(), category: $("tCat").value, note: $("tNote").value.trim() });
+    renderTimer();
+  });
+  ["tCat", "tNote"].forEach((id) => $(id).addEventListener("change", () => {
+    const t = timerState(); if (!t) return;
+    setTimer({ ...t, category: $("tCat").value, note: $("tNote").value.trim() });
+  }));
+  $("tStop").addEventListener("click", async () => {
+    const t = timerState(); if (!t) return;
+    const st = new Date(t.startedAt), en = new Date();
+    const minutes = Math.max(1, Math.round((en - st) / 60000));
+    const entry = { id: uid(), date: isoDate(st), start: hhmm(st), end: hhmm(en), minutes, person: me(), category: $("tCat").value, note: $("tNote").value.trim(), createdAt: Date.now() };
+    try {
+      await store.add(entry);
+      setTimer(null); $("tNote").value = "";
+      renderTimer();
+      flash($("formMsg"), `${fmtMin(minutes)} h für ${entry.person} aus der Stoppuhr eingetragen.`);
+    } catch { $("timerSince").textContent = "Speichern fehlgeschlagen – nochmal auf Stopp tippen."; }
+  });
+  $("tDiscard").addEventListener("click", (ev) => {
+    const b = ev.currentTarget;
+    if (!b.dataset.confirm) { b.dataset.confirm = "1"; b.textContent = "Zeit wirklich verwerfen?"; setTimeout(() => { delete b.dataset.confirm; b.textContent = "Verwerfen"; }, 4000); return; }
+    delete b.dataset.confirm; b.textContent = "Verwerfen";
+    setTimer(null); renderTimer();
+  });
+
+  // ---------- Ich bin … ----------
+  $("meSel").addEventListener("change", () => {
+    lsSet(LS_ME, $("meSel").value || null);
+    render(); renderTimer();
+    if (!editingId && me()) $("fPerson").value = me();
+  });
+
+  // ---------- Einstellungen ----------
+  const splitList = (s) => [...new Set(s.split(",").map((x) => x.trim()).filter(Boolean))];
+  $("settingsBox").addEventListener("toggle", () => {
+    if (!$("settingsBox").open) return;
+    const s = state.settings;
+    $("sTitle").value = s.title; $("sGoal").value = s.goal; $("sDue").value = s.due || "";
+    $("sPeople").value = s.people.join(", "); $("sCats").value = s.cats.join(", ");
+  });
+  $("settingsForm").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const people = splitList($("sPeople").value), cats = splitList($("sCats").value);
+    if (!people.length) return flash($("setMsg"), "Mindestens eine Person eintragen.", true);
+    if (!cats.length) return flash($("setMsg"), "Mindestens eine Kategorie eintragen.", true);
+    const s = { title: $("sTitle").value.trim() || "Maturaprojekt", goal: Math.max(0, parseInt($("sGoal").value, 10) || 0), due: $("sDue").value, people, cats };
+    // Umbenennungen an gleicher Position übernehmen (z. B. "Person 1" -> "Anna")
+    const old = state.settings.people, renames = {};
+    old.forEach((o, i) => { if (people[i] && people[i] !== o && !people.includes(o)) renames[o] = people[i]; });
+    try {
+      await store.saveSettings(s);
+      const affected = state.entries.filter((e) => renames[e.person]);
+      for (const e of affected) await store.update({ ...e, person: renames[e.person] });
+      const m = lsGet(LS_ME);
+      if (renames[m]) {
+        lsSet(LS_ME, renames[m]);
+        const all = allTimers(); if (all[m]) { all[renames[m]] = all[m]; delete all[m]; lsSet(LS_TIMER, all); }
+      }
+      render(); renderTimer(); resetForm();
+      flash($("setMsg"), affected.length ? `Gespeichert – ${affected.length} Einträge umbenannt.` : "Gespeichert.");
+    } catch { flash($("setMsg"), "Speichern fehlgeschlagen.", true); }
+  });
+
+  // ---------- Export / Import ----------
+  async function offerFile(filename, data, mime) {
+    let dl = null;
+    if (window.claude && typeof window.claude.use === "function") { try { dl = await window.claude.use("downloads"); } catch {} }
+    if (dl) {
+      try { await dl.save({ filename, data }); return "Datei gespeichert."; }
+      catch (e) { return e && e.code === "declined" ? "" : "Download ist hier nicht möglich."; }
+    }
+    const url = URL.createObjectURL(new Blob([data], { type: mime }));
+    const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    return "Datei gespeichert.";
+  }
+  const stamp = () => isoDate(new Date());
+  // Excel: Übersicht + alle Einträge + ein Blatt pro Person
+  const xlDate = (iso) => { const [y, m, d] = iso.split("-").map(Number); return (Date.UTC(y, m - 1, d) - Date.UTC(1899, 11, 30)) / 864e5; };
+  const xlTime = (t) => (t ? toMin(t) / 1440 : "");
+  const hours = (m) => Math.round((m / 60) * 100) / 100;
+  function sheetName(name, used) {
+    let n = String(name).replace(/[\[\]:*?\/\\]/g, " ").trim().slice(0, 31) || "Person";
+    let k = n, i = 2;
+    while (used.has(k.toLowerCase())) k = n.slice(0, 28) + " " + i++;
+    used.add(k.toLowerCase());
+    return k;
+  }
+  function makeSheet(aoa, { widths = [], formats = {}, headerRow = 0, filter = false, firstRow = 0 } = {}) {
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws["!cols"] = widths.map((w) => ({ wch: w }));
+    const range = XLSX.utils.decode_range(ws["!ref"]);
+    for (let r = firstRow; r <= range.e.r; r++) {
+      for (const [c, z] of Object.entries(formats)) {
+        const cell = ws[XLSX.utils.encode_cell({ r, c: Number(c) })];
+        if (cell && cell.t === "n") cell.z = z;
+      }
+    }
+    if (filter) ws["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: headerRow, c: 0 }, e: { r: range.e.r, c: range.e.c } }) };
+    return ws;
+  }
+  function buildWorkbook() {
+    const s = state.settings;
+    const rows = state.entries.slice().sort((a, b) => (a.date + (a.start || "")).localeCompare(b.date + (b.start || "")));
+    const wb = XLSX.utils.book_new();
+    wb.Props = { Title: `${s.title} – Arbeitsprotokoll`, Author: "Maturaprojekt Stundenlog" };
+    const people = s.people.concat([...new Set(rows.map((e) => e.person).filter((p) => !s.people.includes(p)))]);
+    const cats = s.cats.concat([...new Set(rows.map((e) => e.category).filter((c) => !s.cats.includes(c)))]);
+    const goal = Number(s.goal) || 0;
+
+    // Übersicht
+    const ov = [
+      [`${s.title} – Arbeitsprotokoll`],
+      ["Stand", xlDate(isoDate(new Date()))],
+      ["Zielstunden pro Person", goal || ""],
+      s.due ? ["Abgabetermin", xlDate(s.due)] : [],
+      [],
+      ["Person", "Stunden", "Ziel (h)", "Erfüllt", "Einträge"],
+    ];
+    const pStart = ov.length + 1;
+    people.forEach((p, i) => {
+      const m = rows.filter((e) => e.person === p);
+      const r = pStart + i;
+      ov.push([p, hours(m.reduce((a, e) => a + e.minutes, 0)), goal || "", goal ? { t: "n", f: `IF(C${r}>0,B${r}/C${r},"")` } : "", m.length]);
+    });
+    const pEnd = pStart + people.length - 1;
+    ov.push(["Team gesamt", { t: "n", f: `SUM(B${pStart}:B${pEnd})` }, goal ? { t: "n", f: `SUM(C${pStart}:C${pEnd})` } : "", goal ? { t: "n", f: `IF(C${pEnd + 1}>0,B${pEnd + 1}/C${pEnd + 1},"")` } : "", { t: "n", f: `SUM(E${pStart}:E${pEnd})` }]);
+    ov.push([]);
+    ov.push(["Stunden nach Kategorie", ...people, "Gesamt"]);
+    const cStart = ov.length + 1;
+    cats.forEach((c, i) => {
+      const r = cStart + i;
+      ov.push([c, ...people.map((p) => hours(rows.filter((e) => e.person === p && e.category === c).reduce((a, e) => a + e.minutes, 0))),
+        { t: "n", f: `SUM(B${r}:${XLSX.utils.encode_col(people.length)}${r})` }]);
+    });
+    const ovWs = makeSheet(ov, { widths: [26, ...people.map(() => 12), 12], formats: Object.fromEntries([...people.keys(), people.length].map((i) => [i + 1, "0.00"])), firstRow: 5 });
+    ovWs["B2"].z = "dd.mm.yyyy"; if (s.due) ovWs["B4"].z = "dd.mm.yyyy";
+    ovWs["B3"] && (ovWs["B3"].z = "0");
+    for (let r = pStart; r <= pEnd + 1; r++) { const g = ovWs["C" + r]; if (g) g.z = "0"; const c = ovWs["D" + r]; if (c) c.z = "0%"; const e = ovWs["E" + r]; if (e) e.z = "0"; }
+    XLSX.utils.book_append_sheet(wb, ovWs, "Übersicht");
+
+    // Alle Einträge
+    const head = ["Datum", "Von", "Bis", "Stunden", "Person", "Kategorie", "Tätigkeit"];
+    const all = [head, ...rows.map((e) => [xlDate(e.date), xlTime(e.start), xlTime(e.end), hours(e.minutes), e.person, e.category, e.note])];
+    all.push(["Summe", "", "", { t: "n", f: `SUM(D2:D${rows.length + 1})` }]);
+    const fmt = { 0: "dd.mm.yyyy", 1: "hh:mm", 2: "hh:mm", 3: "0.00" };
+    const allWs = makeSheet(all, { widths: [11, 7, 7, 9, 16, 22, 60], formats: fmt, firstRow: 1 });
+    allWs["!autofilter"] = { ref: `A1:G${rows.length + 1}` };
+    const used = new Set(["übersicht", "alle einträge"]);
+    XLSX.utils.book_append_sheet(wb, allWs, "Alle Einträge");
+
+    // Pro Person
+    people.forEach((p) => {
+      const mine = rows.filter((e) => e.person === p);
+      const aoa = [[`Arbeitsprotokoll ${p}`], [], ["Datum", "Von", "Bis", "Stunden", "Kategorie", "Tätigkeit"],
+        ...mine.map((e) => [xlDate(e.date), xlTime(e.start), xlTime(e.end), hours(e.minutes), e.category, e.note])];
+      aoa.push(["Summe", "", "", { t: "n", f: mine.length ? `SUM(D4:D${mine.length + 3})` : "0" }]);
+      if (goal) aoa.push(["Ziel", "", "", goal]);
+      const ws = makeSheet(aoa, { widths: [11, 7, 7, 9, 22, 60], formats: fmt, firstRow: 3 });
+      XLSX.utils.book_append_sheet(wb, ws, sheetName(p, used));
+    });
+    return wb;
+  }
+  $("expXlsx").addEventListener("click", async () => {
+    if (!state.entries.length) return flash($("expMsg"), "Noch keine eigenen Einträge zum Exportieren.", true);
+    if (!window.XLSX) return flash($("expMsg"), "Das Excel-Modul konnte nicht geladen werden – Internetverbindung prüfen und Seite neu laden.", true);
+    try {
+      const buf = XLSX.write(buildWorkbook(), { bookType: "xlsx", type: "array", compression: true });
+      const name = `Arbeitsprotokoll_${(state.settings.title || "Maturaprojekt").replace(/[^\wÄÖÜäöüß -]/g, "").trim().replace(/\s+/g, "_")}_${stamp()}.xlsx`;
+      const m = await offerFile(name, new Uint8Array(buf), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      if (m) flash($("expMsg"), m);
+    } catch (err) { flash($("expMsg"), "Excel-Datei konnte nicht erstellt werden.", true); }
+  });
+  $("expJson").addEventListener("click", async () => {
+    const data = JSON.stringify({ app: "matura-stundenlog", version: 1, exportedAt: new Date().toISOString(), settings: state.settings, entries: state.entries }, null, 2);
+    const m = await offerFile(`Stundenlog_Sicherung_${stamp()}.json`, data, "application/json");
+    if (m) flash($("expMsg"), m);
+  });
+  $("impBtn").addEventListener("click", () => $("impJson").click());
+  $("impJson").addEventListener("change", async (ev) => {
+    const file = ev.target.files[0]; ev.target.value = "";
+    if (!file) return;
+    try {
+      const d = JSON.parse(await file.text());
+      if (!Array.isArray(d.entries)) throw new Error();
+      const have = new Set(state.entries.map((e) => e.id));
+      const fresh = d.entries.filter((e) => e && e.id && e.date && Number(e.minutes) > 0 && !have.has(e.id));
+      if (d.settings && state.entries.length === 0) await store.saveSettings({ ...DEFAULT_SETTINGS, ...d.settings });
+      for (const e of fresh) await store.add({ id: String(e.id), date: String(e.date), start: e.start || "", end: e.end || "", minutes: Number(e.minutes), person: e.person || "", category: e.category || "", note: e.note || "", createdAt: e.createdAt || Date.now() });
+      flash($("expMsg"), `${fresh.length} Einträge importiert${d.entries.length - fresh.length ? `, ${d.entries.length - fresh.length} waren schon vorhanden` : ""}.`);
+    } catch { flash($("expMsg"), "Diese Datei ist keine gültige Stundenlog-Sicherung.", true); }
+  });
+
+  // ---------- Start ----------
+  render();
+  resetForm();
+  renderTimer();
+  initStore().then(() => { resetForm(); renderTimer(); });
+})();
+</script>
