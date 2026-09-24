@@ -71,10 +71,13 @@ function readEntries_() {
   const sh = entriesSheet_();
   const n = sh.getLastRow() - 1;
   if (n < 1) return [];
+  // Google wandelt eingetragene Texte manchmal in Datums-/Zeitwerte um – hier zurück in Text
+  const tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
+  const txt = (v, pattern) => (v instanceof Date ? Utilities.formatDate(v, tz, pattern) : String(v));
   return sh.getRange(2, 1, n, HEADERS.length).getValues()
     .filter((r) => r[7])
     .map((r) => ({
-      date: String(r[0]), start: String(r[1]), end: String(r[2]),
+      date: txt(r[0], "yyyy-MM-dd"), start: txt(r[1], "HH:mm"), end: txt(r[2], "HH:mm"),
       person: String(r[4]), category: String(r[5]), note: String(r[6]),
       id: String(r[7]), minutes: Number(r[8]) || Math.round(Number(r[3]) * 60), createdAt: Number(r[9]) || 0,
     }));

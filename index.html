@@ -440,12 +440,32 @@
     if (!d.ok) throw new Error(d.error || "Fehler");
     return d;
   }
+  // Google Sheets wandelt Datum/Uhrzeit oft in echte Datumswerte um und liefert sie z. B. als
+  // "Thu Sep 24 2026 00:00:00 GMT+0200 (…)" bzw. "Sat Dec 30 1899 14:58:00 GMT+0100 (…)" zurück.
+  const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
+  function normDate(v) {
+    v = String(v ?? "").trim();
+    let m;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+    if ((m = v.match(/^\w{3},? (\w{3}) (\d{1,2}),? (\d{4})/)) && MONTHS[m[1]]) return `${m[3]}-${pad(MONTHS[m[1]])}-${pad(m[2])}`;
+    if ((m = v.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/))) return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
+    if (/^\d{4}-\d{2}-\d{2}T/.test(v)) { const d = new Date(v); if (!isNaN(d)) return isoDate(d); }
+    return v;
+  }
+  function normTime(v) {
+    v = String(v ?? "").trim();
+    if (!v) return "";
+    const m = v.replace(/^\w{3},? \w{3} \d{1,2},? \d{4}/, "").match(/(\d{1,2}):(\d{2})/);
+    return m ? `${pad(m[1])}:${m[2]}` : "";
+  }
+  const normEntry = (e) => ({ ...e, date: normDate(e.date), start: normTime(e.start), end: normTime(e.end), minutes: Number(e.minutes) || 0 });
+
   function sheetStore(cfg) {
     let pending = 0, seeded = false, cb = () => {};
     async function refresh() {
       try {
         const d = await sheetCall(cfg);
-        if (pending === 0) state.entries = d.entries;
+        if (pending === 0) state.entries = d.entries.map(normEntry);
         if (d.settings) state.settings = { ...DEFAULT_SETTINGS, ...d.settings };
         else if (!seeded) { seeded = true; sheetCall(cfg, { action: "settings", settings: state.settings }).catch(() => {}); }
         setSync(true, "Live mit der Team-Tabelle verbunden");
