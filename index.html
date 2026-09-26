@@ -198,6 +198,8 @@
     </div>
   </header>
 
+  <div class="banner" id="notLinked" hidden><strong>Nicht mit dem Team verbunden.</strong> Einträge landen nur in diesem Browser. Öffne den Einladungslink, den du bekommen hast (am besten direkt in Safari bzw. Chrome, nicht in WhatsApp), oder verbinde die App unten bei „Team verbinden“.</div>
+
   <div class="grid-main">
     <div class="col">
       <!-- Stoppuhr -->
@@ -318,9 +320,11 @@
           </form>
         </div>
         <div id="teamOn" hidden>
+          <p class="toast" id="teamStatus" style="margin:8px 0 0"></p>
           <p class="hint" style="margin-top:8px">Verbunden mit eurer Google-Tabelle. Schick diesen Einladungslink an dein Team – wer ihn öffnet, ist sofort verbunden:</p>
           <input id="gInvite" type="text" readonly aria-label="Einladungslink">
           <div class="btns" style="margin-top:8px">
+            <button type="button" id="gRefresh">Jetzt aktualisieren</button>
             <button type="button" id="gCopy">Link kopieren</button>
             <button type="button" id="gUpload" hidden></button>
             <button type="button" class="ghost danger" id="gDisconnect">Trennen</button>
@@ -389,8 +393,16 @@
     return { year: t.getUTCFullYear(), week: Math.ceil(((t - y0) / 864e5 + 1) / 7) };
   }
   function mondayOf(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
-  const lsGet = (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
-  const lsSet = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+  // Browser-Speicher mit Ersatz im Arbeitsspeicher (z. B. privater Modus, blockierte Website-Daten)
+  const memStore = {};
+  const lsGet = (k) => {
+    if (k in memStore) return memStore[k];
+    try { return JSON.parse(localStorage.getItem(k)); } catch { return null; }
+  };
+  const lsSet = (k, v) => {
+    try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); delete memStore[k]; }
+    catch { memStore[k] = v == null ? null : JSON.parse(JSON.stringify(v)); }
+  };
   function flash(el, msg, err) { el.textContent = msg; el.classList.toggle("err", !!err); clearTimeout(el._t); el._t = setTimeout(() => (el.textContent = ""), 4000); }
 
   // ---------- Speicher: geteilte Datenbank im Artifact, sonst Browser ----------
@@ -432,12 +444,23 @@
 
   // Google-Tabelle über ein Apps-Script-Web-App (siehe google-apps-script/Code.gs)
   const LS_SHEET = "matura-stundenlog-sheet";
+  const LS_SHEET_SETTINGS = "matura-stundenlog-sheet-settings";
   async function sheetCall(cfg, body) {
-    const res = body
-      ? await fetch(cfg.url, { method: "POST", body: JSON.stringify({ ...body, key: cfg.key }) })
-      : await fetch(`${cfg.url}?action=list&key=${encodeURIComponent(cfg.key)}`);
-    const d = await res.json();
-    if (!d.ok) throw new Error(d.error || "Fehler");
+    const ctrl = typeof AbortController === "function" ? new AbortController() : null;
+    const timer = ctrl && setTimeout(() => ctrl.abort(), 25000);
+    let res, text;
+    try {
+      res = body
+        ? await fetch(cfg.url, { method: "POST", body: JSON.stringify({ ...body, key: cfg.key }), signal: ctrl?.signal })
+        : await fetch(`${cfg.url}?action=list&key=${encodeURIComponent(cfg.key)}&t=${Date.now()}`, { signal: ctrl?.signal, cache: "no-store" });
+      text = await res.text();
+    } catch (err) {
+      throw new Error(navigator.onLine === false ? "Kein Internet" : err && err.name === "AbortError" ? "Google antwortet nicht (Zeitüberschreitung)" : "Google-Tabelle nicht erreichbar");
+    } finally { if (timer) clearTimeout(timer); }
+    let d;
+    try { d = JSON.parse(text); }
+    catch { throw new Error("Die Web-App antwortet nicht richtig – Bereitstellung prüfen (Zugriff: „Jeder“)"); }
+    if (!d.ok) throw new Error(d.error || "Unbekannter Fehler");
     return d;
   }
   // Google Sheets wandelt Datum/Uhrzeit oft in echte Datumswerte um und liefert sie z. B. als
@@ -461,17 +484,22 @@
   const normEntry = (e) => ({ ...e, date: normDate(e.date), start: normTime(e.start), end: normTime(e.end), minutes: Number(e.minutes) || 0 });
 
   function sheetStore(cfg) {
-    let pending = 0, seeded = false, cb = () => {};
+    let pending = 0, seeded = false, cb = () => {}, lastSync = null;
     async function refresh() {
       try {
         const d = await sheetCall(cfg);
         if (pending === 0) state.entries = d.entries.map(normEntry);
-        if (d.settings) state.settings = { ...DEFAULT_SETTINGS, ...d.settings };
+        if (d.settings) { state.settings = { ...DEFAULT_SETTINGS, ...d.settings }; lsSet(LS_SHEET_SETTINGS, state.settings); }
         else if (!seeded) { seeded = true; sheetCall(cfg, { action: "settings", settings: state.settings }).catch(() => {}); }
-        setSync(true, "Live mit der Team-Tabelle verbunden");
+        lastSync = new Date();
+        setSync(true, `Mit der Team-Tabelle verbunden · Stand ${hhmm(lastSync)}`);
+        $("teamStatus").textContent = `Letzter Abgleich: ${hhmm(lastSync)} Uhr – ${d.entries.length} Einträge in der Tabelle.`;
+        $("teamStatus").classList.remove("err");
         cb();
       } catch (err) {
-        setSync(false, `Keine Verbindung zur Tabelle (${err.message}) – versuche es gleich wieder`);
+        setSync(false, `Keine Verbindung: ${err.message}`);
+        $("teamStatus").textContent = `Abgleich fehlgeschlagen: ${err.message}. Die App versucht es alle 30 Sekunden erneut.${lastSync ? ` Letzter erfolgreicher Abgleich: ${hhmm(lastSync)} Uhr.` : ""}`;
+        $("teamStatus").classList.add("err");
       }
     }
     async function write(body, apply, revert) {
@@ -505,20 +533,30 @@
     };
   }
 
+  // Der Einladungslink enthält die Verbindung. Er bleibt in der Adresszeile stehen, damit
+  // Lesezeichen und Home-Bildschirm-Symbole auch in anderen Browsern verbunden sind.
   function readInvite() {
     try {
       const q = new URLSearchParams(location.search);
       if (q.get("sheet") && q.get("key")) {
-        lsSet(LS_SHEET, { url: q.get("sheet"), key: q.get("key") });
-        history.replaceState(null, "", location.pathname + location.hash);
+        const cfg = { url: q.get("sheet"), key: q.get("key") };
+        lsSet(LS_SHEET, cfg);
+        return cfg;
       }
     } catch {}
+    const saved = lsGet(LS_SHEET);
+    if (saved && saved.url && saved.key) {
+      try { if (!location.search && history.replaceState) history.replaceState(null, "", inviteLink(saved) + location.hash); } catch {}
+      return saved;
+    }
+    return null;
   }
 
   async function initStore() {
-    readInvite();
-    const cfg = lsGet(LS_SHEET);
-    if (cfg && cfg.url && cfg.key) {
+    const cfg = readInvite();
+    if (cfg) {
+      const cached = lsGet(LS_SHEET_SETTINGS);
+      if (cached) state.settings = { ...DEFAULT_SETTINGS, ...cached };
       store = sheetStore(cfg);
       setSync(false, "Verbinde mit der Team-Tabelle …");
       renderTeam(cfg);
@@ -530,7 +568,8 @@
       try { db = await window.claude.use("db"); } catch { db = null; }
     }
     store = db ? dbStore(db) : localStore();
-    setSync(!!db, db ? "Gespeichert & mit dem Team geteilt" : "Nur in diesem Browser gespeichert");
+    setSync(!!db, db ? "Gespeichert & mit dem Team geteilt" : "Nicht mit dem Team verbunden");
+    $("notLinked").hidden = !!db;
     renderTeam(null);
     store.start(render);
   }
@@ -561,6 +600,7 @@
       flash($("teamMsg"), `Verbindung fehlgeschlagen: ${err.message === "Failed to fetch" ? "Adresse nicht erreichbar – ist die Web-App für „Jeder“ freigegeben?" : err.message}`, true);
     } finally { $("gConnect").disabled = false; }
   });
+  $("gRefresh").addEventListener("click", () => store && store.refresh && store.refresh());
   $("gCopy").addEventListener("click", async () => {
     try { await navigator.clipboard.writeText($("gInvite").value); flash($("teamMsg"), "Link kopiert."); }
     catch { $("gInvite").select(); flash($("teamMsg"), "Link markiert – jetzt mit Strg+C / Kopieren kopieren."); }
@@ -604,6 +644,7 @@
     if (keep && prev && [...el.options].some((o) => o.value === prev)) el.value = prev;
   }
 
+  let lastMe;
   function render() {
     const s = state.settings;
     const real = state.entries.slice().sort((a, b) => (b.date + (b.start || "")).localeCompare(a.date + (a.start || "")));
@@ -618,6 +659,7 @@
 
     [["fPerson", s.people], ["tCat", s.cats], ["fCat", s.cats]].forEach(([id, items]) => fillSelect($(id), items, { keep: true }));
     const my = me();
+    if (my !== lastMe) { lastMe = my; queueMicrotask(renderTimer); }
     $("meSel").innerHTML = `<option value="">– bitte wählen –</option>` + s.people.map((x) => `<option${x === my ? " selected" : ""}>${esc(x)}</option>`).join("");
     $("meBox").classList.toggle("unset", !my);
     if (!editingId && my && $("fPerson").value !== my && !$("fPerson").dataset.touched) $("fPerson").value = my;
@@ -747,7 +789,10 @@
     if (!e) return;
     if (btn.dataset.act === "edit") startEdit(e);
     if (btn.dataset.act === "del") {
-      if (btn.dataset.confirm) { await store.remove(id); }
+      if (btn.dataset.confirm) {
+        try { await store.remove(id); }
+        catch (err) { flash($("formMsg"), `Nicht gelöscht: ${err && err.message ? err.message : "Fehler"}.`, true); }
+      }
       else { btn.dataset.confirm = "1"; btn.textContent = "Wirklich löschen?"; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.confirm; btn.textContent = "Löschen"; } }, 4000); }
     }
   });
@@ -804,7 +849,7 @@
       await (editingId ? store.update(entry) : store.add(entry));
       flash(msg, editingId ? "Änderungen gespeichert." : `${fmtMin(minutes)} h eingetragen.`);
       resetForm();
-    } catch (err) { flash(msg, "Speichern fehlgeschlagen – bitte nochmal versuchen.", true); }
+    } catch (err) { flash(msg, `Nicht gespeichert: ${err && err.message ? err.message : "unbekannter Fehler"}. Bitte nochmal versuchen.`, true); }
   });
 
   // ---------- Stoppuhr (eine pro Person, falls ihr ein Gerät teilt) ----------
@@ -850,7 +895,7 @@
       setTimer(null); $("tNote").value = "";
       renderTimer();
       flash($("formMsg"), `${fmtMin(minutes)} h für ${entry.person} aus der Stoppuhr eingetragen.`);
-    } catch { $("timerSince").textContent = "Speichern fehlgeschlagen – nochmal auf Stopp tippen."; }
+    } catch (err) { $("timerSince").textContent = `Nicht gespeichert (${err && err.message ? err.message : "Fehler"}) – nochmal auf Stopp tippen, die Zeit läuft weiter.`; }
   });
   $("tDiscard").addEventListener("click", (ev) => {
     const b = ev.currentTarget;
@@ -894,7 +939,7 @@
       }
       render(); renderTimer(); resetForm();
       flash($("setMsg"), affected.length ? `Gespeichert – ${affected.length} Einträge umbenannt.` : "Gespeichert.");
-    } catch { flash($("setMsg"), "Speichern fehlgeschlagen.", true); }
+    } catch (err) { flash($("setMsg"), `Nicht gespeichert: ${err && err.message ? err.message : "Fehler"}.`, true); }
   });
 
   // ---------- Export / Import ----------
