@@ -1,26 +1,32 @@
-<title>Maturaprojekt Stundenlog</title>
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Maturaprojekt Doppelhaushälfte</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Projektplan mit Fortschritt und Arbeitsprotokoll für das Maturaprojekt Doppelhaushälfte (Bautechnik).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
   :root {
-    --paper: #F5F6F1;
+    color-scheme: light;
+    --paper: #F3F5F8;
     --sheet: #FFFFFF;
-    --ink: #1D2430;
-    --muted: #5E6776;
-    --rule: #DCE0E4;
-    --grid: rgba(40, 80, 160, 0.07);
-    --blue: #2447A8;
-    --blue-soft: #E4EAF8;
-    --marker: #F3D34A;
-    --marker-ink: #3A2F00;
-    --good: #2F7D4F;
-    --warn: #B5611B;
+    --ink: #17202D;
+    --muted: #586476;
+    --rule: #D6DCE4;
+    --grid-fine: rgba(31, 79, 176, 0.055);
+    --grid-major: rgba(31, 79, 176, 0.11);
+    --blue: #1F4FB0;
+    --blue-ink: #FFFFFF;
+    --blue-soft: #E2E9F7;
+    --marker: #F5D547;
+    --marker-ink: #362C00;
+    --good: #2B7A4B;
+    --warn: #A85A16;
     --danger: #B3261E;
-    --cat-1: #2447A8; --cat-2: #3E8E7E; --cat-3: #C0752B;
-    --cat-4: #8A4FB0; --cat-5: #C2476B; --cat-6: #6B7A8F;
-    --cat-7: #7A8F2A; --cat-8: #1F7FA8; --cat-9: #9C6A3C;
+    --c1: #1F4FB0; --c2: #3B8C7B; --c3: #BF7330; --c4: #8A4FB0; --c5: #C2476B; --c6: #6B7A8F; --c7: #7A8F2A;
     --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
     --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
     --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -28,194 +34,291 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --paper: #12161D; --sheet: #1A1F28; --ink: #E6E9EE; --muted: #9AA3B2;
-      --rule: #2C3340; --grid: rgba(140, 170, 255, 0.05);
-      --blue: #8FA8F0; --blue-soft: #232D45; --marker: #E8C93A; --marker-ink: #231C00;
+      --paper: #0F141B; --sheet: #161D27; --ink: #E4E9F0; --muted: #97A2B3; --rule: #293341;
+      --grid-fine: rgba(140, 170, 255, 0.035); --grid-major: rgba(140, 170, 255, 0.075);
+      --blue: #89A5F1; --blue-ink: #0F141B; --blue-soft: #1E293E; --marker: #E3C63B; --marker-ink: #221B00;
       --good: #6CC291; --warn: #E0955A; --danger: #F08A82;
-      --cat-1: #8FA8F0; --cat-2: #6CC0AE; --cat-3: #E3A15F;
-      --cat-4: #BD8FE0; --cat-5: #EC86A2; --cat-6: #98A6B8;
-      --cat-7: #B9CC6A; --cat-8: #6DC0E6; --cat-9: #D6A677;
+      --c1: #89A5F1; --c2: #6CC0AE; --c3: #E3A15F; --c4: #BD8FE0; --c5: #EC86A2; --c6: #98A6B8; --c7: #B9CC6A;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --paper: #12161D; --sheet: #1A1F28; --ink: #E6E9EE; --muted: #9AA3B2;
-    --rule: #2C3340; --grid: rgba(140, 170, 255, 0.05);
-    --blue: #8FA8F0; --blue-soft: #232D45; --marker: #E8C93A; --marker-ink: #231C00;
+    --paper: #0F141B; --sheet: #161D27; --ink: #E4E9F0; --muted: #97A2B3; --rule: #293341;
+    --grid-fine: rgba(140, 170, 255, 0.035); --grid-major: rgba(140, 170, 255, 0.075);
+    --blue: #89A5F1; --blue-ink: #0F141B; --blue-soft: #1E293E; --marker: #E3C63B; --marker-ink: #221B00;
     --good: #6CC291; --warn: #E0955A; --danger: #F08A82;
-    --cat-1: #8FA8F0; --cat-2: #6CC0AE; --cat-3: #E3A15F;
-    --cat-4: #BD8FE0; --cat-5: #EC86A2; --cat-6: #98A6B8;
-      --cat-7: #B9CC6A; --cat-8: #6DC0E6; --cat-9: #D6A677;
+    --c1: #89A5F1; --c2: #6CC0AE; --c3: #E3A15F; --c4: #BD8FE0; --c5: #EC86A2; --c6: #98A6B8; --c7: #B9CC6A;
   }
 
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
     background-color: var(--paper);
+    /* Millimeterpapier: kräftige Linien alle 50 px über feinem 10-px-Raster */
     background-image:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 22px 22px;
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(var(--grid-fine) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-fine) 1px, transparent 1px);
+    background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
     color: var(--ink);
     font: 15px/1.5 var(--f-body);
     padding-inline: 16px;
-    padding-block: 20px 48px;
+    padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(64px + env(safe-area-inset-bottom, 0px));
   }
-  .wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
+  [hidden] { display: none !important; }
+  .wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 16px; }
   h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
-  h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; line-height: 1.1; }
+  h1 { font-size: clamp(1.45rem, 4vw, 2.1rem); font-weight: 700; line-height: 1.1; }
   h2 { font-size: 1.15rem; font-weight: 700; }
-  .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+  h3 { font-size: 1rem; font-weight: 700; }
+  .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
   .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
   .muted { color: var(--muted); }
+  .hint { font-size: 0.82rem; color: var(--muted); }
+  .sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; min-width: 0; }
+  .banner { background: var(--blue-soft); border-radius: 4px; padding: 10px 12px; font-size: 0.9rem; }
+  .banner.warn { background: color-mix(in srgb, var(--marker) 30%, var(--sheet)); }
 
-  header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
-  header.top .sub { color: var(--muted); margin-top: 4px; }
-  .sync { font-size: 0.8rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
-  .sync::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  /* Kopf */
+  header.top { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; justify-content: space-between; }
+  header.top .sub { color: var(--muted); margin-top: 4px; font-size: 0.9rem; }
+  .whoami { display: grid; justify-items: end; gap: 6px; }
+  label.me { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  label.me select { width: auto; max-width: 62vw; background: var(--sheet); font-weight: 600; }
+  label.me.unset select { border-color: var(--marker); box-shadow: 0 0 0 3px color-mix(in srgb, var(--marker) 45%, transparent); }
+  .sync { font-size: 0.78rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; text-align: right; }
+  .sync::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
   .sync.on::before { background: var(--good); }
+  .sync.err::before { background: var(--danger); }
+  .pill { display: inline-flex; align-items: center; gap: 8px; border: 0; cursor: pointer; font: inherit; font-weight: 600; font-size: 0.85rem;
+    background: var(--marker); color: var(--marker-ink); border-radius: 999px; padding: 4px 12px; font-variant-numeric: tabular-nums; }
+  @media (max-width: 560px) { .whoami { justify-items: start; } }
 
-  .sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; }
-  .grid-main { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: start; }
-  .col { display: grid; gap: 20px; min-width: 0; }
-  @media (max-width: 860px) { .grid-main { grid-template-columns: minmax(0, 1fr); } }
+  /* Gruppenkarten */
+  .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .gcard { text-align: left; font: inherit; color: inherit; cursor: pointer; display: grid; gap: 8px;
+    background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; }
+  .gcard:hover { border-color: var(--muted); }
+  .gcard.active { border: 2px solid var(--blue); padding: 13px 15px; }
+  .gcard > span { display: block; }
+  .gcard .g-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .gcard .g-name { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; }
+  .gcard .g-mem { font-size: 0.8rem; color: var(--muted); }
+  .gcard .g-nums { display: flex; gap: 4px 18px; align-items: baseline; flex-wrap: wrap; }
+  .gcard .g-pct { font-family: var(--f-display); font-weight: 700; font-size: 1.9rem; line-height: 1; }
+  .gcard .g-h { font-family: var(--f-mono); font-size: 0.9rem; }
+  @media (max-width: 480px) { .gcard { padding: 12px; } .gcard.active { padding: 11px; } .gcard .g-pct { font-size: 1.5rem; } .gcard .g-mem { display: none; } }
+  .tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 1px 7px; border-radius: 3px; background: var(--blue-soft); color: var(--ink); }
+  .tag.now { background: var(--marker); color: var(--marker-ink); }
 
-  /* Stoppuhr */
-  .timer { display: grid; gap: 14px; }
-  .timer.running { border-color: var(--marker); box-shadow: 0 0 0 3px color-mix(in srgb, var(--marker) 35%, transparent); }
-  .clock { font-family: var(--f-mono); font-size: clamp(2.4rem, 9vw, 3.6rem); font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-  .timer.running .clock { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--marker) 70%, transparent) 55%); display: inline-block; padding-inline: 4px; }
-  .timer-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  /* Fortschrittsbalken mit Soll-Markierung */
+  .pbar { display: block; position: relative; height: 10px; background: var(--blue-soft); border-radius: 2px; }
+  .pbar.lg { height: 14px; }
+  .pbar .fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--blue); border-radius: 2px; }
+  .pbar .soll { position: absolute; top: -5px; bottom: -5px; width: 2px; margin-left: -1px; background: var(--ink); }
+  .pbar .soll::before { content: ""; position: absolute; top: -5px; left: -4px; border: 5px solid transparent; border-top-color: var(--ink); border-bottom: 0; }
+  @media (prefers-reduced-motion: no-preference) { .pbar .fill, .hbar span { transition: width .35s ease; } }
 
-  /* Formulare */
+  /* Reiter */
+  nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none;
+    background: color-mix(in srgb, var(--paper) 92%, transparent); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); padding: 6px 4px; margin-inline: -4px; }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  nav.tabs button { flex: none; border: 1px solid transparent; background: transparent; color: var(--muted); font-weight: 600; padding: 7px 12px; border-radius: 4px; }
+  nav.tabs button[aria-selected="true"] { background: var(--sheet); color: var(--ink); border-color: var(--rule); box-shadow: inset 0 -2px 0 var(--blue); }
+
+  /* Formulare & Knöpfe */
   .fields { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
   .fields .wide { grid-column: 1 / -1; }
   label.f { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); font-weight: 500; }
-  input, select, textarea {
-    font: inherit; font-size: 0.95rem; color: var(--ink); background: var(--paper);
-    border: 1px solid var(--rule); border-radius: 4px; padding: 8px 10px; width: 100%; min-width: 0;
-  }
-  textarea { resize: vertical; min-height: 64px; }
-  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible {
-    outline: 2px solid var(--blue); outline-offset: 1px;
-  }
+  input, select, textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 10px; width: 100%; min-width: 0; }
+  textarea { resize: vertical; min-height: 60px; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
   .btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  button {
-    font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-radius: 4px;
-    padding: 8px 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink);
-  }
-  button:hover { border-color: var(--muted); }
-  button.primary { background: var(--blue); border-color: var(--blue); color: var(--sheet); }
-  button.primary:hover { filter: brightness(1.08); }
-  button.go { background: var(--marker); border-color: var(--marker); color: var(--marker-ink); font-size: 1rem; padding: 10px 20px; }
-  button.ghost { background: transparent; border-color: transparent; color: var(--muted); padding: 6px 8px; }
+  button { font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-radius: 4px; padding: 8px 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); }
+  button:hover:not(:disabled) { border-color: var(--muted); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.primary { background: var(--blue); border-color: var(--blue); color: var(--blue-ink); }
+  button.go { background: var(--marker); border-color: var(--marker); color: var(--marker-ink); font-size: 1rem; padding: 10px 22px; }
+  button.ghost { background: transparent; border-color: transparent; color: var(--muted); padding: 5px 8px; }
   button.ghost:hover { color: var(--ink); }
   button.danger { color: var(--danger); }
-  .hint { font-size: 0.8rem; color: var(--muted); }
-  .toast { font-size: 0.85rem; color: var(--good); min-height: 1.3em; }
-  .toast.err { color: var(--danger); }
+  button.icon { padding: 4px 10px; font-size: 0.85rem; }
+  .msg { font-size: 0.85rem; color: var(--good); min-height: 1.3em; }
+  .msg.err { color: var(--danger); }
 
-  /* Fortschritt */
-  .progress-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .big { font-family: var(--f-display); font-size: 2.6rem; font-weight: 700; line-height: 1; }
-  .big small { font-family: var(--f-body); font-size: 0.95rem; font-weight: 500; color: var(--muted); }
-  .bar { height: 12px; background: var(--blue-soft); border-radius: 2px; overflow: hidden; margin-top: 12px; position: relative; }
-  .bar > span { display: block; height: 100%; background: var(--blue); }
-  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+  /* Projektplan */
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .kpi { display: grid; gap: 2px; min-width: 0; align-content: start; }
+  .kpi .v { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; line-height: 1.15; overflow-wrap: anywhere; }
+  .kpi .v.small { font-size: 1.05rem; line-height: 1.3; overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
+  .kpi .s { font-size: 0.8rem; color: var(--muted); }
+  .overall { display: grid; gap: 8px; margin-top: 18px; }
+  .overall .row { display: flex; justify-content: space-between; gap: 4px 10px; flex-wrap: wrap; font-size: 0.88rem; }
+  .ahead { font-weight: 600; }
+  .ahead.pos { color: var(--good); } .ahead.neg { color: var(--warn); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+
+  .phases { display: grid; gap: 10px; }
+  details.phase { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+  details.phase.current { border-color: color-mix(in srgb, var(--marker) 80%, var(--rule)); box-shadow: inset 4px 0 0 var(--marker); }
+  details.phase > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: grid; gap: 8px; }
+  details.phase > summary::-webkit-details-marker { display: none; }
+  .ph-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .ph-head h3 { font-size: 1.05rem; }
+  .ph-head .chev { margin-left: auto; color: var(--muted); transition: transform .2s; }
+  details[open] > summary .chev { transform: rotate(180deg); }
+  .ph-meta { font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .ph-bar { display: grid; grid-template-columns: minmax(0, 1fr) 3.4rem; gap: 10px; align-items: center; }
+  .ph-bar .num { text-align: right; font-weight: 500; }
+  .ph-body { padding: 0 16px 14px; display: grid; gap: 8px; }
+  .ph-desc { color: var(--muted); font-size: 0.9rem; margin: 0; }
+  ul.subs { list-style: none; margin: 0; padding: 0; display: grid; }
+  li.sub { display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, 15rem); gap: 4px 16px; align-items: center; padding: 9px 0; border-top: 1px solid var(--rule); }
+  .sub-main { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 8px; align-items: start; }
+  .tick { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--rule); display: grid; place-items: center; margin-top: 1px; }
+  li.sub.done .tick { background: var(--good); border-color: var(--good); color: var(--sheet); }
+  .tick svg { width: 12px; height: 12px; }
+  .sub-name { overflow-wrap: anywhere; }
+  li.sub.done .sub-name { text-decoration: line-through; color: var(--muted); }
+  .sub-desc { font-size: 0.8rem; color: var(--muted); }
+  .sub-h { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+  .sub-ctl { display: grid; grid-template-columns: minmax(0, 1fr) 3.2rem; gap: 8px; align-items: center; }
+  .sub-ctl output { font-family: var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; font-size: 0.9rem; }
+  input[type="range"] { padding: 0; border: 0; background: transparent; accent-color: var(--blue); height: 30px; }
+  input[type="range"]:disabled { opacity: 0.5; }
+  @media (max-width: 640px) {
+    li.sub { grid-template-columns: minmax(0, 1fr); }
+    .sub-ctl { padding-left: 30px; }
+    .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  /* Plan bearbeiten */
+  .phase.edit { background: var(--sheet); border: 1px dashed var(--blue); border-radius: 6px; padding: 14px 16px; display: grid; gap: 10px; }
+  .ed-grid { display: grid; gap: 8px; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); }
+  .ed-sub { display: grid; gap: 6px; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; align-items: center; padding-top: 6px; border-top: 1px solid var(--rule); }
+  .ed-acts { display: flex; gap: 4px; }
+  .ed-warn { color: var(--danger); font-size: 0.82rem; }
+  @media (max-width: 640px) { .ed-grid, .ed-sub { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Stunden */
+  .two { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  @media (max-width: 860px) { .two { grid-template-columns: minmax(0, 1fr); } }
+  .timer { display: grid; gap: 12px; }
+  .timer.running { border-color: var(--marker); box-shadow: 0 0 0 3px color-mix(in srgb, var(--marker) 40%, transparent); }
+  .clock { font-family: var(--f-mono); font-size: clamp(2.3rem, 9vw, 3.4rem); font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+  .timer.running .clock { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--marker) 70%, transparent) 55%); justify-self: start; padding-inline: 4px; }
+  .head-row { display: flex; justify-content: space-between; gap: 6px 10px; align-items: baseline; flex-wrap: wrap; }
+
+  /* Auswertung */
+  .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
   .facts div { display: grid; gap: 2px; }
-  .facts .v { font-family: var(--f-mono); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
-
-  .rows { display: grid; gap: 10px; margin-top: 12px; }
-  .hrow { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 4.2rem; gap: 10px; align-items: center; font-size: 0.88rem; }
+  .facts .v { font-family: var(--f-mono); font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+  @media (max-width: 560px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .rows { display: grid; gap: 9px; margin-top: 12px; }
+  .hrow { display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) 4.6rem; gap: 10px; align-items: center; font-size: 0.88rem; }
   .hrow .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .hrow .track { height: 8px; background: var(--blue-soft); border-radius: 2px; overflow: hidden; }
-  .hrow .track span { display: block; height: 100%; }
+  .hbar { height: 8px; background: var(--blue-soft); border-radius: 2px; overflow: hidden; }
+  .hbar span { display: block; height: 100%; }
   .hrow .val { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
-
+  @media (max-width: 560px) { .hrow { grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr) 4.2rem; } }
   svg.chart { width: 100%; height: auto; display: block; margin-top: 8px; }
   svg.chart text { fill: var(--muted); font-family: var(--f-mono); font-size: 10px; }
-  svg.chart .gridline { stroke: var(--rule); stroke-width: 1; }
+  svg.chart .grid { stroke: var(--rule); stroke-width: 1; }
   svg.chart .b { fill: var(--blue); }
   svg.chart .b.now { fill: var(--marker); }
-  svg.chart .vlabel { fill: var(--ink); }
+  svg.chart .vl { fill: var(--ink); }
 
   /* Protokoll */
-  .log-head { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
   .filters { display: flex; flex-wrap: wrap; gap: 8px; }
-  .filters select { width: auto; font-size: 0.85rem; padding: 6px 8px; }
-  .month { margin-top: 18px; }
+  .filters select { width: auto; max-width: 100%; font-size: 0.9rem; padding: 6px 8px; }
+  .month { margin-top: 16px; }
   .month-head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
-  .month-head h3 { font-size: 1rem; }
   .entry { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr) auto; gap: 4px 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); align-items: start; }
   .entry .d { font-family: var(--f-mono); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
   .entry .d .t { color: var(--muted); font-size: 0.78rem; display: block; }
-  .entry .body { min-width: 0; }
   .entry .note { overflow-wrap: anywhere; }
-  .entry .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; font-size: 0.78rem; color: var(--muted); align-items: center; }
-  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; background: var(--blue-soft); color: var(--ink); }
-  .chip i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .entry .meta { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 4px; font-size: 0.78rem; color: var(--muted); align-items: center; }
+  .chip { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; background: var(--blue-soft); color: var(--ink); max-width: 100%; }
+  .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .entry .dur { font-family: var(--f-mono); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
   .entry .acts { display: flex; gap: 2px; justify-content: flex-end; margin-top: 2px; }
   .entry .acts button { font-size: 0.78rem; padding: 2px 6px; }
-  .entry.example { opacity: 0.72; }
-  .banner { background: var(--blue-soft); border-radius: 4px; padding: 10px 12px; font-size: 0.88rem; margin-top: 12px; }
-  .empty { color: var(--muted); padding: 16px 0; }
-
-  details.settings summary { cursor: pointer; font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; }
-  details.settings[open] summary { margin-bottom: 14px; }
-  @media (prefers-reduced-motion: no-preference) { .bar > span, .hrow .track span { transition: width .4s ease; } }
-  .whoami { display: grid; justify-items: end; gap: 6px; }
-  label.me { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; }
-  label.me select { width: auto; background: var(--sheet); font-weight: 600; }
-  label.me.unset select { border-color: var(--marker); box-shadow: 0 0 0 3px color-mix(in srgb, var(--marker) 40%, transparent); }
-  h2 .for { font-family: var(--f-body); font-weight: 500; font-size: 0.9rem; color: var(--muted); }
-  .hrow.person { grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 7.5rem; }
-  .hrow.person.me .name { font-weight: 600; }
-  .hrow.person .val small { color: var(--muted); }
+  .empty { color: var(--muted); padding: 14px 0; }
   @media (max-width: 520px) {
-    .whoami { justify-items: start; }
-    .hrow.person { grid-template-columns: minmax(0, 5.5rem) minmax(0, 1fr) 6.8rem; }
     .entry { grid-template-columns: minmax(0, 1fr) auto; }
     .entry .d { grid-column: 1 / -1; display: flex; gap: 8px; }
     .entry .d .t { display: inline; }
-    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .hrow { grid-template-columns: minmax(0, 6.5rem) minmax(0, 1fr) 3.8rem; }
   }
-</style>
 
+  .settings-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); align-items: start; }
+  #toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 20; width: max-content; max-width: min(92vw, 520px);
+    background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 6px; font-size: 0.9rem; box-shadow: 0 6px 24px rgba(0,0,0,.2); }
+  #toast.err { background: var(--danger); color: #fff; }
+</style>
+</head>
+<body>
 <div class="wrap">
   <header class="top">
     <div>
-      <div class="label">Arbeitsprotokoll</div>
-      <h1 id="projTitle">Maturaprojekt</h1>
-      <div class="sub" id="projSub"></div>
+      <div class="label">Maturaprojekt · Bautechnik</div>
+      <h1 id="projTitle">Doppelhaushälfte</h1>
+      <div class="sub">Projektplan &amp; Arbeitsprotokoll</div>
     </div>
     <div class="whoami">
-      <label class="me" id="meBox">Ich bin
-        <select id="meSel"></select>
-      </label>
+      <label class="me" id="meBox">Ich bin <select id="meSel"></select></label>
+      <button class="pill" id="timerPill" type="button" hidden></button>
       <span class="sync" id="sync">Lade …</span>
     </div>
   </header>
 
-  <div class="banner" id="notLinked" hidden><strong>Nicht mit dem Team verbunden.</strong> Einträge landen nur in diesem Browser. Öffne den Einladungslink, den du bekommen hast (am besten direkt in Safari bzw. Chrome, nicht in WhatsApp), oder verbinde die App unten bei „Team verbinden“.</div>
+  <div class="banner warn" id="notLinked" hidden><strong>Nicht mit der Team-Datenbank verbunden.</strong> Änderungen landen nur in diesem Browser. Öffne den Einladungslink aus eurer Gruppe (am besten direkt in Safari/Chrome) oder verbinde die Datenbank unter „Einstellungen“.</div>
 
-  <div class="grid-main">
-    <div class="col">
-      <!-- Stoppuhr -->
+  <section class="groups" id="groupCards" aria-label="Gruppen"></section>
+
+  <nav class="tabs" role="tablist" aria-label="Bereiche">
+    <button type="button" role="tab" data-tab="plan" aria-selected="true">Projektplan</button>
+    <button type="button" role="tab" data-tab="hours" aria-selected="false">Stunden erfassen</button>
+    <button type="button" role="tab" data-tab="stats" aria-selected="false">Auswertung</button>
+    <button type="button" role="tab" data-tab="log" aria-selected="false">Protokoll</button>
+    <button type="button" role="tab" data-tab="settings" aria-selected="false">Einstellungen</button>
+  </nav>
+
+  <!-- PROJEKTPLAN -->
+  <section class="tab wrap" id="tab-plan" role="tabpanel" style="gap:12px; width:100%">
+    <div class="sheet">
+      <div class="kpis">
+        <div class="kpi"><span class="label">Gesamt</span><span class="v num" id="kPct">0 %</span><span class="s" id="kGroup"></span></div>
+        <div class="kpi"><span class="label">Unterphasen fertig</span><span class="v num" id="kDone">0 / 0</span><span class="s">mit 100 %</span></div>
+        <div class="kpi"><span class="label">Aktuelle Phase</span><span class="v small" id="kPhase">–</span><span class="s" id="kPhasePct"></span></div>
+        <div class="kpi"><span class="label">Phasenende</span><span class="v small num" id="kEnd">–</span><span class="s" id="kEndLeft"></span></div>
+      </div>
+      <div class="overall">
+        <div class="row"><span>Fortschritt <span class="muted" id="ovName"></span></span><span class="ahead" id="ovAhead"></span></div>
+        <div id="ovBar"></div>
+        <div class="row hint"><span>Blau = erledigt · Strich = Soll laut Zeitplan (heute <span id="ovSoll">0</span> %)</span></div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <span class="hint" id="permHint"></span>
+      <div class="btns">
+        <button type="button" class="ghost" id="toggleAll">Alle aufklappen</button>
+        <button type="button" id="editPlan">Plan bearbeiten</button>
+      </div>
+    </div>
+    <div class="phases" id="phases"></div>
+  </section>
+
+  <!-- STUNDEN -->
+  <section class="tab" id="tab-hours" role="tabpanel" hidden>
+    <div class="two">
       <section class="sheet timer" id="timerBox" aria-labelledby="timerH">
-        <div class="timer-row">
-          <h2 id="timerH">Stoppuhr <span class="for" id="timerFor"></span></h2>
-          <span class="hint" id="timerSince">Läuft nicht</span>
-        </div>
-        <div class="clock" id="clock" aria-live="off">0:00:00</div>
+        <div class="head-row"><h2 id="timerH">Stoppuhr <span class="hint" id="timerFor"></span></h2><span class="hint" id="timerSince">Läuft nicht</span></div>
+        <div class="clock" id="clock">0:00:00</div>
         <div class="fields">
-          <label class="f wide">Kategorie
-            <select id="tCat"></select>
-          </label>
-          <label class="f wide">Woran arbeitest du?
-            <input id="tNote" type="text" placeholder="z. B. Schnitt A-A zeichnen">
-          </label>
+          <label class="f wide">Unterphase <select id="tSub"></select></label>
+          <label class="f wide">Woran arbeitest du? (optional) <input id="tNote" type="text" placeholder="z. B. Kellergrundriss Wandstärken eintragen"></label>
         </div>
         <div class="btns">
           <button class="go" id="tStart" type="button">Start</button>
@@ -224,157 +327,181 @@
         </div>
       </section>
 
-      <!-- Manuell -->
       <section class="sheet" aria-labelledby="formH">
         <form id="entryForm" novalidate>
-          <div class="timer-row" style="margin-bottom:14px">
-            <h2 id="formH">Stunden nachtragen</h2>
-            <button class="ghost" type="button" id="cancelEdit" hidden>Bearbeiten abbrechen</button>
-          </div>
+          <div class="head-row" style="margin-bottom:12px"><h2 id="formH">Stunden nachtragen</h2><button class="ghost" type="button" id="cancelEdit" hidden>Bearbeiten abbrechen</button></div>
           <div class="fields">
             <label class="f">Datum <input id="fDate" type="date" required></label>
             <label class="f">Von <input id="fStart" type="time"></label>
             <label class="f">Bis <input id="fEnd" type="time"></label>
-            <label class="f">Dauer (h:mm) <input id="fDur" type="text" inputmode="numeric" placeholder="1:30"></label>
-            <label class="f">Wer <select id="fPerson"></select></label>
-            <label class="f">Kategorie <select id="fCat"></select></label>
-            <label class="f wide">Tätigkeit <textarea id="fNote" placeholder="Was wurde gemacht? Das steht später so im Protokoll."></textarea></label>
+            <label class="f">Dauer (h:mm oder 1,5) <input id="fDur" type="text" inputmode="decimal" placeholder="1:30"></label>
+            <label class="f">Person <select id="fPerson"></select></label>
+            <label class="f wide">Unterphase <select id="fSub"></select></label>
+            <label class="f wide">Tätigkeit <textarea id="fNote" placeholder="Was wurde gemacht? So steht es später im Protokoll."></textarea></label>
           </div>
-          <div class="btns" style="margin-top:14px">
-            <button class="primary" type="submit" id="saveBtn">Eintragen</button>
-            <span class="hint">Von/Bis ausfüllen – oder nur die Dauer.</span>
-          </div>
-          <div class="toast" id="formMsg" role="status"></div>
+          <div class="btns" style="margin-top:12px"><button class="primary" type="submit" id="saveBtn">Eintragen</button><span class="hint">Von/Bis ausfüllen – oder nur die Dauer.</span></div>
+          <div class="msg" id="formMsg" role="status"></div>
         </form>
       </section>
-
-      <!-- Protokoll -->
-      <section class="sheet" aria-labelledby="logH">
-        <div class="log-head">
-          <h2 id="logH">Protokoll</h2>
-          <div class="filters">
-            <select id="filterPerson" aria-label="Nach Person filtern"></select>
-            <select id="filterCat" aria-label="Nach Kategorie filtern"></select>
-          </div>
-        </div>
-        <div id="exampleBanner" class="banner" hidden>Das sind <strong>Beispieleinträge</strong>, damit du siehst, wie es aussieht. Sie verschwinden, sobald du den ersten eigenen Eintrag machst.</div>
-        <div id="log"></div>
-      </section>
     </div>
+  </section>
 
-    <div class="col">
-      <section class="sheet" aria-labelledby="progH">
-        <div class="progress-head">
-          <h2 id="progH">Fortschritt</h2>
-          <span class="label" id="progPct"></span>
+  <!-- AUSWERTUNG -->
+  <section class="tab wrap" id="tab-stats" role="tabpanel" hidden style="width:100%">
+    <section class="sheet">
+      <h2>Stunden · <span id="stGroup"></span></h2>
+      <div class="facts" style="margin-top:12px">
+        <div><span class="label">Gesamt</span><span class="v" id="sTotal">0:00</span></div>
+        <div><span class="label">Diese Woche</span><span class="v" id="sWeek">0:00</span></div>
+        <div><span class="label">Einträge</span><span class="v" id="sCount">0</span></div>
+        <div><span class="label">Ø pro Woche</span><span class="v" id="sAvg">0:00</span></div>
+      </div>
+    </section>
+    <div class="two">
+      <section class="sheet"><h2>Pro Person</h2><div class="rows" id="sPeople"></div></section>
+      <section class="sheet"><h2>Letzte 10 Kalenderwochen</h2><div id="sWeeks"></div></section>
+    </div>
+    <section class="sheet"><h2>Pro Phase</h2><div class="rows" id="sPhases"></div></section>
+  </section>
+
+  <!-- PROTOKOLL -->
+  <section class="tab" id="tab-log" role="tabpanel" hidden>
+    <section class="sheet">
+      <div class="head-row">
+        <h2>Protokoll · <span id="logGroup"></span></h2>
+        <div class="filters">
+          <select id="filterPerson" aria-label="Nach Person filtern"></select>
+          <select id="filterPhase" aria-label="Nach Phase filtern"></select>
         </div>
-        <div style="margin-top:10px" class="big"><span id="totalH" class="num">0</span> <small id="goalTxt">von 180 h</small></div>
-        <div class="bar" role="progressbar" aria-labelledby="progH" id="progBar" aria-valuemin="0" aria-valuemax="100"><span id="progFill" style="width:0%"></span></div>
-        <div class="facts">
-          <div><span class="label">Diese Woche</span><span class="v" id="fWeek">0:00</span></div>
-          <div><span class="label">Einträge</span><span class="v" id="fCount">0</span></div>
-          <div><span class="label">Ø pro Woche</span><span class="v" id="fAvg">0:00</span></div>
-        </div>
-        <p class="hint" id="paceTxt" style="margin-bottom:0"></p>
-      </section>
+      </div>
+      <div id="log"></div>
+    </section>
+  </section>
 
-      <section class="sheet" aria-labelledby="weekH">
-        <h2 id="weekH">Team · letzte 10 Kalenderwochen</h2>
-        <div id="weekChart"></div>
-      </section>
-
-      <section class="sheet" aria-labelledby="catH">
-        <h2 id="catH">Team · nach Kategorie</h2>
-        <div class="rows" id="catRows"></div>
-      </section>
-
-      <section class="sheet" aria-labelledby="personH" id="personBox">
-        <h2 id="personH">Team – Stunden pro Person</h2>
-        <p class="hint" id="personHint" hidden>Tragt unter „Projekt einrichten“ eure Namen ein – dann kann jede Person oben bei „Ich bin“ sich selbst auswählen.</p>
-        <div class="rows" id="personRows"></div>
-      </section>
-
-      <section class="sheet" aria-labelledby="expH">
-        <h2 id="expH">Export &amp; Sicherung</h2>
-        <p class="hint">Die Excel-Datei enthält eine Übersicht, alle Einträge und ein eigenes Blatt pro Person – ideal als Anhang für das Arbeitsprotokoll.</p>
-        <div class="btns">
-          <button type="button" class="primary" id="expXlsx">Als Excel-Tabelle exportieren</button>
-          <button type="button" id="expJson">Sicherung (JSON)</button>
-          <label class="f" style="display:inline-block">
-            <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Sicherung importieren</span>
-            <input type="file" id="impJson" accept="application/json,.json" hidden>
-            <button type="button" id="impBtn">Sicherung importieren</button>
-          </label>
-        </div>
-        <div class="toast" id="expMsg" role="status"></div>
-      </section>
-
-      <section class="sheet" aria-labelledby="teamH" id="teamBox">
-        <h2 id="teamH">Team verbinden</h2>
-        <div id="teamOff">
-          <p class="hint">Damit alle vier gemeinsam eintragen, verbindet die App mit einer Google-Tabelle. Die Anleitung steht in der README. Wer einen Einladungslink bekommen hat, muss hier nichts tun.</p>
-          <form id="teamForm" class="fields" novalidate>
-            <label class="f wide">Web-App-Adresse der Google-Tabelle <input id="gUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec"></label>
-            <label class="f wide">Team-Code <input id="gKey" type="text" autocomplete="off"></label>
-            <div class="btns wide"><button class="primary" type="submit" id="gConnect">Verbinden</button></div>
-          </form>
-        </div>
-        <div id="teamOn" hidden>
-          <p class="toast" id="teamStatus" style="margin:8px 0 0"></p>
-          <p class="hint" style="margin-top:8px">Verbunden mit eurer Google-Tabelle. Schick diesen Einladungslink an dein Team – wer ihn öffnet, ist sofort verbunden:</p>
-          <input id="gInvite" type="text" readonly aria-label="Einladungslink">
-          <div class="btns" style="margin-top:8px">
-            <button type="button" id="gRefresh">Jetzt aktualisieren</button>
-            <button type="button" id="gCopy">Link kopieren</button>
-            <button type="button" id="gUpload" hidden></button>
-            <button type="button" class="ghost danger" id="gDisconnect">Trennen</button>
-          </div>
-        </div>
-        <div class="toast" id="teamMsg" role="status"></div>
+  <!-- EINSTELLUNGEN -->
+  <section class="tab" id="tab-settings" role="tabpanel" hidden>
+    <div class="settings-grid">
+      <section class="sheet">
+        <h2>Gruppen</h2>
+        <p class="hint">Mitglieder mit Komma trennen. Wird ein Name geändert, werden die bisherigen Einträge dieser Person automatisch umbenannt.</p>
+        <form id="groupForm" class="fields" novalidate></form>
+        <div class="msg" id="groupMsg" role="status"></div>
       </section>
 
       <section class="sheet">
-        <details class="settings" id="settingsBox">
-          <summary>Projekt einrichten</summary>
-          <form id="settingsForm" class="fields" novalidate>
-            <label class="f wide">Projekttitel <input id="sTitle" type="text" placeholder="z. B. Maturaprojekt Doppelhaushälfte"></label>
-            <label class="f">Zielstunden pro Person <input id="sGoal" type="number" min="1" step="1"></label>
-            <label class="f">Abgabetermin <input id="sDue" type="date"></label>
-            <label class="f wide">Teammitglieder (mit Komma getrennt) <input id="sPeople" type="text" placeholder="Anna, Ben, Lea, Tom"></label>
-            <p class="hint wide" style="margin:0">Wenn ihr einen Namen ändert, werden die bisherigen Einträge dieser Person automatisch mit umbenannt.</p>
-            <label class="f wide">Kategorien (mit Komma getrennt) <input id="sCats" type="text"></label>
-            <div class="btns wide"><button class="primary" type="submit">Speichern</button><span class="toast" id="setMsg" role="status"></span></div>
+        <h2>Team-Datenbank</h2>
+        <div id="dbOff">
+          <p class="hint">Damit alle vier dieselben Daten sehen, wird die Seite mit eurer Supabase-Datenbank verbunden (Anleitung in der README). Wer den Einladungslink bekommen hat, muss hier nichts tun.</p>
+          <form id="dbForm" class="fields" novalidate>
+            <label class="f wide">Project URL <input id="dbUrl" type="url" placeholder="https://abcd1234.supabase.co" autocomplete="off"></label>
+            <label class="f wide">Publishable key (oder anon key) <input id="dbKey" type="text" autocomplete="off" spellcheck="false"></label>
+            <div class="btns wide"><button class="primary" type="submit" id="dbConnect">Verbinden</button></div>
           </form>
-        </details>
+        </div>
+        <div id="dbOn" hidden>
+          <p class="msg" id="dbStatus" style="margin:0 0 8px"></p>
+          <p class="hint" style="margin-top:0">Einladungslink für alle vier – wer ihn öffnet, ist sofort verbunden. Nur im Team teilen.</p>
+          <input id="dbInvite" type="text" readonly aria-label="Einladungslink">
+          <div class="btns" style="margin-top:8px">
+            <button type="button" id="dbCopy">Link kopieren</button>
+            <button type="button" id="dbRefresh">Jetzt aktualisieren</button>
+            <button type="button" class="ghost danger" id="dbDisconnect">Trennen</button>
+          </div>
+        </div>
+        <div class="msg" id="dbMsg" role="status"></div>
+      </section>
+
+      <section class="sheet">
+        <h2>Export &amp; Sicherung</h2>
+        <p class="hint">Excel enthält eine Übersicht, den Projektplan mit % und Stunden je Gruppe und ein Protokoll-Blatt pro Gruppe.</p>
+        <div class="btns">
+          <button type="button" class="primary" id="expXlsx">Als Excel exportieren</button>
+          <button type="button" id="expJson">Sicherung (JSON)</button>
+          <button type="button" id="impBtn">Sicherung importieren</button>
+          <input type="file" id="impFile" accept="application/json,.json" hidden>
+        </div>
+        <div id="impConfirm" class="banner" hidden style="margin-top:10px"></div>
+        <div class="msg" id="expMsg" role="status"></div>
+      </section>
+
+      <section class="sheet" id="legacyBox" hidden>
+        <h2>Alte Stundenliste übernehmen</h2>
+        <p class="hint">Auf diesem Gerät ist noch die Verbindung zur alten Google-Tabelle gespeichert. Ihre Einträge können einmalig übernommen werden – die alte Kategorie wird der Tätigkeit vorangestellt, Unterphase „Allgemein“. Doppelte Einträge werden übersprungen.</p>
+        <button type="button" id="legacyImport">Einträge aus Google-Tabelle übernehmen</button>
+        <div class="msg" id="legacyMsg" role="status"></div>
       </section>
     </div>
-  </div>
+  </section>
 </div>
+<div id="toast" role="status" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 (() => {
   "use strict";
   const $ = (id) => document.getElementById(id);
-  const DEFAULT_SETTINGS = {
-    title: "Maturaprojekt",
-    goal: 125,
-    due: "",
-    people: ["Person 1", "Person 2", "Person 3", "Person 4"],
-    cats: ["Recherche", "Entwurf & Planung", "CAD-Pläne", "Statik & Berechnungen", "Kosten & Ausschreibung", "Dokumentation schreiben", "Betreuungsgespräch", "Teamsitzung", "Präsentation"],
-  };
-  const LS_KEY = "matura-stundenlog-v1";
-  const LS_TIMER = "matura-stundenlog-timers";
-  const LS_ME = "matura-stundenlog-me";
-  const me = () => { const m = lsGet(LS_ME); return state.settings.people.includes(m) ? m : ""; };
 
-  // ---------- Hilfsfunktionen ----------
+  // ================= Startdaten (aus Projektzeitplan.xlsx) =================
+  // [Phase, Start, Ende, [[Unterphase, Fortschritt „Obexer & Taferner“], …]]
+  const SEED = [
+    ["Vorentwurfsplanung", "2026-09-17", "2026-11-01", [
+      ["Grundstücksanalyse", 100], ["Ausrichtung nach Himmelsrichtungen", 60], ["Lichtachsen und Verschattung", 40],
+      ["Zufahrt und Zugänge festlegen", 80], ["Raumprogramm festlegen", 0], ["Kellerkonzept festlegen", 40],
+      ["Technikraum positionieren (UG)", 0], ["Kellerabteile/Lagerräume planen", 10], ["Garage/Stellplätze im Keller erstellen", 80],
+      ["Erschließung Keller–EG festlegen", 25], ["Kellergrundriss ausarbeiten", 100], ["Gebäudeform und Position festlegen", 70],
+      ["Erschließungskonzept festlegen (EG)", 40], ["Dachform wählen", 0], ["Fensterkonzept grob festlegen", 0],
+      ["Grundskizzen erstellen", 25], ["Varianten vergleichen", 0], ["Gruppensitzung mit Verbesserungsvorschlägen", 0],
+      ["Änderungen aus Gruppensitzung umsetzen", 0], ["Abstimmung mit Tutor", 0], ["Vorentwurf abschließen durch gegenseitige Kontrolle", 0]]],
+    ["Entwurfsplanung", "2026-11-02", "2026-12-06", [
+      ["Raumgrößen kontrollieren"], ["Möblierung einzeichnen"], ["Verkehrsflächen optimieren"], ["Erschließung optimieren"],
+      ["Treppenhaus dimensionieren"], ["Fluchtwege festlegen"], ["Deckensystem wählen"], ["Spannweiten prüfen"],
+      ["Tragende Wände/Stützen festlegen"], ["Fensteranordnung optimieren"], ["Fassaden- und Dachgestaltung"], ["Materialkonzept erstellen"],
+      ["Wärmeschutzkonzept"], ["Wirtschaftlichkeit prüfen"], ["Gruppensitzung mit Verbesserungsvorschlägen"],
+      ["Änderungen aus Gruppensitzung umsetzen"], ["Freigabe für Einreichplanung"]]],
+    ["Einreichplanung", "2026-12-07", "2027-01-10", [
+      ["Geländemodell modellieren", 90], ["UG1 modellieren"], ["EG modellieren"], ["OG1 modellieren"], ["OG2/DG modellieren"],
+      ["Dach modellieren"], ["Qualitätskontrolle des BIM-Modells durch schulinterne Person"], ["Grundrisse ableiten"], ["Schnitte ableiten"],
+      ["Ansichten ableiten"], ["Lageplan erstellen"], ["Flächenberechnung"], ["Kubaturberechnung"], ["Planlayout erstellen"],
+      ["Interne Qualitätskontrolle durch Tutor"], ["Einreichplanung abschließen"]]],
+    ["Detailplanung", "2027-01-11", "2027-02-07", [
+      ["Detailzeichnungen erstellen"], ["Nachweis für Wärmeschutz erbringen"], ["Nachweis für Schallschutz erbringen"],
+      ["Nachweis für Brandschutzkonzept erbringen"], ["Nachweis für Luftdichtheit erbringen"], ["Bodenaufbau festlegen"],
+      ["Lüftungssystem"], ["Heizsystem"], ["PV-Anlage"], ["(Schülerspezifische Spezialisierung)"], ["Gruppensitzung mit Verbesserungsvorschlägen"]]],
+    ["Abrechnung", "2027-02-08", "2027-03-14", [
+      ["Mengenermittlung erstellen"], ["Kostenberechnung erstellen"], ["Infrastrukturplan erstellen"], ["Sicherheitsplan erstellen"]]],
+    ["Visualisierung", "2027-03-15", "2027-04-25", [
+      ["3D-Modell für Renderings vorbereiten"], ["Modellbauplanung"], ["Modellbau"],
+      ["Vorstellen vor ausgewählter Kommission (mit Fachlehrern)"], ["Freigabe zur Abgabe des Projekts"]]],
+    ["Zeitpuffer", "2027-04-26", "2027-05-20", []],
+  ];
+  const SEED_GROUPS = [
+    { id: "g1", name: "Engl & Bürgstaller", members: ["Matthias Engl", "Paul Bürgstaller"] },
+    { id: "g2", name: "Obexer & Taferner", members: ["Josef Obexer", "Felix Taferner"] },
+  ];
+  const SEED_PROGRESS_GROUP = "g2";
   const pad = (n) => String(n).padStart(2, "0");
+  function seedPlan() {
+    return {
+      title: "Doppelhaushälfte",
+      phases: SEED.map(([name, start, end, subs], i) => ({
+        id: `ph${i + 1}`, name, start, end, desc: "",
+        subs: subs.map(([n], j) => ({ id: `ph${i + 1}-${pad(j + 1)}`, name: n, desc: "" })),
+      })),
+    };
+  }
+  function seedProgress() {
+    const out = [];
+    SEED.forEach(([, , , subs], i) => subs.forEach(([, p], j) => { if (p) out.push({ g: SEED_PROGRESS_GROUP, s: `ph${i + 1}-${pad(j + 1)}`, pct: p }); }));
+    return out;
+  }
+
+  // ================= Hilfsfunktionen =================
   const isoDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const hhmm = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   const fmtMin = (m) => `${Math.floor(m / 60)}:${pad(Math.round(m % 60))}`;
   const fmtH = (m) => (m / 60).toLocaleString("de-AT", { maximumFractionDigits: 1 });
-  const parseDate = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+  const parseDate = (s) => { const [y, m, d] = String(s).split("-").map(Number); return new Date(y, m - 1, d); };
+  const fmtDate = (s, withYear = true) => { if (!s) return "–"; const d = parseDate(s); return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${withYear ? d.getFullYear() : ""}`; };
   const toMin = (t) => { if (!t) return null; const [h, m] = t.split(":").map(Number); return h * 60 + m; };
   const parseDur = (s) => {
     s = (s || "").trim().replace(",", ".");
@@ -385,450 +512,494 @@
   };
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const today = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); };
+  const avg = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
   function isoWeek(d) {
     const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    const day = t.getUTCDay() || 7;
-    t.setUTCDate(t.getUTCDate() + 4 - day);
+    const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day);
     const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
-    return { year: t.getUTCFullYear(), week: Math.ceil(((t - y0) / 864e5 + 1) / 7) };
+    return Math.ceil(((t - y0) / 864e5 + 1) / 7);
   }
   function mondayOf(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
-  // Browser-Speicher mit Ersatz im Arbeitsspeicher (z. B. privater Modus, blockierte Website-Daten)
-  const memStore = {};
-  const lsGet = (k) => {
-    if (k in memStore) return memStore[k];
-    try { return JSON.parse(localStorage.getItem(k)); } catch { return null; }
-  };
+  const CHECK = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5 5 9l5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const CHEV = '<svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+  // Browser-Speicher mit Ersatz im Arbeitsspeicher (privater Modus, blockierte Website-Daten)
+  const mem = {};
+  const lsGet = (k) => { if (k in mem) return mem[k]; try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
   const lsSet = (k, v) => {
-    try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); delete memStore[k]; }
-    catch { memStore[k] = v == null ? null : JSON.parse(JSON.stringify(v)); }
+    try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); delete mem[k]; }
+    catch { mem[k] = v == null ? null : JSON.parse(JSON.stringify(v)); }
   };
-  function flash(el, msg, err) { el.textContent = msg; el.classList.toggle("err", !!err); clearTimeout(el._t); el._t = setTimeout(() => (el.textContent = ""), 4000); }
+  const LS = { me: "mp-me", view: "mp-view", timers: "mp-timers", db: "mp-db", cache: "mp-cache", local: "mp-local-v2",
+    legacySheet: "matura-stundenlog-sheet", legacyMe: "matura-stundenlog-me" };
 
-  // ---------- Speicher: geteilte Datenbank im Artifact, sonst Browser ----------
-  let state = { entries: [], settings: { ...DEFAULT_SETTINGS } };
-  let store = null;
+  let toastT;
+  function toast(msg, err) {
+    const t = $("toast"); t.textContent = msg; t.classList.toggle("err", !!err); t.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), err ? 6000 : 2600);
+  }
+  function flash(el, msg, err) { el.textContent = msg; el.classList.toggle("err", !!err); clearTimeout(el._t); el._t = setTimeout(() => (el.textContent = ""), 7000); }
+  // Zweistufiges Bestätigen direkt am Knopf (Browser-Dialoge sind auf Handys oft blockiert)
+  function confirmClick(btn, label, fn) {
+    if (btn.dataset.confirm) { delete btn.dataset.confirm; fn(); return; }
+    const orig = btn.textContent; btn.dataset.confirm = "1"; btn.textContent = label;
+    setTimeout(() => { if (btn.isConnected && btn.dataset.confirm) { delete btn.dataset.confirm; btn.textContent = orig; } }, 4000);
+  }
 
-  function localStore() {
-    const load = () => { const d = lsGet(LS_KEY) || {}; state.entries = d.entries || []; state.settings = { ...DEFAULT_SETTINGS, ...(d.settings || {}) }; };
-    const save = () => lsSet(LS_KEY, { entries: state.entries, settings: state.settings });
+  // ================= Zustand =================
+  const cache = lsGet(LS.cache);
+  const state = {
+    groups: cache?.groups || SEED_GROUPS,
+    plan: cache?.plan || seedPlan(),
+    progress: cache?.progress || {},
+    entries: cache?.entries || [],
+    view: lsGet(LS.view),
+    tab: "plan",
+    editPlan: false,
+  };
+  const allMembers = () => state.groups.flatMap((g) => g.members);
+  const groupOf = (person) => state.groups.find((g) => g.members.includes(person)) || null;
+  const groupById = (id) => state.groups.find((g) => g.id === id) || null;
+  function me() {
+    let m = lsGet(LS.me);
+    if (!m) { // aus der alten App übernehmen (dort standen nur Vornamen)
+      const old = lsGet(LS.legacyMe);
+      if (old) m = allMembers().find((x) => x === old || x.split(" ")[0] === old) || null;
+    }
+    return m && allMembers().includes(m) ? m : "";
+  }
+  const viewGroup = () => groupById(state.view) || groupOf(me()) || state.groups[0];
+  const allSubs = () => state.plan.phases.flatMap((p) => p.subs.map((s) => ({ ...s, phase: p })));
+  const subById = (id) => { if (!id) return null; for (const p of state.plan.phases) { const s = p.subs.find((x) => x.id === id); if (s) return { ...s, phase: p }; } return null; };
+  const pct = (gid, sid) => state.progress[`${gid}:${sid}`] || 0;
+
+  // ================= Berechnungen =================
+  // Anteil der verstrichenen Zeit einer Phase (Start- und Endtag zählen mit)
+  function elapsedFrac(ph, t = today()) {
+    if (!ph.start || !ph.end) return 0;
+    const s = parseDate(ph.start), e = parseDate(ph.end);
+    const total = (e - s) / 864e5 + 1;
+    if (total <= 0) return 0;
+    return clamp(((t - s) / 864e5 + 1) / total, 0, 1);
+  }
+  const phasePct = (gid, ph) => avg(ph.subs.map((s) => pct(gid, s.id)));
+  const groupPct = (gid) => avg(allSubs().map((s) => pct(gid, s.id)));
+  const sollPct = () => avg(allSubs().map((s) => elapsedFrac(s.phase) * 100));
+  const doneCount = (gid) => allSubs().filter((s) => pct(gid, s.id) >= 100).length;
+  const currentPhase = () => { const t = today(); return state.plan.phases.find((p) => p.start && p.end && parseDate(p.start) <= t && t <= parseDate(p.end)) || null; };
+  const groupEntries = (gid) => state.entries.filter((e) => e.group === gid);
+  const sumMin = (list) => list.reduce((a, e) => a + (Number(e.minutes) || 0), 0);
+  function hoursBySub(gid) { const m = {}; groupEntries(gid).forEach((e) => { const k = e.sub || ""; m[k] = (m[k] || 0) + e.minutes; }); return m; }
+  function aheadText(diff) {
+    const d = Math.round(diff);
+    if (d === 0) return { t: "genau im Zeitplan", c: "pos" };
+    return d > 0 ? { t: `${d} ${d === 1 ? "Punkt" : "Punkte"} vor dem Zeitplan`, c: "pos" } : { t: `${-d} ${d === -1 ? "Punkt" : "Punkte"} hinter dem Zeitplan`, c: "neg" };
+  }
+  const pbar = (val, soll, lg) => `<span class="pbar${lg ? " lg" : ""}"><span class="fill" style="width:${clamp(val, 0, 100).toFixed(1)}%"></span>${soll != null ? `<i class="soll" style="left:${clamp(soll, 0, 100).toFixed(1)}%" title="Soll: ${Math.round(soll)} %"></i>` : ""}</span>`;
+
+  // ================= Speicher-Backends =================
+  // Supabase über die REST-Schnittstelle (PostgREST) – Tabellen siehe supabase/schema.sql
+  function supabaseBackend(cfg) {
+    const base = cfg.url.replace(/\/+$/, "") + "/rest/v1/";
+    const headers = (prefer) => {
+      const h = { apikey: cfg.key, "Content-Type": "application/json" };
+      if (!cfg.key.startsWith("sb_")) h.Authorization = "Bearer " + cfg.key; // alter anon key (JWT)
+      if (prefer) h.Prefer = prefer;
+      return h;
+    };
+    async function req(method, path, body, prefer) {
+      const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 20000);
+      let res;
+      try { res = await fetch(base + path, { method, headers: headers(prefer), body: body ? JSON.stringify(body) : undefined, signal: ctrl.signal, cache: "no-store" }); }
+      catch (e) { throw new Error(navigator.onLine === false ? "Kein Internet" : e.name === "AbortError" ? "Datenbank antwortet nicht (Zeitüberschreitung)" : "Datenbank nicht erreichbar"); }
+      finally { clearTimeout(t); }
+      const txt = await res.text();
+      if (!res.ok) {
+        let m = txt; try { const j = JSON.parse(txt); m = j.message || j.msg || j.error || txt; } catch {}
+        if (res.status === 401 || res.status === 403) m = `Zugriff verweigert – Schlüssel prüfen (${m})`;
+        else if (res.status === 404) m = `Tabelle fehlt – wurde supabase/schema.sql ausgeführt? (${m})`;
+        throw new Error(m);
+      }
+      return txt ? JSON.parse(txt) : null;
+    }
+    async function all(table, select, order) {
+      let out = [];
+      for (let off = 0; ; off += 1000) {
+        const rows = await req("GET", `${table}?select=${select}${order ? `&order=${order}` : ""}&limit=1000&offset=${off}`);
+        out = out.concat(rows);
+        if (rows.length < 1000) return out;
+      }
+    }
+    const toRow = (e) => ({ id: e.id, date: e.date, start_time: e.start || null, end_time: e.end || null, minutes: e.minutes, person: e.person, group_id: e.group, subphase_id: e.sub || null, note: e.note || "" });
+    const fromRow = (r) => ({ id: r.id, date: r.date, start: r.start_time || "", end: r.end_time || "", minutes: Number(r.minutes) || 0, person: r.person, group: r.group_id, sub: r.subphase_id || "", note: r.note || "" });
+    const upsert = "resolution=merge-duplicates,return=minimal";
+    return {
+      mode: "supabase",
+      async load() {
+        const [cfgRows, prog, ents] = await Promise.all([all("config", "id,data"), all("progress", "group_id,subphase_id,pct"), all("entries", "*", "date.desc,id.asc")]);
+        const c = Object.fromEntries(cfgRows.map((r) => [r.id, r.data]));
+        return { groups: c.groups || null, plan: c.plan || null, progress: Object.fromEntries(prog.map((p) => [`${p.group_id}:${p.subphase_id}`, p.pct])), entries: ents.map(fromRow) };
+      },
+      putConfig: (id, data) => req("POST", "config?on_conflict=id", [{ id, data, updated_at: new Date().toISOString() }], upsert),
+      putProgress: (list) => req("POST", "progress?on_conflict=group_id,subphase_id", list.map((p) => ({ group_id: p.g, subphase_id: p.s, pct: p.pct, updated_by: p.by || null, updated_at: new Date().toISOString() })), upsert),
+      putEntries: (list) => req("POST", "entries?on_conflict=id", list.map(toRow), upsert),
+      delEntry: (id) => req("DELETE", `entries?id=eq.${encodeURIComponent(id)}`, null, "return=minimal"),
+      renamePerson: (from, to) => req("PATCH", `entries?person=eq.${encodeURIComponent(from)}`, { person: to }, "return=minimal"),
+    };
+  }
+  // Ohne Datenbank: nur dieser Browser
+  function localBackend() {
+    const get = () => lsGet(LS.local) || { groups: null, plan: null, progress: {}, entries: [] };
+    const edit = (fn) => { const d = get(); fn(d); lsSet(LS.local, d); };
     return {
       mode: "local",
-      start(cb) { load(); cb(); },
-      async add(e) { state.entries.push(e); save(); render(); },
-      async update(e) { state.entries = state.entries.map((x) => (x.id === e.id ? e : x)); save(); render(); },
-      async remove(id) { state.entries = state.entries.filter((x) => x.id !== id); save(); render(); },
-      async saveSettings(s) { state.settings = s; save(); render(); },
+      load: async () => JSON.parse(JSON.stringify(get())),
+      putConfig: async (id, data) => edit((d) => (d[id] = data)),
+      putProgress: async (list) => edit((d) => list.forEach((p) => (d.progress[`${p.g}:${p.s}`] = p.pct))),
+      putEntries: async (list) => edit((d) => list.forEach((e) => { const i = d.entries.findIndex((x) => x.id === e.id); if (i >= 0) d.entries[i] = e; else d.entries.push(e); })),
+      delEntry: async (id) => edit((d) => (d.entries = d.entries.filter((e) => e.id !== id))),
+      renamePerson: async (from, to) => edit((d) => d.entries.forEach((e) => { if (e.person === from) e.person = to; })),
     };
   }
 
-  function dbStore(db) {
-    const col = db.collection("entries");
-    const setDoc = db.doc("config/project");
-    const strip = ({ id, ...rest }) => rest;
-    return {
-      mode: "db",
-      start(cb) {
-        col.onSnapshot((snap) => { state.entries = snap.docs.map((d) => ({ ...d.data(), id: d.id })); cb(); },
-          () => { $("sync").textContent = "Verbindung getrennt – neu laden"; $("sync").classList.remove("on"); });
-        setDoc.onSnapshot((snap) => { state.settings = { ...DEFAULT_SETTINGS, ...(snap.exists ? snap.data() : {}) }; cb(); }, () => {});
-      },
-      add: (e) => col.doc(e.id).set(strip(e)),
-      update: (e) => col.doc(e.id).set(strip(e)),
-      remove: (id) => col.doc(id).delete(),
-      saveSettings: (s) => setDoc.set(s),
-    };
+  // ================= Abgleich =================
+  let backend = null, pending = 0, lastSig = "", lastSync = null, syncErr = "";
+  function setSync() {
+    const s = $("sync");
+    s.classList.remove("on", "err");
+    if (!backend) s.textContent = "Lade …";
+    else if (backend.mode === "local") s.textContent = "Nur in diesem Browser";
+    else if (syncErr) { s.classList.add("err"); s.textContent = `Keine Verbindung: ${syncErr}`; }
+    else if (lastSync) { s.classList.add("on"); s.textContent = `Live · Stand ${hhmm(lastSync)}`; }
+    else s.textContent = "Verbinde …";
+    const st = $("dbStatus");
+    st.textContent = syncErr ? `Abgleich fehlgeschlagen: ${syncErr}. Neuer Versuch in wenigen Sekunden.` : lastSync ? `Verbunden – letzter Abgleich ${hhmm(lastSync)} Uhr, ${state.entries.length} Einträge.` : "Verbinde …";
+    st.classList.toggle("err", !!syncErr);
   }
-
-  function setSync(on, text) { const s = $("sync"); s.textContent = text; s.classList.toggle("on", on); }
-
-  // Google-Tabelle über ein Apps-Script-Web-App (siehe google-apps-script/Code.gs)
-  const LS_SHEET = "matura-stundenlog-sheet";
-  const LS_SHEET_SETTINGS = "matura-stundenlog-sheet-settings";
-  async function sheetCall(cfg, body) {
-    const ctrl = typeof AbortController === "function" ? new AbortController() : null;
-    const timer = ctrl && setTimeout(() => ctrl.abort(), 25000);
-    let res, text;
+  // Leere Datenbank: Startplan aus der Excel anlegen
+  async function seedIfEmpty(d) {
+    if (!d.groups) await backend.putConfig("groups", SEED_GROUPS);
+    if (!d.plan) {
+      await backend.putConfig("plan", seedPlan());
+      if (!Object.keys(d.progress || {}).length) await backend.putProgress(seedProgress());
+    }
+  }
+  async function refresh() {
+    if (!backend || pending > 0) return;
     try {
-      res = body
-        ? await fetch(cfg.url, { method: "POST", body: JSON.stringify({ ...body, key: cfg.key }), signal: ctrl?.signal })
-        : await fetch(`${cfg.url}?action=list&key=${encodeURIComponent(cfg.key)}&t=${Date.now()}`, { signal: ctrl?.signal, cache: "no-store" });
-      text = await res.text();
-    } catch (err) {
-      throw new Error(navigator.onLine === false ? "Kein Internet" : err && err.name === "AbortError" ? "Google antwortet nicht (Zeitüberschreitung)" : "Google-Tabelle nicht erreichbar");
-    } finally { if (timer) clearTimeout(timer); }
-    let d;
-    try { d = JSON.parse(text); }
-    catch { throw new Error("Die Web-App antwortet nicht richtig – Bereitstellung prüfen (Zugriff: „Jeder“)"); }
-    if (!d.ok) throw new Error(d.error || "Unbekannter Fehler");
-    return d;
-  }
-  // Google Sheets wandelt Datum/Uhrzeit oft in echte Datumswerte um und liefert sie z. B. als
-  // "Thu Sep 24 2026 00:00:00 GMT+0200 (…)" bzw. "Sat Dec 30 1899 14:58:00 GMT+0100 (…)" zurück.
-  const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
-  function normDate(v) {
-    v = String(v ?? "").trim();
-    let m;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-    if ((m = v.match(/^\w{3},? (\w{3}) (\d{1,2}),? (\d{4})/)) && MONTHS[m[1]]) return `${m[3]}-${pad(MONTHS[m[1]])}-${pad(m[2])}`;
-    if ((m = v.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/))) return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
-    if (/^\d{4}-\d{2}-\d{2}T/.test(v)) { const d = new Date(v); if (!isNaN(d)) return isoDate(d); }
-    return v;
-  }
-  function normTime(v) {
-    v = String(v ?? "").trim();
-    if (!v) return "";
-    const m = v.replace(/^\w{3},? \w{3} \d{1,2},? \d{4}/, "").match(/(\d{1,2}):(\d{2})/);
-    return m ? `${pad(m[1])}:${m[2]}` : "";
-  }
-  const normEntry = (e) => ({ ...e, date: normDate(e.date), start: normTime(e.start), end: normTime(e.end), minutes: Number(e.minutes) || 0 });
-
-  function sheetStore(cfg) {
-    let pending = 0, seeded = false, cb = () => {}, lastSync = null;
-    async function refresh() {
-      try {
-        const d = await sheetCall(cfg);
-        if (pending === 0) state.entries = d.entries.map(normEntry);
-        if (d.settings) { state.settings = { ...DEFAULT_SETTINGS, ...d.settings }; lsSet(LS_SHEET_SETTINGS, state.settings); }
-        else if (!seeded) { seeded = true; sheetCall(cfg, { action: "settings", settings: state.settings }).catch(() => {}); }
-        lastSync = new Date();
-        setSync(true, `Mit der Team-Tabelle verbunden · Stand ${hhmm(lastSync)}`);
-        $("teamStatus").textContent = `Letzter Abgleich: ${hhmm(lastSync)} Uhr – ${d.entries.length} Einträge in der Tabelle.`;
-        $("teamStatus").classList.remove("err");
-        cb();
-      } catch (err) {
-        setSync(false, `Keine Verbindung: ${err.message}`);
-        $("teamStatus").textContent = `Abgleich fehlgeschlagen: ${err.message}. Die App versucht es alle 30 Sekunden erneut.${lastSync ? ` Letzter erfolgreicher Abgleich: ${hhmm(lastSync)} Uhr.` : ""}`;
-        $("teamStatus").classList.add("err");
+      let d = await backend.load();
+      if (!d.groups || !d.plan) { await seedIfEmpty(d); d = await backend.load(); }
+      syncErr = ""; lastSync = new Date();
+      const sig = JSON.stringify(d);
+      if (sig !== lastSig && pending === 0) {
+        lastSig = sig;
+        Object.assign(state, { groups: d.groups, plan: d.plan, progress: d.progress, entries: d.entries });
+        lsSet(LS.cache, d);
+        renderAll();
       }
-    }
-    async function write(body, apply, revert) {
-      apply(); render(); pending++;
-      try { await sheetCall(cfg, body); }
-      catch (err) { revert(); render(); throw err; }
-      finally { pending--; }
-      if (pending === 0) refresh();
-    }
-    return {
-      mode: "sheet",
-      refresh,
-      start(fn) {
-        cb = fn; refresh();
-        setInterval(() => { if (document.visibilityState === "visible" && pending === 0) refresh(); }, 30000);
-        document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
-      },
-      add(e) { return write({ action: "add", entry: e }, () => state.entries.push(e), () => (state.entries = state.entries.filter((x) => x.id !== e.id))); },
-      update(e) {
-        const before = state.entries;
-        return write({ action: "update", entry: e }, () => (state.entries = before.map((x) => (x.id === e.id ? e : x))), () => (state.entries = before));
-      },
-      remove(id) {
-        const before = state.entries;
-        return write({ action: "remove", id }, () => (state.entries = before.filter((x) => x.id !== id)), () => (state.entries = before));
-      },
-      saveSettings(s) {
-        const before = state.settings;
-        return write({ action: "settings", settings: s }, () => (state.settings = s), () => (state.settings = before));
-      },
-    };
+    } catch (err) { syncErr = err.message || "Fehler"; }
+    setSync();
+  }
+  // Änderung sofort anzeigen, dann speichern; bei Fehler Meldung und Stand neu laden
+  async function write(apply, op) {
+    apply(); renderAll(); pending++;
+    try { await op(); return true; }
+    catch (err) { $("phases")._html = null; toast(`Nicht gespeichert: ${err.message || "Fehler"}`, true); return false; }
+    finally { pending--; if (pending === 0) { lastSig = ""; refresh(); } }
   }
 
-  // Der Einladungslink enthält die Verbindung. Er bleibt in der Adresszeile stehen, damit
-  // Lesezeichen und Home-Bildschirm-Symbole auch in anderen Browsern verbunden sind.
-  function readInvite() {
-    try {
-      const q = new URLSearchParams(location.search);
-      if (q.get("sheet") && q.get("key")) {
-        const cfg = { url: q.get("sheet"), key: q.get("key") };
-        lsSet(LS_SHEET, cfg);
-        return cfg;
-      }
-    } catch {}
-    const saved = lsGet(LS_SHEET);
-    if (saved && saved.url && saved.key) {
-      try { if (!location.search && history.replaceState) history.replaceState(null, "", inviteLink(saved) + location.hash); } catch {}
-      return saved;
+  // ================= Rendering =================
+  let openPhases = null; // aufgeklappte Phasen
+  // DOM nur ersetzen, wenn sich der Inhalt geändert hat (sonst gehen Klicks/Fokus verloren)
+  function setHTML(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }
+  function renderAll() {
+    renderHeader();
+    renderCards();
+    if (state.tab === "plan") renderPlan();
+    if (state.tab === "hours") renderHoursForms();
+    if (state.tab === "stats") renderStats();
+    if (state.tab === "log") renderLog();
+    if (state.tab === "settings") renderSettings();
+    renderTimer();
+  }
+  function renderHeader() {
+    const my = me();
+    $("projTitle").textContent = state.plan.title || "Doppelhaushälfte";
+    if (document.activeElement !== $("meSel")) {
+      $("meSel").innerHTML = `<option value="">– bitte wählen –</option>` + state.groups.map((g) =>
+        `<optgroup label="${esc(g.name)}">${g.members.map((m) => `<option${m === my ? " selected" : ""}>${esc(m)}</option>`).join("")}</optgroup>`).join("");
     }
-    return null;
+    $("meBox").classList.toggle("unset", !my);
+  }
+  function renderCards() {
+    const soll = sollPct(), v = viewGroup(), myG = groupOf(me());
+    $("groupCards").innerHTML = state.groups.map((g) => {
+      const p = groupPct(g.id), h = sumMin(groupEntries(g.id));
+      return `<button type="button" class="gcard${g.id === v.id ? " active" : ""}" data-g="${esc(g.id)}" aria-pressed="${g.id === v.id}">
+        <span class="g-top"><span class="g-name">${esc(g.name)}</span>${myG && myG.id === g.id ? '<span class="tag">Deine Gruppe</span>' : ""}</span>
+        <span class="g-mem">${esc(g.members.join(", "))}</span>
+        <span class="g-nums"><span class="g-pct num">${Math.round(p)} %</span><span class="g-h">${fmtH(h)} h</span></span>
+        ${pbar(p, soll)}
+      </button>`;
+    }).join("");
   }
 
-  async function initStore() {
-    const cfg = readInvite();
-    if (cfg) {
-      const cached = lsGet(LS_SHEET_SETTINGS);
-      if (cached) state.settings = { ...DEFAULT_SETTINGS, ...cached };
-      store = sheetStore(cfg);
-      setSync(false, "Verbinde mit der Team-Tabelle …");
-      renderTeam(cfg);
-      store.start(render);
+  // ---------- Projektplan ----------
+  let sliderBusy = false;
+  const planBusy = () => sliderBusy || (state.editPlan && $("phases").contains(document.activeElement) && /INPUT|TEXTAREA/.test(document.activeElement.tagName));
+  function renderPlan() {
+    const g = viewGroup(), my = me(), canEdit = !!my && groupOf(my)?.id === g.id;
+    const subs = allSubs(), p = groupPct(g.id), soll = sollPct(), cur = currentPhase();
+    $("kPct").textContent = `${Math.round(p)} %`;
+    $("kGroup").textContent = g.name;
+    $("kDone").textContent = `${doneCount(g.id)} / ${subs.length}`;
+    $("kPhase").textContent = cur ? cur.name : "–";
+    $("kPhasePct").textContent = cur && cur.subs.length ? `${Math.round(phasePct(g.id, cur))} % erledigt` : "";
+    $("kEnd").textContent = cur ? fmtDate(cur.end) : "–";
+    const left = cur ? Math.round((parseDate(cur.end) - today()) / 864e5) : null;
+    $("kEndLeft").textContent = cur ? (left === 0 ? "heute" : `noch ${left} ${left === 1 ? "Tag" : "Tage"}`) : "";
+    $("ovName").textContent = `· ${g.name}`;
+    $("ovBar").innerHTML = pbar(p, soll, true);
+    $("ovSoll").textContent = Math.round(soll);
+    const a = aheadText(p - soll); $("ovAhead").textContent = a.t; $("ovAhead").className = `ahead ${a.c}`;
+    $("permHint").textContent = state.editPlan ? "Bearbeitungsmodus – Änderungen am Plan gelten für beide Gruppen und werden sofort gespeichert." :
+      !my ? "Wähle oben „Ich bin …“, um den Fortschritt einzustellen." :
+      canEdit ? "Regler loslassen speichert den Fortschritt deiner Gruppe." : `Nur Mitglieder von „${g.name}“ können diesen Fortschritt ändern.`;
+    $("editPlan").textContent = state.editPlan ? "Fertig" : "Plan bearbeiten";
+    $("editPlan").classList.toggle("primary", state.editPlan);
+    $("toggleAll").hidden = state.editPlan;
+    if (planBusy()) return;
+    if (!openPhases) openPhases = new Set(cur ? [cur.id] : []);
+    $("toggleAll").textContent = openPhases.size >= state.plan.phases.length ? "Alle zuklappen" : "Alle aufklappen";
+    if (state.editPlan) return renderPlanEdit();
+
+    const hrs = hoursBySub(g.id);
+    setHTML($("phases"), state.plan.phases.map((ph) => {
+      const isCur = cur && cur.id === ph.id;
+      const pp = phasePct(g.id, ph), done = ph.subs.filter((s) => pct(g.id, s.id) >= 100).length;
+      const phH = ph.subs.reduce((acc, s) => acc + (hrs[s.id] || 0), 0);
+      return `<details class="phase${isCur ? " current" : ""}" data-ph="${esc(ph.id)}"${openPhases.has(ph.id) ? " open" : ""}>
+        <summary>
+          <div class="ph-head"><h3>${esc(ph.name)}</h3>${isCur ? '<span class="tag now">jetzt</span>' : ""}${CHEV}</div>
+          <div class="ph-meta"><span class="num">${fmtDate(ph.start, false)}–${fmtDate(ph.end)}</span><span>${ph.subs.length ? `${done} / ${ph.subs.length} fertig` : "keine Unterphasen"}</span>${phH ? `<span>${fmtH(phH)} h</span>` : ""}</div>
+          ${ph.subs.length ? `<div class="ph-bar">${pbar(pp, elapsedFrac(ph) * 100)}<span class="num">${Math.round(pp)} %</span></div>` : ""}
+        </summary>
+        <div class="ph-body">
+          ${ph.desc ? `<p class="ph-desc">${esc(ph.desc)}</p>` : ""}
+          ${ph.subs.length ? `<ul class="subs">${ph.subs.map((s) => {
+            const v = pct(g.id, s.id), h = hrs[s.id] || 0;
+            return `<li class="sub${v >= 100 ? " done" : ""}">
+              <div class="sub-main"><span class="tick">${v >= 100 ? CHECK : ""}</span>
+                <div><div class="sub-name">${esc(s.name)}</div>${s.desc ? `<div class="sub-desc">${esc(s.desc)}</div>` : ""}</div>
+                <span class="sub-h" title="Stunden von ${esc(g.name)}">${h ? `${fmtMin(h)} h` : "–"}</span></div>
+              <div class="sub-ctl"><input type="range" min="0" max="100" step="5" value="${v}" data-sub="${esc(s.id)}" aria-label="Fortschritt ${esc(s.name)}"${canEdit ? "" : " disabled"}><output>${v} %</output></div>
+            </li>`;
+          }).join("")}</ul>` : `<p class="hint" style="margin:0">Keine Unterphasen – Reservezeit.</p>`}
+        </div>
+      </details>`;
+    }).join(""));
+  }
+  function renderPlanEdit() {
+    const ph = state.plan.phases;
+    setHTML($("phases"), ph.map((p, i) => `
+      <div class="phase edit" data-ph="${esc(p.id)}">
+        <div class="ed-grid">
+          <label class="f">Phase <input data-f="name" value="${esc(p.name)}"></label>
+          <label class="f">Start <input type="date" data-f="start" value="${esc(p.start)}"></label>
+          <label class="f">Ende <input type="date" data-f="end" value="${esc(p.end)}"></label>
+        </div>
+        ${p.start && p.end && p.end < p.start ? '<div class="ed-warn">Das Ende liegt vor dem Start.</div>' : ""}
+        <label class="f">Beschreibung (optional) <input data-f="desc" value="${esc(p.desc)}"></label>
+        <div class="btns">
+          <button type="button" class="icon" data-act="ph-up" ${i === 0 ? "disabled" : ""} aria-label="Phase nach oben">↑</button>
+          <button type="button" class="icon" data-act="ph-down" ${i === ph.length - 1 ? "disabled" : ""} aria-label="Phase nach unten">↓</button>
+          <button type="button" class="icon ghost danger" data-act="ph-del">Phase löschen</button>
+        </div>
+        <div class="label" style="margin-top:4px">Unterphasen (${p.subs.length})</div>
+        ${p.subs.map((s, j) => `
+          <div class="ed-sub" data-sub="${esc(s.id)}">
+            <input data-f="name" value="${esc(s.name)}" aria-label="Name der Unterphase">
+            <input data-f="desc" value="${esc(s.desc)}" placeholder="Beschreibung (optional)" aria-label="Beschreibung der Unterphase">
+            <div class="ed-acts">
+              <button type="button" class="icon" data-act="sub-up" ${j === 0 ? "disabled" : ""} aria-label="Unterphase nach oben">↑</button>
+              <button type="button" class="icon" data-act="sub-down" ${j === p.subs.length - 1 ? "disabled" : ""} aria-label="Unterphase nach unten">↓</button>
+              <button type="button" class="icon ghost danger" data-act="sub-del" aria-label="Unterphase löschen">✕</button>
+            </div>
+          </div>`).join("")}
+        <div><button type="button" class="icon" data-act="sub-add">+ Unterphase</button></div>
+      </div>`).join("") + `<div><button type="button" class="primary" data-act="ph-add">+ Phase hinzufügen</button></div>`);
+  }
+  function savePlan(mutate) {
+    const plan = JSON.parse(JSON.stringify(state.plan));
+    mutate(plan);
+    return write(() => (state.plan = plan), () => backend.putConfig("plan", plan));
+  }
+  $("editPlan").addEventListener("click", () => { state.editPlan = !state.editPlan; if (document.activeElement) document.activeElement.blur(); renderPlan(); });
+  $("toggleAll").addEventListener("click", () => {
+    const allOpen = openPhases && openPhases.size >= state.plan.phases.length;
+    openPhases = new Set(allOpen ? [] : state.plan.phases.map((p) => p.id)); renderPlan();
+  });
+  $("phases").addEventListener("toggle", (e) => {
+    const d = e.target; if (!d.matches || !d.matches("details.phase") || !openPhases) return;
+    if (d.open) openPhases.add(d.dataset.ph); else openPhases.delete(d.dataset.ph);
+    $("toggleAll").textContent = openPhases.size >= state.plan.phases.length ? "Alle zuklappen" : "Alle aufklappen";
+  }, true);
+  // Regler: beim Ziehen nur Anzeige, beim Loslassen speichern
+  $("phases").addEventListener("pointerdown", (e) => { if (e.target.matches('input[type="range"]')) sliderBusy = true; });
+  document.addEventListener("pointerup", () => { if (sliderBusy) setTimeout(() => (sliderBusy = false), 300); });
+  $("phases").addEventListener("input", (e) => {
+    if (!e.target.matches('input[type="range"]')) return;
+    const v = Number(e.target.value), li = e.target.closest("li.sub");
+    e.target.nextElementSibling.textContent = `${v} %`;
+    li.classList.toggle("done", v >= 100); li.querySelector(".tick").innerHTML = v >= 100 ? CHECK : "";
+  });
+  $("phases").addEventListener("change", (e) => {
+    const t = e.target;
+    if (t.matches('input[type="range"]')) {
+      sliderBusy = false;
+      const g = viewGroup(), v = Number(t.value), sid = t.dataset.sub, my = me();
+      if (!my || groupOf(my)?.id !== g.id) return renderPlan();
+      if (pct(g.id, sid) === v) return;
+      write(() => (state.progress[`${g.id}:${sid}`] = v), () => backend.putProgress([{ g: g.id, s: sid, pct: v, by: my }]))
+        .then((ok) => ok && toast(`${subById(sid)?.name || "Unterphase"}: ${v} % gespeichert`));
       return;
     }
-    let db = null;
-    if (window.claude && typeof window.claude.use === "function") {
-      try { db = await window.claude.use("db"); } catch { db = null; }
+    if (state.editPlan && t.dataset.f) {
+      const phId = t.closest("[data-ph]").dataset.ph, subEl = t.closest(".ed-sub"), f = t.dataset.f, val = t.value.trim();
+      if (f === "name" && !val) { toast("Der Name darf nicht leer sein.", true); t.value = (subEl ? state.plan.phases.find((x) => x.id === phId).subs.find((x) => x.id === subEl.dataset.sub) : state.plan.phases.find((x) => x.id === phId)).name; return; }
+      const curP = state.plan.phases.find((x) => x.id === phId);
+      const curT = subEl ? curP?.subs.find((x) => x.id === subEl.dataset.sub) : curP;
+      if (!curT || (curT[f] || "") === val) return;
+      savePlan((plan) => {
+        const p = plan.phases.find((x) => x.id === phId);
+        const target = subEl ? p.subs.find((x) => x.id === subEl.dataset.sub) : p;
+        if (target) target[f] = val;
+      }).then(() => { if (!subEl && (f === "start" || f === "end")) { t.blur(); renderPlanEdit(); } });
     }
-    store = db ? dbStore(db) : localStore();
-    setSync(!!db, db ? "Gespeichert & mit dem Team geteilt" : "Nicht mit dem Team verbunden");
-    $("notLinked").hidden = !!db;
-    renderTeam(null);
-    store.start(render);
-  }
-
-  // ---------- Team verbinden ----------
-  function inviteLink(cfg) {
-    return `${location.origin}${location.pathname}?sheet=${encodeURIComponent(cfg.url)}&key=${encodeURIComponent(cfg.key)}`;
-  }
-  function renderTeam(cfg) {
-    $("teamOff").hidden = !!cfg; $("teamOn").hidden = !cfg;
-    if (!cfg) return;
-    $("gInvite").value = inviteLink(cfg);
-    const local = (lsGet(LS_KEY) || {}).entries || [];
-    $("gUpload").hidden = !local.length;
-    $("gUpload").textContent = `${local.length} Einträge aus diesem Browser in die Tabelle übertragen`;
-  }
-  $("teamForm").addEventListener("submit", async (ev) => {
-    ev.preventDefault();
-    const cfg = { url: $("gUrl").value.trim(), key: $("gKey").value.trim() };
-    if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(cfg.url)) return flash($("teamMsg"), "Die Adresse muss mit https://script.google.com/ beginnen und auf /exec enden.", true);
-    if (!cfg.key) return flash($("teamMsg"), "Bitte den Team-Code eingeben, der im Skript steht.", true);
-    $("gConnect").disabled = true;
-    try {
-      await sheetCall(cfg);
-      lsSet(LS_SHEET, cfg);
-      location.reload();
-    } catch (err) {
-      flash($("teamMsg"), `Verbindung fehlgeschlagen: ${err.message === "Failed to fetch" ? "Adresse nicht erreichbar – ist die Web-App für „Jeder“ freigegeben?" : err.message}`, true);
-    } finally { $("gConnect").disabled = false; }
   });
-  $("gRefresh").addEventListener("click", () => store && store.refresh && store.refresh());
-  $("gCopy").addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText($("gInvite").value); flash($("teamMsg"), "Link kopiert."); }
-    catch { $("gInvite").select(); flash($("teamMsg"), "Link markiert – jetzt mit Strg+C / Kopieren kopieren."); }
-  });
-  $("gUpload").addEventListener("click", async () => {
-    const local = (lsGet(LS_KEY) || {}).entries || [];
-    const have = new Set(state.entries.map((e) => e.id));
-    let n = 0;
-    try {
-      for (const e of local) if (!have.has(e.id)) { await store.add(e); n++; }
-      lsSet(LS_KEY, { ...(lsGet(LS_KEY) || {}), entries: [] });
-      $("gUpload").hidden = true;
-      flash($("teamMsg"), `${n} Einträge übertragen.`);
-    } catch { flash($("teamMsg"), `Übertragung abgebrochen nach ${n} Einträgen – bitte nochmal versuchen.`, true); }
-  });
-  $("gDisconnect").addEventListener("click", (ev) => {
-    const b = ev.currentTarget;
-    if (!b.dataset.confirm) { b.dataset.confirm = "1"; b.textContent = "Wirklich trennen? (Daten bleiben in der Tabelle)"; setTimeout(() => { delete b.dataset.confirm; b.textContent = "Trennen"; }, 5000); return; }
-    lsSet(LS_SHEET, null); location.reload();
+  $("phases").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-act]"); if (!b) return;
+    const act = b.dataset.act, phId = b.closest("[data-ph]")?.dataset.ph, subId = b.closest(".ed-sub")?.dataset.sub;
+    const move = (arr, i, d) => { const j = i + d; if (i < 0 || j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; };
+    const run = (fn) => savePlan(fn).then(() => renderPlanEdit());
+    if (act === "ph-add") return run((plan) => {
+      const last = plan.phases[plan.phases.length - 1];
+      const start = last && last.end ? isoDate(new Date(parseDate(last.end).getTime() + 864e5 * 1.5)) : isoDate(today());
+      plan.phases.push({ id: "ph-" + uid(), name: "Neue Phase", start, end: start, desc: "", subs: [] });
+    });
+    const pi = state.plan.phases.findIndex((p) => p.id === phId);
+    if (pi < 0) return;
+    if (act === "ph-up" || act === "ph-down") return run((plan) => move(plan.phases, pi, act === "ph-up" ? -1 : 1));
+    if (act === "ph-del") return confirmClick(b, `„${state.plan.phases[pi].name}“ wirklich löschen?`, () => run((plan) => plan.phases.splice(pi, 1)));
+    if (act === "sub-add") return run((plan) => plan.phases[pi].subs.push({ id: "s-" + uid(), name: "Neue Unterphase", desc: "" }));
+    const si = state.plan.phases[pi].subs.findIndex((s) => s.id === subId);
+    if (si < 0) return;
+    if (act === "sub-up" || act === "sub-down") return run((plan) => move(plan.phases[pi].subs, si, act === "sub-up" ? -1 : 1));
+    if (act === "sub-del") return confirmClick(b, "Wirklich?", () => run((plan) => plan.phases[pi].subs.splice(si, 1)));
   });
 
-  // ---------- Beispieldaten (nur Anzeige, nie gespeichert) ----------
-  function exampleEntries() {
-    const today = new Date();
-    const d = (off) => { const x = new Date(today); x.setDate(x.getDate() - off); return isoDate(x); };
-    const ps = state.settings.people, p = (i) => ps[i % ps.length] || "Ich";
-    const c = state.settings.cats;
-    return [
-      { id: "ex1", date: d(1), start: "15:00", end: "17:30", minutes: 150, person: p(0), category: c[0], note: "Bebauungsplan und OIB-Richtlinien für das Grundstück gesichtet", example: true },
-      { id: "ex2", date: d(3), start: "13:15", end: "14:00", minutes: 45, person: p(1), category: c[6] || c[0], note: "Besprechung mit dem Betreuer: Raumprogramm abgestimmt", example: true },
-      { id: "ex3", date: d(6), start: "09:00", end: "12:00", minutes: 180, person: p(2), category: c[1] || c[0], note: "Grundriss-Varianten Erdgeschoss skizziert", example: true },
-      { id: "ex4", date: d(10), start: "16:00", end: "18:00", minutes: 120, person: p(3), category: c[2] || c[0], note: "Einreichplan Obergeschoss im CAD gezeichnet", example: true },
-    ];
+  // ---------- Gruppen-Karten & „Ich bin“ ----------
+  $("groupCards").addEventListener("click", (e) => {
+    const c = e.target.closest(".gcard"); if (!c) return;
+    state.view = c.dataset.g; lsSet(LS.view, state.view); renderAll();
+  });
+  $("meSel").addEventListener("change", () => {
+    lsSet(LS.me, $("meSel").value || null);
+    const g = groupOf(me()); if (g) { state.view = g.id; lsSet(LS.view, g.id); }
+    if (!editingId && me()) $("fPerson").value = me();
+    $("meSel").blur(); renderAll();
+  });
+
+  // ---------- Reiter ----------
+  const TABS = ["plan", "hours", "stats", "log", "settings"];
+  function showTab(t, push) {
+    if (!TABS.includes(t)) t = "plan";
+    state.tab = t;
+    document.querySelectorAll("nav.tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === t)));
+    TABS.forEach((x) => ($(`tab-${x}`).hidden = x !== t));
+    if (push) try { history.replaceState(null, "", location.pathname + location.search + "#" + t); } catch {}
+    renderAll();
+  }
+  document.querySelector("nav.tabs").addEventListener("click", (e) => { const b = e.target.closest("button[data-tab]"); if (b) showTab(b.dataset.tab, true); });
+
+  // ---------- Stunden: Auswahllisten ----------
+  function subOptions() {
+    return `<option value="">Allgemein</option>` + state.plan.phases.filter((p) => p.subs.length).map((p) =>
+      `<optgroup label="${esc(p.name)}">${p.subs.map((s) => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
+  }
+  function fillSelect(el, html) { const prev = el.value; el.innerHTML = html; if ([...el.options].some((o) => o.value === prev)) el.value = prev; }
+  function renderHoursForms() {
+    if (document.activeElement !== $("tSub")) fillSelect($("tSub"), subOptions());
+    if (document.activeElement !== $("fSub")) fillSelect($("fSub"), subOptions());
+    if (document.activeElement !== $("fPerson")) {
+      fillSelect($("fPerson"), state.groups.map((g) => `<optgroup label="${esc(g.name)}">${g.members.map((m) => `<option>${esc(m)}</option>`).join("")}</optgroup>`).join(""));
+      if (!editingId && !$("fPerson").dataset.touched && me()) $("fPerson").value = me();
+    }
   }
 
-  // ---------- Rendering ----------
-  const catColor = (cat) => { const i = state.settings.cats.indexOf(cat); return `var(--cat-${(i < 0 ? 5 : i % 9) + 1})`; };
-  function fillSelect(el, items, { all, keep } = {}) {
-    const prev = el.value;
-    el.innerHTML = (all ? `<option value="">${esc(all)}</option>` : "") + items.map((x) => `<option>${esc(x)}</option>`).join("");
-    if (keep && prev && [...el.options].some((o) => o.value === prev)) el.value = prev;
-  }
-
-  let lastMe;
-  function render() {
-    const s = state.settings;
-    const real = state.entries.slice().sort((a, b) => (b.date + (b.start || "")).localeCompare(a.date + (a.start || "")));
-    const showExamples = real.length === 0;
-    const list = showExamples ? exampleEntries() : real;
-
-    $("projTitle").textContent = s.title || "Maturaprojekt";
-    document.title = (s.title ? s.title + " · " : "") + "Stundenlog";
-    const due = s.due ? parseDate(s.due) : null;
-    const daysLeft = due ? Math.ceil((due - new Date(new Date().toDateString())) / 864e5) : null;
-    $("projSub").textContent = [s.people.length > 1 ? `Team: ${s.people.join(", ")}` : "", due ? `Abgabe ${due.toLocaleDateString("de-AT")} · ${daysLeft >= 0 ? `noch ${daysLeft} Tage` : "Termin vorbei"}` : ""].filter(Boolean).join("  ·  ") || "Jede Stunde zählt – hier landet sie.";
-
-    [["fPerson", s.people], ["tCat", s.cats], ["fCat", s.cats]].forEach(([id, items]) => fillSelect($(id), items, { keep: true }));
-    const my = me();
-    if (my !== lastMe) { lastMe = my; queueMicrotask(renderTimer); }
-    $("meSel").innerHTML = `<option value="">– bitte wählen –</option>` + s.people.map((x) => `<option${x === my ? " selected" : ""}>${esc(x)}</option>`).join("");
-    $("meBox").classList.toggle("unset", !my);
-    if (!editingId && my && $("fPerson").value !== my && !$("fPerson").dataset.touched) $("fPerson").value = my;
+  // ---------- Stoppuhr (pro Person, im Browser gespeichert) ----------
+  let tick = null;
+  const timers = () => lsGet(LS.timers) || {};
+  const timerState = () => { const m = me(); return m ? timers()[m] || null : null; };
+  function setTimer(t) { const m = me(); if (!m) return; const all = timers(); if (t) all[m] = t; else delete all[m]; lsSet(LS.timers, all); }
+  function elapsedStr(t) { const s = Math.max(0, Math.floor((Date.now() - t.startedAt) / 1000)); return `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`; }
+  function renderTimer() {
+    const t = timerState(), running = !!t, my = me();
     $("timerFor").textContent = my ? `· ${my}` : "";
-    $("personHint").hidden = !s.people.every((x) => /^Person \d+$/.test(x));
-    fillSelect($("filterPerson"), s.people, { all: "Alle Personen", keep: true });
-    fillSelect($("filterCat"), s.cats, { all: "Alle Kategorien", keep: true });
-    $("filterPerson").hidden = s.people.length < 2;
-
-    // Kennzahlen: persönlich, wenn "Ich bin" gewählt ist, sonst fürs ganze Team
-    const mine = my ? list.filter((e) => e.person === my) : list;
-    $("progH").textContent = my ? `Mein Fortschritt` : "Team-Fortschritt";
-    const total = mine.reduce((a, e) => a + e.minutes, 0);
-    const goalH = (Number(s.goal) || 0) * (my ? 1 : s.people.length);
-    const goalMin = goalH * 60;
-    const pct = goalMin ? Math.min(100, (total / goalMin) * 100) : 0;
-    $("totalH").textContent = fmtH(total);
-    $("goalTxt").textContent = goalMin ? `von ${goalH} h` : "Stunden";
-    $("progFill").style.width = pct.toFixed(1) + "%";
-    $("progBar").setAttribute("aria-valuenow", pct.toFixed(0));
-    $("progPct").textContent = goalMin ? `${pct.toFixed(0)} %` : "";
-    const mon = mondayOf(new Date());
-    const weekMin = mine.filter((e) => parseDate(e.date) >= mon).reduce((a, e) => a + e.minutes, 0);
-    $("fWeek").textContent = fmtMin(weekMin);
-    $("fCount").textContent = mine.length;
-    let avg = 0;
-    if (mine.length) {
-      const first = mine.reduce((m, e) => (e.date < m ? e.date : m), mine[0].date);
-      const weeks = Math.max(1, Math.ceil((new Date() - mondayOf(parseDate(first))) / (7 * 864e5)));
-      avg = total / weeks;
+    $("timerBox").classList.toggle("running", running);
+    $("tStart").hidden = running; $("tStop").hidden = !running; $("tDiscard").hidden = !running;
+    clearInterval(tick);
+    if (running) {
+      if (document.activeElement !== $("tNote")) $("tNote").value = t.note || "";
+      if (document.activeElement !== $("tSub") && [...$("tSub").options].some((o) => o.value === (t.sub || ""))) $("tSub").value = t.sub || "";
+      const upd = () => { const s = elapsedStr(t); $("clock").textContent = s; $("timerPill").textContent = `Stoppuhr läuft · ${s}`; };
+      upd(); tick = setInterval(upd, 1000);
+      $("timerSince").textContent = `Läuft seit ${hhmm(new Date(t.startedAt))}`;
+    } else {
+      $("clock").textContent = "0:00:00";
+      $("timerSince").textContent = my ? "Läuft nicht" : "Wähle oben „Ich bin …“";
     }
-    $("fAvg").textContent = fmtMin(avg);
-    let pace = "";
-    if (goalMin && total >= goalMin) pace = "Ziel erreicht – stark!";
-    else if (goalMin && daysLeft > 0) {
-      const perWeek = (goalMin - total) / (daysLeft / 7);
-      pace = `Für das Ziel ${my ? "brauchst du" : "braucht ihr"} noch ca. ${fmtMin(perWeek)} h pro Woche bis zur Abgabe.`;
-    } else if (goalMin) pace = `Noch ${fmtH(goalMin - total)} h bis zum Ziel. Trag unter „Projekt einrichten“ den Abgabetermin ein, dann siehst du dein Wochenpensum.`;
-    $("paceTxt").textContent = pace;
-
-    renderWeeks(list);
-    renderRows($("catRows"), s.cats.map((c) => [c, sum(list, "category", c), catColor(c)]).concat(extra(list, "category", s.cats)));
-    renderPeople(list, my);
-    renderLog(list, showExamples);
+    $("timerPill").hidden = !running || state.tab === "hours";
   }
-  function renderPeople(list, my) {
-    const s = state.settings, goal = Number(s.goal) || 0;
-    const rows = s.people.map((p) => [p, sum(list, "person", p)]).concat(extra(list, "person", s.people));
-    const scale = Math.max(goal * 60, 1, ...rows.map((r) => r[1]));
-    const teamMin = rows.reduce((a, r) => a + r[1], 0);
-    $("personRows").innerHTML = rows.map(([name, m], i) => {
-      const pct = goal ? Math.round((m / (goal * 60)) * 100) : null;
-      const col = `var(--cat-${(i % 6) + 1})`;
-      return `<div class="hrow person${name === my ? " me" : ""}"><span class="name" title="${esc(name)}">${esc(name)}${name === my ? " (du)" : ""}</span><span class="track"><span style="width:${Math.min(100, (m / scale) * 100)}%;background:${col}"></span></span><span class="val">${fmtH(m)} h${pct != null ? ` <small>${pct} %</small>` : ""}</span></div>`;
-    }).join("") + `<div class="hrow person" style="border-top:1px solid var(--rule);padding-top:8px"><span class="name"><strong>Team gesamt</strong></span><span></span><span class="val"><strong>${fmtH(teamMin)} h</strong>${goal ? ` <small>von ${goal * s.people.length}</small>` : ""}</span></div>`;
-  }
-  const sum = (list, key, v) => list.filter((e) => e[key] === v).reduce((a, e) => a + e.minutes, 0);
-  function extra(list, key, known) {
-    const other = [...new Set(list.map((e) => e[key]).filter((v) => !known.includes(v)))];
-    return other.map((v) => [v || "—", sum(list, key, v), "var(--cat-6)"]);
-  }
-  function renderRows(el, rows) {
-    const max = Math.max(1, ...rows.map((r) => r[1]));
-    el.innerHTML = rows.map(([name, m, col]) =>
-      `<div class="hrow"><span class="name" title="${esc(name)}">${esc(name)}</span><span class="track"><span style="width:${(m / max) * 100}%;background:${col}"></span></span><span class="val">${fmtMin(m)}</span></div>`).join("");
-  }
-
-  function renderWeeks(list) {
-    const N = 10, W = 340, H = 150, padL = 26, padB = 20, padT = 14;
-    const mon = mondayOf(new Date());
-    const weeks = [];
-    for (let i = N - 1; i >= 0; i--) { const start = new Date(mon); start.setDate(start.getDate() - i * 7); weeks.push({ start, min: 0 }); }
-    list.forEach((e) => {
-      const d = parseDate(e.date);
-      const w = weeks.find((w) => d >= w.start && d < new Date(w.start.getFullYear(), w.start.getMonth(), w.start.getDate() + 7));
-      if (w) w.min += e.minutes;
-    });
-    const maxH = Math.max(2, Math.ceil(Math.max(...weeks.map((w) => w.min)) / 60 / 2) * 2);
-    const y = (h) => padT + (H - padT - padB) * (1 - h / maxH);
-    const bw = (W - padL) / N;
-    let g = "";
-    [0, maxH / 2, maxH].forEach((h) => { g += `<line class="gridline" x1="${padL}" x2="${W}" y1="${y(h)}" y2="${y(h)}"></line><text x="${padL - 5}" y="${y(h) + 3}" text-anchor="end">${h}h</text>`; });
-    weeks.forEach((w, i) => {
-      const h = w.min / 60, x = padL + i * bw + bw * 0.18, bwid = bw * 0.64;
-      const top = y(h), isNow = i === N - 1;
-      if (w.min > 0) g += `<rect class="b${isNow ? " now" : ""}" x="${x}" y="${top}" width="${bwid}" height="${y(0) - top}" rx="1"><title>KW ${isoWeek(w.start).week}: ${fmtMin(w.min)} h</title></rect>`;
-      if (w.min > 0) g += `<text class="vlabel" x="${x + bwid / 2}" y="${top - 3}" text-anchor="middle">${fmtH(w.min)}</text>`;
-      g += `<text x="${x + bwid / 2}" y="${H - 5}" text-anchor="middle">${isoWeek(w.start).week}</text>`;
-    });
-    $("weekChart").innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Stunden pro Kalenderwoche">${g}</svg><div class="hint">Zahlen unten = Kalenderwoche (KW), markiert = aktuelle Woche</div>`;
-  }
-
-  function renderLog(list, examples) {
-    const fp = $("filterPerson").value, fc = $("filterCat").value;
-    const shown = list.filter((e) => (!fp || e.person === fp) && (!fc || e.category === fc));
-    $("exampleBanner").hidden = !examples;
-    if (!shown.length) { $("log").innerHTML = `<div class="empty">Keine Einträge für diesen Filter.</div>`; return; }
-    const months = new Map();
-    shown.forEach((e) => { const k = e.date.slice(0, 7); if (!months.has(k)) months.set(k, []); months.get(k).push(e); });
-    const multi = state.settings.people.length > 1;
-    let html = "";
-    for (const [k, es] of months) {
-      const label = parseDate(k + "-01").toLocaleDateString("de-AT", { month: "long", year: "numeric" });
-      const m = es.reduce((a, e) => a + e.minutes, 0);
-      html += `<div class="month"><div class="month-head"><h3>${esc(label)}</h3><span class="num">${fmtMin(m)} h</span></div>`;
-      es.forEach((e) => {
-        const dd = parseDate(e.date);
-        const wd = dd.toLocaleDateString("de-AT", { weekday: "short" });
-        html += `<div class="entry${e.example ? " example" : ""}" data-id="${esc(e.id)}">
-          <div class="d">${wd} ${pad(dd.getDate())}.${pad(dd.getMonth() + 1)}.<span class="t">${e.start && e.end ? `${esc(e.start)}–${esc(e.end)}` : ""}</span></div>
-          <div class="body"><div class="note">${esc(e.note) || '<span class="muted">(ohne Beschreibung)</span>'}</div>
-            <div class="meta"><span class="chip"><i style="background:${catColor(e.category)}"></i>${esc(e.category)}</span>${multi ? `<span>${esc(e.person)}</span>` : ""}${e.example ? "<span>Beispiel</span>" : ""}</div></div>
-          <div><div class="dur">${fmtMin(e.minutes)}</div>${e.example ? "" : `<div class="acts"><button class="ghost" data-act="edit" type="button">Bearbeiten</button><button class="ghost danger" data-act="del" type="button">Löschen</button></div>`}</div>
-        </div>`;
-      });
-      html += `</div>`;
-    }
-    $("log").innerHTML = html;
-  }
-
-  // ---------- Protokoll-Aktionen ----------
-  $("log").addEventListener("click", async (ev) => {
-    const btn = ev.target.closest("button[data-act]");
-    if (!btn) return;
-    const id = btn.closest(".entry").dataset.id;
-    const e = state.entries.find((x) => x.id === id);
-    if (!e) return;
-    if (btn.dataset.act === "edit") startEdit(e);
-    if (btn.dataset.act === "del") {
-      if (btn.dataset.confirm) {
-        try { await store.remove(id); }
-        catch (err) { flash($("formMsg"), `Nicht gelöscht: ${err && err.message ? err.message : "Fehler"}.`, true); }
-      }
-      else { btn.dataset.confirm = "1"; btn.textContent = "Wirklich löschen?"; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.confirm; btn.textContent = "Löschen"; } }, 4000); }
-    }
+  $("timerPill").addEventListener("click", () => showTab("hours", true));
+  $("tStart").addEventListener("click", () => {
+    if (!me()) { $("timerSince").textContent = "Wähle zuerst oben bei „Ich bin“ deinen Namen."; $("meSel").focus(); return; }
+    setTimer({ startedAt: Date.now(), sub: $("tSub").value, note: $("tNote").value.trim() }); renderTimer();
   });
-  $("filterPerson").addEventListener("change", render);
-  $("filterCat").addEventListener("change", render);
+  ["tSub", "tNote"].forEach((id) => $(id).addEventListener("change", () => { const t = timerState(); if (t) setTimer({ ...t, sub: $("tSub").value, note: $("tNote").value.trim() }); }));
+  $("tStop").addEventListener("click", async () => {
+    const t = timerState(); if (!t) return;
+    const st = new Date(t.startedAt), en = new Date(), my = me(), g = groupOf(my);
+    const minutes = Math.max(1, Math.round((en - st) / 60000));
+    const entry = { id: uid(), date: isoDate(st), start: hhmm(st), end: hhmm(en), minutes, person: my, group: g.id, sub: $("tSub").value, note: $("tNote").value.trim() };
+    const ok = await write(() => state.entries.push(entry), () => backend.putEntries([entry]));
+    if (ok) { setTimer(null); $("tNote").value = ""; renderTimer(); toast(`${fmtMin(minutes)} h eingetragen`); }
+    else { state.entries = state.entries.filter((x) => x.id !== entry.id); $("timerSince").textContent = "Nicht gespeichert – nochmal auf Stopp tippen, die Zeit läuft weiter."; }
+  });
+  $("tDiscard").addEventListener("click", (e) => confirmClick(e.currentTarget, "Zeit wirklich verwerfen?", () => { setTimer(null); $("tNote").value = ""; renderTimer(); }));
 
   // ---------- Formular ----------
   let editingId = null;
   function resetForm() {
-    editingId = null;
-    $("entryForm").reset();
-    delete $("fPerson").dataset.touched;
-    $("fDate").value = isoDate(new Date());
-    $("saveBtn").textContent = "Eintragen";
-    $("cancelEdit").hidden = true;
-    if (state.settings.people[0]) $("fPerson").value = me() || state.settings.people[0];
+    editingId = null; $("entryForm").reset(); delete $("fPerson").dataset.touched;
+    $("fDate").value = isoDate(new Date()); $("saveBtn").textContent = "Eintragen"; $("cancelEdit").hidden = true;
+    renderHoursForms(); if (me()) $("fPerson").value = me();
   }
   function startEdit(e) {
+    showTab("hours", true);
     editingId = e.id;
     $("fDate").value = e.date; $("fStart").value = e.start || ""; $("fEnd").value = e.end || "";
     $("fDur").value = fmtMin(e.minutes); $("fNote").value = e.note || "";
-    $("fPerson").value = e.person; $("fCat").value = e.category;
-    $("saveBtn").textContent = "Änderungen speichern";
-    $("cancelEdit").hidden = false;
+    $("fPerson").value = e.person; $("fSub").value = subById(e.sub) ? e.sub : "";
+    $("saveBtn").textContent = "Änderungen speichern"; $("cancelEdit").hidden = false;
     $("entryForm").scrollIntoView({ behavior: "smooth", block: "start" });
-    $("fNote").focus({ preventScroll: true });
   }
   $("cancelEdit").addEventListener("click", resetForm);
   $("fPerson").addEventListener("change", () => ($("fPerson").dataset.touched = "1"));
-  const autoDur = () => {
-    const a = toMin($("fStart").value), b = toMin($("fEnd").value);
-    if (a != null && b != null) { let d = b - a; if (d < 0) d += 1440; $("fDur").value = fmtMin(d); }
-  };
-  $("fStart").addEventListener("change", autoDur);
-  $("fEnd").addEventListener("change", autoDur);
-
+  const autoDur = () => { const a = toMin($("fStart").value), b = toMin($("fEnd").value); if (a != null && b != null) { let d = b - a; if (d < 0) d += 1440; $("fDur").value = fmtMin(d); } };
+  $("fStart").addEventListener("change", autoDur); $("fEnd").addEventListener("change", autoDur);
   $("entryForm").addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const msg = $("formMsg");
@@ -837,245 +1008,352 @@
     const a = toMin($("fStart").value), b = toMin($("fEnd").value);
     if ((minutes == null || Number.isNaN(minutes)) && a != null && b != null) { minutes = b - a; if (minutes < 0) minutes += 1440; }
     if (minutes == null) return flash(msg, "Bitte Von/Bis oder eine Dauer angeben (z. B. 1:30 oder 1,5).", true);
-    if (Number.isNaN(minutes) || minutes <= 0) return flash(msg, "Die Dauer bitte als h:mm (1:30) oder in Stunden (1,5) eingeben.", true);
-    if (minutes > 24 * 60) return flash(msg, "Ein Eintrag kann höchstens 24 Stunden lang sein.", true);
-    const entry = {
-      id: editingId || uid(),
-      date: $("fDate").value, start: $("fStart").value, end: $("fEnd").value, minutes,
-      person: $("fPerson").value, category: $("fCat").value, note: $("fNote").value.trim(),
-      createdAt: editingId ? (state.entries.find((x) => x.id === editingId)?.createdAt || Date.now()) : Date.now(),
-    };
-    try {
-      await (editingId ? store.update(entry) : store.add(entry));
-      flash(msg, editingId ? "Änderungen gespeichert." : `${fmtMin(minutes)} h eingetragen.`);
-      resetForm();
-    } catch (err) { flash(msg, `Nicht gespeichert: ${err && err.message ? err.message : "unbekannter Fehler"}. Bitte nochmal versuchen.`, true); }
+    if (Number.isNaN(minutes) || minutes <= 0) return flash(msg, "Dauer bitte als h:mm (1:30) oder in Stunden (1,5) eingeben.", true);
+    if (minutes > 1440) return flash(msg, "Ein Eintrag kann höchstens 24 Stunden lang sein.", true);
+    const person = $("fPerson").value, g = groupOf(person);
+    if (!g) return flash(msg, "Bitte eine Person wählen.", true);
+    const wasEdit = !!editingId;
+    const entry = { id: editingId || uid(), date: $("fDate").value, start: $("fStart").value, end: $("fEnd").value, minutes, person, group: g.id, sub: $("fSub").value, note: $("fNote").value.trim() };
+    const before = state.entries;
+    const ok = await write(() => { state.entries = before.filter((x) => x.id !== entry.id).concat([entry]); }, () => backend.putEntries([entry]));
+    if (ok) { resetForm(); flash(msg, wasEdit ? "Änderungen gespeichert." : `${fmtMin(minutes)} h für ${person} eingetragen.`); }
+    else { state.entries = before; flash(msg, "Nicht gespeichert – bitte nochmal versuchen.", true); }
   });
 
-  // ---------- Stoppuhr (eine pro Person, falls ihr ein Gerät teilt) ----------
-  let tick = null;
-  const allTimers = () => lsGet(LS_TIMER) || {};
-  function timerState() { const m = me(); return m ? allTimers()[m] || null : null; }
-  function setTimer(t) { const m = me(); if (!m) return; const all = allTimers(); if (t) all[m] = t; else delete all[m]; lsSet(LS_TIMER, all); }
-  function renderTimer() {
-    const t = timerState();
-    const running = !!t;
-    $("timerBox").classList.toggle("running", running);
-    $("tStart").hidden = running; $("tStop").hidden = !running; $("tDiscard").hidden = !running;
-    clearInterval(tick);
-    if (running) {
-      $("tCat").value = t.category; $("tNote").value = t.note || "";
-      const upd = () => {
-        const s = Math.floor((Date.now() - t.startedAt) / 1000);
-        $("clock").textContent = `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
-      };
-      upd(); tick = setInterval(upd, 1000);
-      $("timerSince").textContent = `Läuft seit ${hhmm(new Date(t.startedAt))}`;
-    } else {
-      $("clock").textContent = "0:00:00";
-      $("timerSince").textContent = me() ? "Läuft nicht" : "Wähle oben bei „Ich bin“ deinen Namen";
-    }
+  // ---------- Auswertung ----------
+  function renderRows(el, rows) {
+    const max = Math.max(1, ...rows.map((r) => r[1]));
+    el.innerHTML = rows.map(([name, m, col]) =>
+      `<div class="hrow"><span class="name" title="${esc(name)}">${esc(name)}</span><span class="hbar"><span style="width:${(m / max) * 100}%;background:${col}"></span></span><span class="val">${fmtMin(m)} h</span></div>`).join("");
   }
-  $("tStart").addEventListener("click", () => {
-    if (!me()) { $("timerSince").textContent = "Wähle zuerst oben bei „Ich bin“ deinen Namen."; $("meSel").focus(); return; }
-    setTimer({ startedAt: Date.now(), category: $("tCat").value, note: $("tNote").value.trim() });
-    renderTimer();
-  });
-  ["tCat", "tNote"].forEach((id) => $(id).addEventListener("change", () => {
-    const t = timerState(); if (!t) return;
-    setTimer({ ...t, category: $("tCat").value, note: $("tNote").value.trim() });
-  }));
-  $("tStop").addEventListener("click", async () => {
-    const t = timerState(); if (!t) return;
-    const st = new Date(t.startedAt), en = new Date();
-    const minutes = Math.max(1, Math.round((en - st) / 60000));
-    const entry = { id: uid(), date: isoDate(st), start: hhmm(st), end: hhmm(en), minutes, person: me(), category: $("tCat").value, note: $("tNote").value.trim(), createdAt: Date.now() };
-    try {
-      await store.add(entry);
-      setTimer(null); $("tNote").value = "";
-      renderTimer();
-      flash($("formMsg"), `${fmtMin(minutes)} h für ${entry.person} aus der Stoppuhr eingetragen.`);
-    } catch (err) { $("timerSince").textContent = `Nicht gespeichert (${err && err.message ? err.message : "Fehler"}) – nochmal auf Stopp tippen, die Zeit läuft weiter.`; }
-  });
-  $("tDiscard").addEventListener("click", (ev) => {
-    const b = ev.currentTarget;
-    if (!b.dataset.confirm) { b.dataset.confirm = "1"; b.textContent = "Zeit wirklich verwerfen?"; setTimeout(() => { delete b.dataset.confirm; b.textContent = "Verwerfen"; }, 4000); return; }
-    delete b.dataset.confirm; b.textContent = "Verwerfen";
-    setTimer(null); renderTimer();
+  function renderStats() {
+    const g = viewGroup(), list = groupEntries(g.id), total = sumMin(list);
+    $("stGroup").textContent = g.name;
+    $("sTotal").textContent = fmtMin(total);
+    const mon = mondayOf(new Date());
+    $("sWeek").textContent = fmtMin(sumMin(list.filter((e) => parseDate(e.date) >= mon)));
+    $("sCount").textContent = list.length;
+    let a = 0;
+    if (list.length) { const first = list.reduce((m, e) => (e.date < m ? e.date : m), list[0].date); a = total / Math.max(1, Math.ceil((new Date() - mondayOf(parseDate(first))) / (7 * 864e5))); }
+    $("sAvg").textContent = fmtMin(a);
+    const others = [...new Set(list.map((e) => e.person).filter((p) => !g.members.includes(p)))];
+    renderRows($("sPeople"), g.members.concat(others).map((p, i) => [p, sumMin(list.filter((e) => e.person === p)), `var(--c${(i % 7) + 1})`]));
+    renderWeeks($("sWeeks"), list);
+    const rows = state.plan.phases.map((ph, i) => [ph.name, sumMin(list.filter((e) => ph.subs.some((s) => s.id === e.sub))), `var(--c${(i % 7) + 1})`]);
+    rows.push(["Allgemein", sumMin(list.filter((e) => !subById(e.sub))), "var(--c6)"]);
+    renderRows($("sPhases"), rows);
+  }
+  function renderWeeks(el, list) {
+    const N = 10, W = 340, H = 150, padL = 26, padB = 20, padT = 14, mon = mondayOf(new Date());
+    const weeks = [];
+    for (let i = N - 1; i >= 0; i--) { const s = new Date(mon); s.setDate(s.getDate() - i * 7); weeks.push({ s, e: new Date(s.getFullYear(), s.getMonth(), s.getDate() + 7), min: 0 }); }
+    list.forEach((e) => { const d = parseDate(e.date); const w = weeks.find((x) => d >= x.s && d < x.e); if (w) w.min += e.minutes; });
+    const maxH = Math.max(2, Math.ceil(Math.max(...weeks.map((w) => w.min)) / 60 / 2) * 2);
+    const y = (h) => padT + (H - padT - padB) * (1 - h / maxH), bw = (W - padL) / N;
+    let g = "";
+    [0, maxH / 2, maxH].forEach((h) => { g += `<line class="grid" x1="${padL}" x2="${W}" y1="${y(h)}" y2="${y(h)}"/><text x="${padL - 5}" y="${y(h) + 3}" text-anchor="end">${h}h</text>`; });
+    weeks.forEach((w, i) => {
+      const x = padL + i * bw + bw * 0.18, bwid = bw * 0.64, top = y(w.min / 60);
+      if (w.min > 0) g += `<rect class="b${i === N - 1 ? " now" : ""}" x="${x}" y="${top}" width="${bwid}" height="${y(0) - top}" rx="1"><title>KW ${isoWeek(w.s)}: ${fmtMin(w.min)} h</title></rect><text class="vl" x="${x + bwid / 2}" y="${top - 3}" text-anchor="middle">${fmtH(w.min)}</text>`;
+      g += `<text x="${x + bwid / 2}" y="${H - 5}" text-anchor="middle">${isoWeek(w.s)}</text>`;
+    });
+    el.innerHTML = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Stunden pro Kalenderwoche">${g}</svg><div class="hint">Zahlen unten = Kalenderwoche, gelb = aktuelle Woche</div>`;
+  }
+
+  // ---------- Protokoll ----------
+  function renderLog() {
+    const g = viewGroup();
+    $("logGroup").textContent = g.name;
+    fillSelect($("filterPerson"), `<option value="">Alle Personen</option>` + g.members.map((m) => `<option>${esc(m)}</option>`).join(""));
+    fillSelect($("filterPhase"), `<option value="">Alle Phasen</option>` + state.plan.phases.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("") + `<option value="_none">Allgemein</option>`);
+    const fp = $("filterPerson").value, fph = $("filterPhase").value, all = groupEntries(g.id);
+    const list = all.filter((e) => {
+      if (fp && e.person !== fp) return false;
+      if (!fph) return true;
+      const s = subById(e.sub);
+      return fph === "_none" ? !s : !!s && s.phase.id === fph;
+    }).sort((a, b) => (b.date + (b.start || "")).localeCompare(a.date + (a.start || "")));
+    if (!list.length) { $("log").innerHTML = `<div class="empty">${all.length ? "Keine Einträge für diesen Filter." : "Noch keine Einträge – starte die Stoppuhr oder trag Stunden nach."}</div>`; return; }
+    const months = new Map();
+    list.forEach((e) => { const k = e.date.slice(0, 7); if (!months.has(k)) months.set(k, []); months.get(k).push(e); });
+    let html = "";
+    for (const [k, es] of months) {
+      const label = parseDate(k + "-01").toLocaleDateString("de-AT", { month: "long", year: "numeric" });
+      html += `<div class="month"><div class="month-head"><h3>${esc(label)}</h3><span class="num">${fmtMin(sumMin(es))} h</span></div>`;
+      es.forEach((e) => {
+        const d = parseDate(e.date), s = subById(e.sub);
+        html += `<div class="entry" data-id="${esc(e.id)}">
+          <div class="d">${d.toLocaleDateString("de-AT", { weekday: "short" })} ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.<span class="t">${e.start && e.end ? `${esc(e.start)}–${esc(e.end)}` : ""}</span></div>
+          <div><div class="note">${esc(e.note) || '<span class="muted">(ohne Beschreibung)</span>'}</div>
+            <div class="meta"><span class="chip" title="${s ? esc(s.phase.name + " · " + s.name) : "Allgemein"}"><span>${s ? esc(s.name) : "Allgemein"}</span></span>${s ? `<span>${esc(s.phase.name)}</span>` : ""}<span>· ${esc(e.person)}</span></div></div>
+          <div><div class="dur">${fmtMin(e.minutes)}</div><div class="acts"><button class="ghost" data-act="edit" type="button">Bearbeiten</button><button class="ghost danger" data-act="del" type="button">Löschen</button></div></div>
+        </div>`;
+      });
+      html += "</div>";
+    }
+    $("log").innerHTML = html;
+  }
+  $("filterPerson").addEventListener("change", renderLog);
+  $("filterPhase").addEventListener("change", renderLog);
+  $("log").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button[data-act]"); if (!b) return;
+    const id = b.closest(".entry").dataset.id, e = state.entries.find((x) => x.id === id); if (!e) return;
+    if (b.dataset.act === "edit") return startEdit(e);
+    confirmClick(b, "Wirklich löschen?", () => {
+      const before = state.entries;
+      write(() => (state.entries = before.filter((x) => x.id !== id)), () => backend.delEntry(id)).then((ok) => { if (ok) toast("Eintrag gelöscht"); else { state.entries = before; renderAll(); } });
+    });
   });
 
-  // ---------- Ich bin … ----------
-  $("meSel").addEventListener("change", () => {
-    lsSet(LS_ME, $("meSel").value || null);
-    render(); renderTimer();
-    if (!editingId && me()) $("fPerson").value = me();
-  });
-
-  // ---------- Einstellungen ----------
-  const splitList = (s) => [...new Set(s.split(",").map((x) => x.trim()).filter(Boolean))];
-  $("settingsBox").addEventListener("toggle", () => {
-    if (!$("settingsBox").open) return;
-    const s = state.settings;
-    $("sTitle").value = s.title; $("sGoal").value = s.goal; $("sDue").value = s.due || "";
-    $("sPeople").value = s.people.join(", "); $("sCats").value = s.cats.join(", ");
-  });
-  $("settingsForm").addEventListener("submit", async (ev) => {
+  // ---------- Einstellungen: Gruppen ----------
+  function renderSettings() {
+    if (!$("groupForm").contains(document.activeElement)) {
+      $("groupForm").innerHTML = state.groups.map((g, i) => `
+        <label class="f wide">Gruppe ${i + 1} – Name <input id="gName-${esc(g.id)}" value="${esc(g.name)}"></label>
+        <label class="f wide">Mitglieder <input id="gMem-${esc(g.id)}" value="${esc(g.members.join(", "))}"></label>`).join("") +
+        `<div class="btns wide"><button class="primary" type="submit">Gruppen speichern</button></div>`;
+    }
+    $("dbOff").hidden = !!dbCfg; $("dbOn").hidden = !dbCfg;
+    if (dbCfg) $("dbInvite").value = inviteLink(dbCfg);
+    const leg = lsGet(LS.legacySheet);
+    $("legacyBox").hidden = !(leg && leg.url && leg.key);
+    setSync();
+  }
+  $("groupForm").addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    const people = splitList($("sPeople").value), cats = splitList($("sCats").value);
-    if (!people.length) return flash($("setMsg"), "Mindestens eine Person eintragen.", true);
-    if (!cats.length) return flash($("setMsg"), "Mindestens eine Kategorie eintragen.", true);
-    const s = { title: $("sTitle").value.trim() || "Maturaprojekt", goal: Math.max(0, parseInt($("sGoal").value, 10) || 0), due: $("sDue").value, people, cats };
-    // Umbenennungen an gleicher Position übernehmen (z. B. "Person 1" -> "Anna")
-    const old = state.settings.people, renames = {};
-    old.forEach((o, i) => { if (people[i] && people[i] !== o && !people.includes(o)) renames[o] = people[i]; });
+    const split = (s) => [...new Set(s.split(",").map((x) => x.trim()).filter(Boolean))];
+    const next = state.groups.map((g) => ({ id: g.id, name: $(`gName-${g.id}`).value.trim() || g.name, members: split($(`gMem-${g.id}`).value) }));
+    if (next.some((g) => !g.members.length)) return flash($("groupMsg"), "Jede Gruppe braucht mindestens ein Mitglied.", true);
+    const flat = next.flatMap((g) => g.members);
+    if (new Set(flat).size !== flat.length) return flash($("groupMsg"), "Eine Person darf nur in einer Gruppe stehen.", true);
+    // Umbenennung = gleiche Position in derselben Gruppe, alter Name kommt nicht mehr vor
+    const renames = {};
+    state.groups.forEach((g, gi) => g.members.forEach((m, i) => { const n = next[gi].members[i]; if (n && n !== m && !flat.includes(m)) renames[m] = n; }));
+    const myOld = lsGet(LS.me);
+    const ok = await write(() => {
+      state.groups = next;
+      state.entries = state.entries.map((e) => (renames[e.person] ? { ...e, person: renames[e.person] } : e));
+    }, async () => {
+      await backend.putConfig("groups", next);
+      for (const [from, to] of Object.entries(renames)) await backend.renamePerson(from, to);
+    });
+    if (!ok) return;
+    if (renames[myOld]) {
+      lsSet(LS.me, renames[myOld]);
+      const all = timers(); if (all[myOld]) { all[renames[myOld]] = all[myOld]; delete all[myOld]; lsSet(LS.timers, all); }
+    }
+    document.activeElement?.blur(); renderAll();
+    const n = Object.keys(renames).length;
+    flash($("groupMsg"), n ? `Gespeichert – ${n} ${n === 1 ? "Name" : "Namen"} in den Einträgen umbenannt.` : "Gespeichert.");
+  });
+
+  // ---------- Einstellungen: Datenbank ----------
+  let dbCfg = null;
+  function inviteLink(cfg) { return `${location.origin}${location.pathname}?sb=${encodeURIComponent(cfg.url)}&k=${encodeURIComponent(cfg.key)}`; }
+  // Die Verbindung steht im Einladungslink und bleibt in der Adresszeile (Lesezeichen, Home-Bildschirm)
+  function readDbCfg() {
     try {
-      await store.saveSettings(s);
-      const affected = state.entries.filter((e) => renames[e.person]);
-      for (const e of affected) await store.update({ ...e, person: renames[e.person] });
-      const m = lsGet(LS_ME);
-      if (renames[m]) {
-        lsSet(LS_ME, renames[m]);
-        const all = allTimers(); if (all[m]) { all[renames[m]] = all[m]; delete all[m]; lsSet(LS_TIMER, all); }
-      }
-      render(); renderTimer(); resetForm();
-      flash($("setMsg"), affected.length ? `Gespeichert – ${affected.length} Einträge umbenannt.` : "Gespeichert.");
-    } catch (err) { flash($("setMsg"), `Nicht gespeichert: ${err && err.message ? err.message : "Fehler"}.`, true); }
+      const q = new URLSearchParams(location.search);
+      if (q.get("sheet") && q.get("key")) lsSet(LS.legacySheet, { url: q.get("sheet"), key: q.get("key") }); // alter Einladungslink
+      if (q.get("sb") && q.get("k")) { const c = { url: q.get("sb"), key: q.get("k") }; lsSet(LS.db, c); return c; }
+    } catch {}
+    const c = lsGet(LS.db);
+    if (c && c.url && c.key) {
+      try { history.replaceState(null, "", inviteLink(c) + location.hash); } catch {}
+      return c;
+    }
+    return null;
+  }
+  $("dbForm").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const cfg = { url: $("dbUrl").value.trim().replace(/\/+$/, ""), key: $("dbKey").value.trim() };
+    if (!/^https:\/\/[\w.-]+$/.test(cfg.url)) return flash($("dbMsg"), "Die Project URL sieht so aus: https://abcd1234.supabase.co", true);
+    if (cfg.key.length < 20) return flash($("dbMsg"), "Bitte den Publishable key (sb_publishable_…) oder anon key einfügen.", true);
+    $("dbConnect").disabled = true;
+    try {
+      await supabaseBackend(cfg).load();
+      lsSet(LS.db, cfg);
+      location.href = inviteLink(cfg) + "#settings";
+    } catch (err) { flash($("dbMsg"), `Verbindung fehlgeschlagen: ${err.message}`, true); }
+    finally { $("dbConnect").disabled = false; }
+  });
+  $("dbCopy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText($("dbInvite").value); flash($("dbMsg"), "Link kopiert."); }
+    catch { $("dbInvite").select(); flash($("dbMsg"), "Link markiert – jetzt kopieren."); }
+  });
+  $("dbRefresh").addEventListener("click", () => { lastSig = ""; refresh(); });
+  $("dbDisconnect").addEventListener("click", (e) => confirmClick(e.currentTarget, "Wirklich trennen? (Daten bleiben in der Datenbank)", () => {
+    lsSet(LS.db, null); location.href = location.pathname + "#settings";
+  }));
+
+  // ---------- Altdaten aus der alten App / Google-Tabelle ----------
+  const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
+  function normDate(v) {
+    v = String(v ?? "").trim(); let m;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+    if ((m = v.match(/^\w{3},? (\w{3}) (\d{1,2}),? (\d{4})/)) && MONTHS[m[1]]) return `${m[3]}-${pad(MONTHS[m[1]])}-${pad(m[2])}`;
+    if ((m = v.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/))) return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
+    if (/^\d{4}-\d{2}-\d{2}T/.test(v)) { const d = new Date(v); if (!isNaN(d)) return isoDate(d); }
+    return "";
+  }
+  function normTime(v) { v = String(v ?? "").trim(); if (!v) return ""; const m = v.replace(/^\w{3},? \w{3} \d{1,2},? \d{4}/, "").match(/(\d{1,2}):(\d{2})/); return m ? `${pad(m[1])}:${m[2]}` : ""; }
+  function fromLegacy(list) {
+    const out = [], skipped = [];
+    for (const e of list || []) {
+      const name = String(e.person || "").trim();
+      const person = allMembers().find((m) => m === name || m.split(" ")[0] === name || m.split(" ").slice(-1)[0] === name);
+      const date = normDate(e.date), minutes = Math.round(Number(e.minutes));
+      if (!person || !date || !(minutes > 0)) { skipped.push(name || "?"); continue; }
+      const cat = String(e.category || "").trim(), note = String(e.note || "").trim();
+      out.push({ id: String(e.id || uid()), date, start: normTime(e.start), end: normTime(e.end), minutes, person, group: groupOf(person).id, sub: "", note: cat ? (note ? `${cat}: ${note}` : cat) : note });
+    }
+    return { out, skipped: [...new Set(skipped)] };
+  }
+  async function importEntries(list) {
+    const have = new Set(state.entries.map((e) => e.id));
+    const fresh = list.filter((e) => !have.has(e.id));
+    if (!fresh.length) return 0;
+    const before = state.entries;
+    const ok = await write(() => (state.entries = before.concat(fresh)), () => backend.putEntries(fresh));
+    if (!ok) { state.entries = before; return -1; }
+    return fresh.length;
+  }
+  const legacyMsg = (n, skipped, total) => n < 0 ? "Übernahme fehlgeschlagen – bitte nochmal versuchen." :
+    `${n} ${n === 1 ? "Eintrag" : "Einträge"} übernommen${total - n - skipped.length > 0 ? `, ${total - n - skipped.length} waren schon vorhanden` : ""}${skipped.length ? `; übersprungen (Name unbekannt): ${skipped.join(", ")}` : ""}.`;
+  $("legacyImport").addEventListener("click", async () => {
+    const leg = lsGet(LS.legacySheet), msg = $("legacyMsg");
+    $("legacyImport").disabled = true;
+    try {
+      const res = await fetch(`${leg.url}?action=list&key=${encodeURIComponent(leg.key)}&t=${Date.now()}`, { cache: "no-store" });
+      let d; try { d = JSON.parse(await res.text()); } catch { throw new Error("die alte Web-App antwortet nicht richtig"); }
+      if (!d.ok) throw new Error(d.error || "Fehler");
+      const { out, skipped } = fromLegacy(d.entries);
+      const n = await importEntries(out);
+      flash(msg, legacyMsg(n, skipped, (d.entries || []).length), n < 0);
+    } catch (err) { flash(msg, `Alte Tabelle nicht lesbar: ${err.message === "Failed to fetch" ? "nicht erreichbar" : err.message}`, true); }
+    finally { $("legacyImport").disabled = false; }
   });
 
   // ---------- Export / Import ----------
-  async function offerFile(filename, data, mime) {
-    let dl = null;
-    if (window.claude && typeof window.claude.use === "function") { try { dl = await window.claude.use("downloads"); } catch {} }
-    if (dl) {
-      try { await dl.save({ filename, data }); return "Datei gespeichert."; }
-      catch (e) { return e && e.code === "declined" ? "" : "Download ist hier nicht möglich."; }
-    }
+  function offerFile(filename, data, mime) {
     const url = URL.createObjectURL(new Blob([data], { type: mime }));
-    const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    return "Datei gespeichert.";
+    const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+    setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 3000);
   }
   const stamp = () => isoDate(new Date());
-  // Excel: Übersicht + alle Einträge + ein Blatt pro Person
   const xlDate = (iso) => { const [y, m, d] = iso.split("-").map(Number); return (Date.UTC(y, m - 1, d) - Date.UTC(1899, 11, 30)) / 864e5; };
   const xlTime = (t) => (t ? toMin(t) / 1440 : "");
-  const hours = (m) => Math.round((m / 60) * 100) / 100;
-  function sheetName(name, used) {
-    let n = String(name).replace(/[\[\]:*?\/\\]/g, " ").trim().slice(0, 31) || "Person";
-    let k = n, i = 2;
-    while (used.has(k.toLowerCase())) k = n.slice(0, 28) + " " + i++;
-    used.add(k.toLowerCase());
-    return k;
-  }
-  function makeSheet(aoa, { widths = [], formats = {}, headerRow = 0, filter = false, firstRow = 0 } = {}) {
+  const hrs2 = (m) => Math.round((m / 60) * 100) / 100;
+  function sheet(aoa, widths, formats = {}, from = 0) {
     const ws = XLSX.utils.aoa_to_sheet(aoa);
     ws["!cols"] = widths.map((w) => ({ wch: w }));
-    const range = XLSX.utils.decode_range(ws["!ref"]);
-    for (let r = firstRow; r <= range.e.r; r++) {
-      for (const [c, z] of Object.entries(formats)) {
-        const cell = ws[XLSX.utils.encode_cell({ r, c: Number(c) })];
-        if (cell && cell.t === "n") cell.z = z;
-      }
-    }
-    if (filter) ws["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: headerRow, c: 0 }, e: { r: range.e.r, c: range.e.c } }) };
+    const r = XLSX.utils.decode_range(ws["!ref"]);
+    for (let i = from; i <= r.e.r; i++) for (const [c, z] of Object.entries(formats)) { const cell = ws[XLSX.utils.encode_cell({ r: i, c: Number(c) })]; if (cell && cell.t === "n") cell.z = z; }
     return ws;
   }
   function buildWorkbook() {
-    const s = state.settings;
-    const rows = state.entries.slice().sort((a, b) => (a.date + (a.start || "")).localeCompare(b.date + (b.start || "")));
-    const wb = XLSX.utils.book_new();
-    wb.Props = { Title: `${s.title} – Arbeitsprotokoll`, Author: "Maturaprojekt Stundenlog" };
-    const people = s.people.concat([...new Set(rows.map((e) => e.person).filter((p) => !s.people.includes(p)))]);
-    const cats = s.cats.concat([...new Set(rows.map((e) => e.category).filter((c) => !s.cats.includes(c)))]);
-    const goal = Number(s.goal) || 0;
-
+    const wb = XLSX.utils.book_new(), G = state.groups, soll = sollPct(), nSubs = allSubs().length;
+    wb.Props = { Title: `Maturaprojekt ${state.plan.title} – Projektplan & Arbeitsprotokoll` };
     // Übersicht
-    const ov = [
-      [`${s.title} – Arbeitsprotokoll`],
-      ["Stand", xlDate(isoDate(new Date()))],
-      ["Zielstunden pro Person", goal || ""],
-      s.due ? ["Abgabetermin", xlDate(s.due)] : [],
-      [],
-      ["Person", "Stunden", "Ziel (h)", "Erfüllt", "Einträge"],
-    ];
-    const pStart = ov.length + 1;
-    people.forEach((p, i) => {
-      const m = rows.filter((e) => e.person === p);
-      const r = pStart + i;
-      ov.push([p, hours(m.reduce((a, e) => a + e.minutes, 0)), goal || "", goal ? { t: "n", f: `IF(C${r}>0,B${r}/C${r},"")` } : "", m.length]);
-    });
-    const pEnd = pStart + people.length - 1;
-    ov.push(["Team gesamt", { t: "n", f: `SUM(B${pStart}:B${pEnd})` }, goal ? { t: "n", f: `SUM(C${pStart}:C${pEnd})` } : "", goal ? { t: "n", f: `IF(C${pEnd + 1}>0,B${pEnd + 1}/C${pEnd + 1},"")` } : "", { t: "n", f: `SUM(E${pStart}:E${pEnd})` }]);
-    ov.push([]);
-    ov.push(["Stunden nach Kategorie", ...people, "Gesamt"]);
-    const cStart = ov.length + 1;
-    cats.forEach((c, i) => {
-      const r = cStart + i;
-      ov.push([c, ...people.map((p) => hours(rows.filter((e) => e.person === p && e.category === c).reduce((a, e) => a + e.minutes, 0))),
-        { t: "n", f: `SUM(B${r}:${XLSX.utils.encode_col(people.length)}${r})` }]);
-    });
-    const ovWs = makeSheet(ov, { widths: [26, ...people.map(() => 12), 12], formats: Object.fromEntries([...people.keys(), people.length].map((i) => [i + 1, "0.00"])), firstRow: 5 });
-    ovWs["B2"].z = "dd.mm.yyyy"; if (s.due) ovWs["B4"].z = "dd.mm.yyyy";
-    ovWs["B3"] && (ovWs["B3"].z = "0");
-    for (let r = pStart; r <= pEnd + 1; r++) { const g = ovWs["C" + r]; if (g) g.z = "0"; const c = ovWs["D" + r]; if (c) c.z = "0%"; const e = ovWs["E" + r]; if (e) e.z = "0"; }
+    const ov = [[`Maturaprojekt ${state.plan.title} – Projektplan & Arbeitsprotokoll`], ["Stand", xlDate(stamp())], ["Soll laut Zeitplan", Math.round(soll) / 100], [],
+      ["Gruppe", "Mitglieder", "Fortschritt", "Unterphasen fertig", "Stunden", "Einträge"]];
+    G.forEach((g) => ov.push([g.name, g.members.join(", "), groupPct(g.id) / 100, `${doneCount(g.id)} / ${nSubs}`, hrs2(sumMin(groupEntries(g.id))), groupEntries(g.id).length]));
+    ov.push([], ["Person", "Gruppe", "Stunden", "Einträge"]);
+    G.forEach((g) => g.members.forEach((m) => { const l = state.entries.filter((e) => e.person === m); ov.push([m, g.name, hrs2(sumMin(l)), l.length]); }));
+    const ovWs = sheet(ov, [26, 34, 12, 18, 10, 10]);
+    ovWs.B2.z = "dd.mm.yyyy"; ovWs.B3.z = "0%";
+    for (let r = 6; r < 6 + G.length; r++) { if (ovWs["C" + r]) ovWs["C" + r].z = "0%"; if (ovWs["E" + r]) ovWs["E" + r].z = "0.00"; }
+    for (let r = 8 + G.length; r <= ov.length; r++) if (ovWs["C" + r]) ovWs["C" + r].z = "0.00";
     XLSX.utils.book_append_sheet(wb, ovWs, "Übersicht");
-
-    // Alle Einträge
-    const head = ["Datum", "Von", "Bis", "Stunden", "Person", "Kategorie", "Tätigkeit"];
-    const all = [head, ...rows.map((e) => [xlDate(e.date), xlTime(e.start), xlTime(e.end), hours(e.minutes), e.person, e.category, e.note])];
-    all.push(["Summe", "", "", { t: "n", f: `SUM(D2:D${rows.length + 1})` }]);
-    const fmt = { 0: "dd.mm.yyyy", 1: "hh:mm", 2: "hh:mm", 3: "0.00" };
-    const allWs = makeSheet(all, { widths: [11, 7, 7, 9, 16, 22, 60], formats: fmt, firstRow: 1 });
-    allWs["!autofilter"] = { ref: `A1:G${rows.length + 1}` };
-    const used = new Set(["übersicht", "alle einträge"]);
-    XLSX.utils.book_append_sheet(wb, allWs, "Alle Einträge");
-
-    // Pro Person
-    people.forEach((p) => {
-      const mine = rows.filter((e) => e.person === p);
-      const aoa = [[`Arbeitsprotokoll ${p}`], [], ["Datum", "Von", "Bis", "Stunden", "Kategorie", "Tätigkeit"],
-        ...mine.map((e) => [xlDate(e.date), xlTime(e.start), xlTime(e.end), hours(e.minutes), e.category, e.note])];
-      aoa.push(["Summe", "", "", { t: "n", f: mine.length ? `SUM(D4:D${mine.length + 3})` : "0" }]);
-      if (goal) aoa.push(["Ziel", "", "", goal]);
-      const ws = makeSheet(aoa, { widths: [11, 7, 7, 9, 22, 60], formats: fmt, firstRow: 3 });
-      XLSX.utils.book_append_sheet(wb, ws, sheetName(p, used));
+    // Projektplan
+    const head = ["Phase", "Unterphase", "Beschreibung", "Start", "Ende"]; G.forEach((g) => head.push(`% ${g.name}`, `Std. ${g.name}`));
+    const pl = [head], hb = Object.fromEntries(G.map((g) => [g.id, hoursBySub(g.id)]));
+    state.plan.phases.forEach((ph) => {
+      const row = [ph.name, "", ph.desc || "", ph.start ? xlDate(ph.start) : "", ph.end ? xlDate(ph.end) : ""];
+      G.forEach((g) => row.push(ph.subs.length ? phasePct(g.id, ph) / 100 : "", hrs2(ph.subs.reduce((a, s) => a + (hb[g.id][s.id] || 0), 0))));
+      pl.push(row);
+      ph.subs.forEach((s) => { const r = [ph.name, s.name, s.desc || "", "", ""]; G.forEach((g) => r.push(pct(g.id, s.id) / 100, hrs2(hb[g.id][s.id] || 0))); pl.push(r); });
+    });
+    const gen = ["Allgemein (ohne Unterphase)", "", "", "", ""]; G.forEach((g) => gen.push("", hrs2(sumMin(groupEntries(g.id).filter((e) => !subById(e.sub)))))); pl.push(gen);
+    const fmt = { 3: "dd.mm.yyyy", 4: "dd.mm.yyyy" }; G.forEach((_, i) => { fmt[5 + i * 2] = "0%"; fmt[6 + i * 2] = "0.00"; });
+    const plWs = sheet(pl, [22, 46, 30, 11, 11, ...G.flatMap(() => [14, 14])], fmt, 1);
+    plWs["!autofilter"] = { ref: `A1:${XLSX.utils.encode_col(head.length - 1)}${pl.length}` };
+    XLSX.utils.book_append_sheet(wb, plWs, "Projektplan");
+    // Protokoll je Gruppe
+    const used = new Set(["übersicht", "projektplan"]);
+    G.forEach((g) => {
+      const list = groupEntries(g.id).slice().sort((a, b) => (a.date + (a.start || "")).localeCompare(b.date + (b.start || "")));
+      const aoa = [["Datum", "Von", "Bis", "Stunden", "Person", "Phase", "Unterphase", "Tätigkeit"],
+        ...list.map((e) => { const s = subById(e.sub); return [xlDate(e.date), xlTime(e.start), xlTime(e.end), hrs2(e.minutes), e.person, s ? s.phase.name : "", s ? s.name : "Allgemein", e.note || ""]; })];
+      aoa.push(["Summe", "", "", { t: "n", f: list.length ? `SUM(D2:D${list.length + 1})` : "0" }]);
+      const ws = sheet(aoa, [11, 7, 7, 9, 18, 20, 40, 60], { 0: "dd.mm.yyyy", 1: "hh:mm", 2: "hh:mm", 3: "0.00" }, 1);
+      ws["!autofilter"] = { ref: `A1:H${list.length + 1}` };
+      let name = `Protokoll ${g.name}`.replace(/[[\]:*?/\\]/g, " ").slice(0, 31), k = 2;
+      while (used.has(name.toLowerCase())) name = `${name.slice(0, 28)} ${k++}`;
+      used.add(name.toLowerCase());
+      XLSX.utils.book_append_sheet(wb, ws, name);
     });
     return wb;
   }
-  $("expXlsx").addEventListener("click", async () => {
-    if (!state.entries.length) return flash($("expMsg"), "Noch keine eigenen Einträge zum Exportieren.", true);
-    if (!window.XLSX) return flash($("expMsg"), "Das Excel-Modul konnte nicht geladen werden – Internetverbindung prüfen und Seite neu laden.", true);
+  $("expXlsx").addEventListener("click", () => {
+    if (!window.XLSX) return flash($("expMsg"), "Das Excel-Modul konnte nicht geladen werden – Internet prüfen und Seite neu laden.", true);
     try {
       const buf = XLSX.write(buildWorkbook(), { bookType: "xlsx", type: "array", compression: true });
-      const name = `Arbeitsprotokoll_${(state.settings.title || "Maturaprojekt").replace(/[^\wÄÖÜäöüß -]/g, "").trim().replace(/\s+/g, "_")}_${stamp()}.xlsx`;
-      const m = await offerFile(name, new Uint8Array(buf), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-      if (m) flash($("expMsg"), m);
-    } catch (err) { flash($("expMsg"), "Excel-Datei konnte nicht erstellt werden.", true); }
+      offerFile(`Maturaprojekt_Doppelhaushaelfte_${stamp()}.xlsx`, new Uint8Array(buf), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      flash($("expMsg"), "Excel-Datei erstellt.");
+    } catch { flash($("expMsg"), "Excel-Datei konnte nicht erstellt werden.", true); }
   });
-  $("expJson").addEventListener("click", async () => {
-    const data = JSON.stringify({ app: "matura-stundenlog", version: 1, exportedAt: new Date().toISOString(), settings: state.settings, entries: state.entries }, null, 2);
-    const m = await offerFile(`Stundenlog_Sicherung_${stamp()}.json`, data, "application/json");
-    if (m) flash($("expMsg"), m);
+  $("expJson").addEventListener("click", () => {
+    const progress = Object.entries(state.progress).map(([k, v]) => { const i = k.indexOf(":"); return { g: k.slice(0, i), s: k.slice(i + 1), pct: v }; });
+    offerFile(`Maturaprojekt_Sicherung_${stamp()}.json`, JSON.stringify({ app: "matura-projektplan", version: 2, exportedAt: new Date().toISOString(), groups: state.groups, plan: state.plan, progress, entries: state.entries }, null, 2), "application/json");
+    flash($("expMsg"), "Sicherung erstellt.");
   });
-  $("impBtn").addEventListener("click", () => $("impJson").click());
-  $("impJson").addEventListener("change", async (ev) => {
-    const file = ev.target.files[0]; ev.target.value = "";
-    if (!file) return;
-    try {
-      const d = JSON.parse(await file.text());
-      if (!Array.isArray(d.entries)) throw new Error();
-      const have = new Set(state.entries.map((e) => e.id));
-      const fresh = d.entries.filter((e) => e && e.id && e.date && Number(e.minutes) > 0 && !have.has(e.id));
-      if (d.settings && state.entries.length === 0) await store.saveSettings({ ...DEFAULT_SETTINGS, ...d.settings });
-      for (const e of fresh) await store.add({ id: String(e.id), date: String(e.date), start: e.start || "", end: e.end || "", minutes: Number(e.minutes), person: e.person || "", category: e.category || "", note: e.note || "", createdAt: e.createdAt || Date.now() });
-      flash($("expMsg"), `${fresh.length} Einträge importiert${d.entries.length - fresh.length ? `, ${d.entries.length - fresh.length} waren schon vorhanden` : ""}.`);
-    } catch { flash($("expMsg"), "Diese Datei ist keine gültige Stundenlog-Sicherung.", true); }
+  $("impBtn").addEventListener("click", () => $("impFile").click());
+  $("impFile").addEventListener("change", async (ev) => {
+    const file = ev.target.files[0]; ev.target.value = ""; if (!file) return;
+    let d; try { d = JSON.parse(await file.text()); } catch { return flash($("expMsg"), "Diese Datei ist keine gültige Sicherung.", true); }
+    const box = $("impConfirm");
+    if (d && d.app === "matura-projektplan" && d.plan && Array.isArray(d.groups)) {
+      const entries = Array.isArray(d.entries) ? d.entries : [];
+      box.hidden = false;
+      box.innerHTML = `<p style="margin:0 0 8px">Sicherung vom ${esc(new Date(d.exportedAt).toLocaleString("de-AT"))}: <strong>Plan, Gruppen und Fortschritt werden ersetzt</strong>, ${entries.length} Einträge werden ergänzt bzw. aktualisiert.</p>
+        <div class="btns"><button type="button" class="primary" id="impYes">Ja, importieren</button><button type="button" class="ghost" id="impNo">Abbrechen</button></div>`;
+      $("impNo").onclick = () => (box.hidden = true);
+      $("impYes").onclick = async () => {
+        box.hidden = true;
+        const prog = {}; (d.progress || []).forEach((p) => (prog[`${p.g}:${p.s}`] = p.pct));
+        const ok = await write(() => {
+          const ids = new Set(entries.map((e) => e.id));
+          Object.assign(state, { groups: d.groups, plan: d.plan, progress: prog, entries: state.entries.filter((e) => !ids.has(e.id)).concat(entries) });
+        }, async () => {
+          await backend.putConfig("groups", d.groups); await backend.putConfig("plan", d.plan);
+          if (d.progress?.length) await backend.putProgress(d.progress);
+          if (entries.length) await backend.putEntries(entries);
+        });
+        flash($("expMsg"), ok ? "Sicherung importiert." : "Import fehlgeschlagen.", !ok);
+      };
+      return;
+    }
+    if (d && Array.isArray(d.entries)) { // Sicherung der alten Stundenlog-App
+      const { out, skipped } = fromLegacy(d.entries);
+      const n = await importEntries(out);
+      flash($("expMsg"), legacyMsg(n, skipped, d.entries.length), n < 0);
+      return;
+    }
+    flash($("expMsg"), "Diese Datei ist keine gültige Sicherung.", true);
   });
 
-  // ---------- Start ----------
-  render();
+  // ================= Start =================
+  dbCfg = readDbCfg();
+  backend = dbCfg ? supabaseBackend(dbCfg) : localBackend();
+  $("notLinked").hidden = !!dbCfg;
+  showTab((location.hash || "").slice(1) || "plan");
   resetForm();
-  renderTimer();
-  initStore().then(() => { resetForm(); renderTimer(); });
+  refresh();
+  setInterval(() => { if (document.visibilityState === "visible") refresh(); }, 10000);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
+  window.addEventListener("hashchange", () => { const t = location.hash.slice(1); if (TABS.includes(t) && t !== state.tab) showTab(t); });
 })();
 </script>
+</body>
+</html>
