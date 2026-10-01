@@ -1,12 +1,14 @@
 # Maturaprojekt Doppelhaushälfte – Projektplan & Arbeitsprotokoll
 
 Web-App für das Maturaprojekt (Bautechnik): ein **Projektplan mit Fortschrittsanzeige** und ein
-**Arbeitsprotokoll für Stunden** – für zwei Gruppen auf einer Seite, am Handy und am Laptop.
+**Arbeitsprotokoll für Stunden** – für vier Personen auf einer Seite, am Handy und am Laptop.
 
-- **Gruppen:** „Engl & Bürgstaller“ und „Obexer & Taferner“ – Fortschritt und Stunden werden getrennt gezählt.
+- **4 Personen:** Matthias Engl, Paul Bürgstaller, Josef Obexer, Felix Taferner – jede Person trägt Fortschritt und Stunden für sich ein,
+  alle sehen den Fortschritt aller (4 Karten oben, „Alle im Vergleich“ in der Auswertung).
 - **Ich bin …:** Jede Person wählt oben einmal ihren Namen (wird im Browser gemerkt, kein Login).
-- **Projektplan:** 7 Phasen, 74 Unterphasen (aus `Projektzeitplan.xlsx`). Fortschritt pro Unterphase per Regler in 5-%-Schritten,
-  Soll-Linie aus den Phasendaten („X Punkte vor/hinter dem Zeitplan“), Plan im Bearbeitungsmodus änderbar.
+- **Projektplan:** 7 gemeinsame Phasen mit Terminen (aus `Projektzeitplan.xlsx`). Die **Unterphasen** kann jede Person
+  für sich anpassen („Meine Unterphasen bearbeiten“) – am Anfang hat jeder die 74 Unterphasen aus der Excel.
+  Fortschritt pro Unterphase per Regler in 5-%-Schritten, Soll-Linie aus den Phasendaten („X Punkte vor/hinter dem Zeitplan“).
 - **Stunden:** Stoppuhr (überlebt Neuladen) oder manuell nachtragen, jeweils mit Unterphase.
 - **Auswertung, Protokoll, Excel-Export, JSON-Sicherung.**
 
@@ -15,7 +17,7 @@ Gemeinsam gespeichert wird in einer **Google-Tabelle** (über ein kleines Apps-S
 
 ---
 
-## Umstellen von der alten Stunden-App (bestehende Google-Tabelle)
+## Skript in der bestehenden Google-Tabelle aktualisieren
 
 Die Tabelle, die Web-App-Adresse, der Team-Code und die Einladungslinks bleiben gleich – nur das Skript wird ausgetauscht.
 
@@ -28,8 +30,9 @@ Die Tabelle, die Web-App-Adresse, der Team-Code und die Einladungslinks bleiben 
    bei *Version* **„Neue Version“** wählen → **Bereitstellen**.
    (Nicht „Neue Bereitstellung“ – sonst ändert sich die Adresse und die Einladungslinks funktionieren nicht mehr.)
 7. Die App mit dem bisherigen Einladungslink öffnen. Beim ersten Öffnen
-   - legt die App den Projektplan aus der Excel an (inkl. der Prozentwerte für „Obexer & Taferner“),
-   - übernimmt die bisherigen Stunden automatisch ins neue Blatt **„Protokoll“**
+   - legt die App den Projektplan aus der Excel an bzw. übernimmt den bisherigen Stand
+     (Fortschritt einer früheren Gruppe geht an beide Mitglieder; „Obexer & Taferner“-Werte aus der Excel an Josef und Felix),
+   - übernimmt Stunden aus der allerersten Stunden-App automatisch ins Blatt **„Protokoll“**
      und benennt das alte Blatt in **„Einträge (alt)“** um (nichts wird gelöscht).
 8. Oben bei **„Ich bin …“** den eigenen Namen wählen – fertig. Die anderen öffnen einfach ihren bisherigen Link neu.
 
@@ -49,9 +52,9 @@ Die Tabelle, die Web-App-Adresse, der Team-Code und die Einladungslinks bleiben 
 
 | Blatt | Inhalt |
 |---|---|
-| **Protokoll** | alle Arbeitsstunden: Datum, Von, Bis, Stunden, Person, Gruppe, Phase, Unterphase, Tätigkeit |
-| **Fortschritt** | Prozent je Gruppe und Unterphase, wer zuletzt geändert hat |
-| **Konfiguration** | Gruppen und Projektplan (von der App verwaltet – nicht von Hand ändern) |
+| **Protokoll** | alle Arbeitsstunden: Datum, Von, Bis, Stunden, Person, Phase, Unterphase, Tätigkeit |
+| **Fortschritt** | Prozent je Person und Unterphase, wann zuletzt geändert |
+| **Konfiguration** | Personen, Phasen und die Unterphasen jeder Person (von der App verwaltet – nicht von Hand ändern) |
 | Einträge (alt) | die Liste der alten Stunden-App, nur noch zur Sicherheit |
 
 Bitte in der Tabelle keine Zeilen von Hand löschen oder umsortieren – Änderungen am besten in der App machen.

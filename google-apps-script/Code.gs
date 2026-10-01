@@ -1,10 +1,10 @@
 /**
- * Maturaprojekt Doppelhaushälfte – gemeinsamer Speicher in einer Google-Tabelle (Version 2).
+ * Maturaprojekt Doppelhaushälfte – gemeinsamer Speicher in einer Google-Tabelle (Version 3).
  *
  * Blätter (werden automatisch angelegt):
  *   „Protokoll“      – alle Arbeitsstunden (lesbar wie eine Excel-Liste)
- *   „Fortschritt“    – Prozent je Gruppe und Unterphase
- *   „Konfiguration“  – Gruppen und Projektplan (von der App verwaltet)
+ *   „Fortschritt“    – Prozent je Person und Unterphase
+ *   „Konfiguration“  – Personen, Phasen und die Unterphasen jeder Person (von der App verwaltet)
  * Ein Blatt „Einträge“ der alten Stunden-App wird von der App einmalig übernommen
  * und danach in „Einträge (alt)“ umbenannt (nichts wird gelöscht).
  *
@@ -20,13 +20,13 @@ const SH_CONFIG = "Konfiguration";
 const SH_LEGACY = "Einträge";
 const SH_LEGACY_DONE = "Einträge (alt)";
 
-const LOG_HEAD = ["Datum", "Von", "Bis", "Stunden", "Person", "Gruppe", "Phase", "Unterphase", "Tätigkeit", "ID", "Minuten", "Unterphasen-ID", "Gruppen-ID"];
-const PROG_HEAD = ["Gruppen-ID", "Unterphasen-ID", "Prozent", "Gruppe", "Unterphase", "Geändert von", "Geändert am"];
+const LOG_HEAD = ["Datum", "Von", "Bis", "Stunden", "Person", "(frei)", "Phase", "Unterphase", "Tätigkeit", "ID", "Minuten", "Unterphasen-ID", "Personen-ID"];
+const PROG_HEAD = ["Personen-ID", "Unterphasen-ID", "Prozent", "Person", "Unterphase", "Geändert von", "Geändert am"];
 
 function doGet(e) {
   return run_(() => {
     checkCode_(e.parameter.key);
-    return { ok: true, version: 2, ...readAll_() };
+    return { ok: true, version: 3, ...readAll_() };
   });
 }
 
@@ -76,6 +76,8 @@ function sheet_(name, head, setup) {
     sh.getRange(1, 1, 1, head.length).setValues([head]).setFontWeight("bold");
     sh.setFrozenRows(1);
     if (setup) setup(sh);
+  } else if (sh.getRange(1, 1, 1, head.length).getValues()[0].join("|") !== head.join("|")) {
+    sh.getRange(1, 1, 1, head.length).setValues([head]); // Überschriften älterer Versionen aktualisieren
   }
   return sh;
 }
@@ -108,7 +110,7 @@ function readAll_() {
     minutes: Number(r[10]) || Math.round(Number(r[3]) * 60), person: String(r[4]), group: String(r[12]),
     sub: String(r[11] || ""), note: String(r[8] || ""),
   }));
-  return { groups: cfg.groups || null, plan: cfg.plan || null, progress, entries, legacy: readLegacy_() };
+  return { config: cfg, progress, entries, legacy: readLegacy_() };
 }
 
 // Blatt der alten Stunden-App (Datum, Von, Bis, Stunden, Person, Kategorie, Tätigkeit, ID, Minuten, …)
@@ -123,9 +125,9 @@ function readLegacy_() {
 
 // ---------- Schreiben ----------
 function putConfig_(id, data) {
-  if (["groups", "plan"].indexOf(id) < 0 || !data || typeof data !== "object") throw new Error("Ungültige Konfiguration");
+  if (!/^(people|plan|subs:[\w-]+)$/.test(String(id)) || !data || typeof data !== "object") throw new Error("Ungültige Konfiguration");
   const sh = cfgSheet_(), json = JSON.stringify(data);
-  if (json.length > 49000) throw new Error("Projektplan zu groß für eine Zelle");
+  if (json.length > 49000) throw new Error("Zu viele Unterphasen für eine Zelle");
   const keys = rows_(sh, 1).map((r) => String(r[0]));
   const i = keys.indexOf(id);
   if (i >= 0) sh.getRange(i + 2, 2).setValue(json); else sh.appendRow([id, json]);
@@ -146,9 +148,9 @@ function putProgress_(list) {
 
 function entryRow_(e) {
   const minutes = Math.round(Number(e.minutes));
-  if (!e.id || !/^\d{4}-\d{2}-\d{2}$/.test(e.date) || !(minutes > 0 && minutes <= 1440) || !e.person || !e.group) throw new Error("Ungültiger Eintrag");
-  return [e.date, e.start || "", e.end || "", Math.round((minutes / 60) * 100) / 100, e.person, e.groupName || "", e.phaseName || "",
-    e.subName || (e.sub ? "" : "Allgemein"), e.note || "", String(e.id), String(minutes), e.sub || "", e.group];
+  if (!e.id || !/^\d{4}-\d{2}-\d{2}$/.test(e.date) || !(minutes > 0 && minutes <= 1440) || !e.person) throw new Error("Ungültiger Eintrag");
+  return [e.date, e.start || "", e.end || "", Math.round((minutes / 60) * 100) / 100, e.person, "", e.phaseName || "",
+    e.subName || (e.sub ? "" : "Allgemein"), e.note || "", String(e.id), String(minutes), e.sub || "", e.group || ""];
 }
 
 function putEntries_(list) {

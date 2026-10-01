@@ -96,8 +96,9 @@
     background: var(--marker); color: var(--marker-ink); border-radius: 999px; padding: 4px 12px; font-variant-numeric: tabular-nums; }
   @media (max-width: 560px) { .whoami { justify-items: start; } }
 
-  /* Gruppenkarten */
-  .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  /* Personenkarten */
+  .groups { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 820px) { .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .gcard { text-align: left; font: inherit; color: inherit; cursor: pointer; display: grid; gap: 8px;
     background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; }
   .gcard:hover { border-color: var(--muted); }
@@ -107,9 +108,9 @@
   .gcard .g-name { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; }
   .gcard .g-mem { font-size: 0.8rem; color: var(--muted); }
   .gcard .g-nums { display: flex; gap: 4px 18px; align-items: baseline; flex-wrap: wrap; }
-  .gcard .g-pct { font-family: var(--f-display); font-weight: 700; font-size: 1.9rem; line-height: 1; }
+  .gcard .g-pct { font-family: var(--f-display); font-weight: 700; font-size: 1.7rem; line-height: 1; }
   .gcard .g-h { font-family: var(--f-mono); font-size: 0.9rem; }
-  @media (max-width: 480px) { .gcard { padding: 12px; } .gcard.active { padding: 11px; } .gcard .g-pct { font-size: 1.5rem; } .gcard .g-mem { display: none; } }
+  @media (max-width: 480px) { .gcard { padding: 12px; } .gcard.active { padding: 11px; } .gcard .g-pct { font-size: 1.45rem; } }
   .tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 1px 7px; border-radius: 3px; background: var(--blue-soft); color: var(--ink); }
   .tag.now { background: var(--marker); color: var(--marker-ink); }
 
@@ -152,7 +153,7 @@
   .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
   .kpi { display: grid; gap: 2px; min-width: 0; align-content: start; }
   .kpi .v { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; line-height: 1.15; overflow-wrap: anywhere; }
-  .kpi .v.small { font-size: 1.05rem; line-height: 1.3; overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
+  .kpi .v.small { font-size: 1.05rem; line-height: 1.3; overflow-wrap: anywhere; -webkit-hyphens: auto; hyphens: auto; }
   .kpi .s { font-size: 0.8rem; color: var(--muted); }
   .overall { display: grid; gap: 8px; margin-top: 18px; }
   .overall .row { display: flex; justify-content: space-between; gap: 4px 10px; flex-wrap: wrap; font-size: 0.88rem; }
@@ -252,6 +253,17 @@
     .entry .d .t { display: inline; }
   }
 
+  /* Vergleichstabelle */
+  .tscroll { overflow-x: auto; margin-top: 12px; }
+  table.cmp { border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 520px; }
+  table.cmp th, table.cmp td { padding: 7px 8px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+  table.cmp th:first-child, table.cmp td:first-child { text-align: left; white-space: normal; }
+  table.cmp thead th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+  table.cmp td.me, table.cmp th.me { background: var(--blue-soft); }
+  table.cmp tfoot td { font-weight: 700; border-top: 2px solid var(--ink); border-bottom: 0; }
+  table.cmp .cell { display: grid; gap: 3px; justify-items: end; }
+  table.cmp .mini { width: 64px; height: 5px; }
+  table.cmp .now td:first-child::after { content: " · jetzt"; color: var(--muted); font-weight: 400; }
   .settings-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); align-items: start; }
   #toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 20; width: max-content; max-width: min(92vw, 520px);
     background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 6px; font-size: 0.9rem; box-shadow: 0 6px 24px rgba(0,0,0,.2); }
@@ -275,7 +287,7 @@
 
   <div class="banner warn" id="notLinked" hidden><strong>Nicht mit der Team-Tabelle verbunden.</strong> Änderungen landen nur in diesem Browser. Öffne den Einladungslink aus eurer Gruppe (am besten direkt in Safari/Chrome) oder verbinde die Tabelle unter „Einstellungen“.</div>
 
-  <section class="groups" id="groupCards" aria-label="Gruppen"></section>
+  <section class="groups" id="groupCards" aria-label="Personen"></section>
 
   <nav class="tabs" role="tablist" aria-label="Bereiche">
     <button type="button" role="tab" data-tab="plan" aria-selected="true">Projektplan</button>
@@ -304,7 +316,7 @@
       <span class="hint" id="permHint"></span>
       <div class="btns">
         <button type="button" class="ghost" id="toggleAll">Alle aufklappen</button>
-        <button type="button" id="editPlan">Plan bearbeiten</button>
+        <button type="button" id="editPlan">Meine Unterphasen bearbeiten</button>
       </div>
     </div>
     <div class="phases" id="phases"></div>
@@ -358,10 +370,14 @@
       </div>
     </section>
     <div class="two">
-      <section class="sheet"><h2>Pro Person</h2><div class="rows" id="sPeople"></div></section>
       <section class="sheet"><h2>Letzte 10 Kalenderwochen</h2><div id="sWeeks"></div></section>
+      <section class="sheet"><h2>Pro Phase</h2><div class="rows" id="sPhases"></div></section>
     </div>
-    <section class="sheet"><h2>Pro Phase</h2><div class="rows" id="sPhases"></div></section>
+    <section class="sheet">
+      <h2>Alle im Vergleich</h2>
+      <p class="hint" style="margin:4px 0 0">Fortschritt je Phase und gearbeitete Stunden aller vier. Strich = Soll laut Zeitplan.</p>
+      <div class="tscroll" id="sCompare"></div>
+    </section>
   </section>
 
   <!-- PROTOKOLL -->
@@ -370,7 +386,6 @@
       <div class="head-row">
         <h2>Protokoll · <span id="logGroup"></span></h2>
         <div class="filters">
-          <select id="filterPerson" aria-label="Nach Person filtern"></select>
           <select id="filterPhase" aria-label="Nach Phase filtern"></select>
         </div>
       </div>
@@ -382,8 +397,8 @@
   <section class="tab" id="tab-settings" role="tabpanel" hidden>
     <div class="settings-grid">
       <section class="sheet">
-        <h2>Gruppen</h2>
-        <p class="hint">Mitglieder mit Komma trennen. Wird ein Name geändert, werden die bisherigen Einträge dieser Person automatisch umbenannt.</p>
+        <h2>Personen</h2>
+        <p class="hint">Wird ein Name geändert, werden die bisherigen Einträge dieser Person automatisch umbenannt. Fortschritt und Unterphasen bleiben erhalten.</p>
         <form id="groupForm" class="fields" novalidate></form>
         <div class="msg" id="groupMsg" role="status"></div>
       </section>
@@ -391,7 +406,7 @@
       <section class="sheet">
         <h2>Team-Tabelle</h2>
         <div id="dbOff">
-          <p class="hint">Damit alle vier dieselben Daten sehen, wird die Seite mit eurer Google-Tabelle verbunden (Anleitung in der README). Wer den Einladungslink bekommen hat, muss hier nichts tun.</p>
+          <p class="hint">Damit alle dieselben Daten sehen, wird die Seite mit eurer Google-Tabelle verbunden (Anleitung in der README). Wer den Einladungslink bekommen hat, muss hier nichts tun.</p>
           <form id="dbForm" class="fields" novalidate>
             <label class="f wide">Web-App-Adresse <input id="dbUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
             <label class="f wide">Team-Code <input id="dbKey" type="text" autocomplete="off" spellcheck="false"></label>
@@ -413,7 +428,7 @@
 
       <section class="sheet">
         <h2>Export &amp; Sicherung</h2>
-        <p class="hint">Excel enthält eine Übersicht, den Projektplan mit % und Stunden je Gruppe und ein Protokoll-Blatt pro Gruppe.</p>
+        <p class="hint">Excel enthält eine Übersicht, den Projektplan aller Personen mit % und Stunden, das gesamte Protokoll und ein Protokoll-Blatt pro Person.</p>
         <div class="btns">
           <button type="button" class="primary" id="expXlsx">Als Excel exportieren</button>
           <button type="button" id="expJson">Sicherung (JSON)</button>
@@ -435,7 +450,7 @@
   const $ = (id) => document.getElementById(id);
 
   // ================= Startdaten (aus Projektzeitplan.xlsx) =================
-  // [Phase, Start, Ende, [[Unterphase, Fortschritt „Obexer & Taferner“], …]]
+  // [Phase, Start, Ende, [[Unterphase, Fortschritt Obexer/Taferner], …]]
   const SEED = [
     ["Vorentwurfsplanung", "2026-09-17", "2026-11-01", [
       ["Grundstücksanalyse", 100], ["Ausrichtung nach Himmelsrichtungen", 60], ["Lichtachsen und Verschattung", 40],
@@ -467,26 +482,19 @@
       ["Vorstellen vor ausgewählter Kommission (mit Fachlehrern)"], ["Freigabe zur Abgabe des Projekts"]]],
     ["Zeitpuffer", "2027-04-26", "2027-05-20", []],
   ];
-  const SEED_GROUPS = [
-    { id: "g1", name: "Engl & Bürgstaller", members: ["Matthias Engl", "Paul Bürgstaller"] },
-    { id: "g2", name: "Obexer & Taferner", members: ["Josef Obexer", "Felix Taferner"] },
+  const SEED_PEOPLE = [
+    { id: "p1", name: "Matthias Engl" }, { id: "p2", name: "Paul Bürgstaller" },
+    { id: "p3", name: "Josef Obexer" }, { id: "p4", name: "Felix Taferner" },
   ];
-  const SEED_PROGRESS_GROUP = "g2";
+  const SEED_PROGRESS_PEOPLE = ["p3", "p4"]; // die Werte aus der Excel gehörten Obexer & Taferner
   const pad = (n) => String(n).padStart(2, "0");
-  function seedPlan() {
-    return {
-      title: "Doppelhaushälfte",
-      phases: SEED.map(([name, start, end, subs], i) => ({
-        id: `ph${i + 1}`, name, start, end, desc: "",
-        subs: subs.map(([n], j) => ({ id: `ph${i + 1}-${pad(j + 1)}`, name: n, desc: "" })),
-      })),
-    };
-  }
-  function seedProgress() {
+  const seedPlan = () => ({ title: "Doppelhaushälfte", phases: SEED.map(([name, start, end], i) => ({ id: `ph${i + 1}`, name, start, end, desc: "" })) });
+  const templateSubs = () => Object.fromEntries(SEED.map(([, , , subs], i) => [`ph${i + 1}`, subs.map(([n], j) => ({ id: `ph${i + 1}-${pad(j + 1)}`, name: n, desc: "" }))]));
+  const seedProgress = () => {
     const out = [];
-    SEED.forEach(([, , , subs], i) => subs.forEach(([, p], j) => { if (p) out.push({ g: SEED_PROGRESS_GROUP, s: `ph${i + 1}-${pad(j + 1)}`, pct: p }); }));
+    SEED.forEach(([, , , subs], i) => subs.forEach(([, p], j) => { if (p) SEED_PROGRESS_PEOPLE.forEach((pid) => out.push({ g: pid, s: `ph${i + 1}-${pad(j + 1)}`, pct: p })); }));
     return out;
-  }
+  };
 
   // ================= Hilfsfunktionen =================
   const isoDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -508,6 +516,7 @@
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
   const today = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); };
   const avg = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
+  const clone = (x) => JSON.parse(JSON.stringify(x));
   function isoWeek(d) {
     const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day);
@@ -515,6 +524,17 @@
     return Math.ceil(((t - y0) / 864e5 + 1) / 7);
   }
   function mondayOf(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
+  const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
+  // Google liefert Datum/Uhrzeit manchmal als „Thu Sep 24 2026 00:00:00 GMT+0200 …“
+  function normDate(v) {
+    v = String(v ?? "").trim(); let m;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+    if ((m = v.match(/^\w{3},? (\w{3}) (\d{1,2}),? (\d{4})/)) && MONTHS[m[1]]) return `${m[3]}-${pad(MONTHS[m[1]])}-${pad(m[2])}`;
+    if ((m = v.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/))) return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
+    if (/^\d{4}-\d{2}-\d{2}T/.test(v)) { const d = new Date(v); if (!isNaN(d)) return isoDate(d); }
+    return "";
+  }
+  function normTime(v) { v = String(v ?? "").trim(); if (!v) return ""; const m = v.replace(/^\w{3},? \w{3} \d{1,2},? \d{4}/, "").match(/(\d{1,2}):(\d{2})/); return m ? `${pad(m[1])}:${m[2]}` : ""; }
   const CHECK = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5 5 9l5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const CHEV = '<svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 
@@ -523,15 +543,14 @@
   const lsGet = (k) => { if (k in mem) return mem[k]; try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
   const lsSet = (k, v) => {
     try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); delete mem[k]; }
-    catch { mem[k] = v == null ? null : JSON.parse(JSON.stringify(v)); }
+    catch { mem[k] = v == null ? null : clone(v); }
   };
-  const LS = { me: "mp-me", view: "mp-view", timers: "mp-timers", db: "matura-stundenlog-sheet", cache: "mp-cache", local: "mp-local-v2",
-    legacyMe: "matura-stundenlog-me" };
+  const LS = { me: "mp-me", view: "mp-view-person", timers: "mp-timers", db: "matura-stundenlog-sheet", cache: "mp-cache-v3", local: "mp-local-v3", legacyMe: "matura-stundenlog-me" };
 
   let toastT;
   function toast(msg, err) {
     const t = $("toast"); t.textContent = msg; t.classList.toggle("err", !!err); t.hidden = false;
-    clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), err ? 6000 : 2600);
+    clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), err ? 7000 : 2600);
   }
   function flash(el, msg, err) { el.textContent = msg; el.classList.toggle("err", !!err); clearTimeout(el._t); el._t = setTimeout(() => (el.textContent = ""), 7000); }
   // Zweistufiges Bestätigen direkt am Knopf (Browser-Dialoge sind auf Handys oft blockiert)
@@ -544,55 +563,54 @@
   // ================= Zustand =================
   const cache = lsGet(LS.cache);
   const state = {
-    groups: cache?.groups || SEED_GROUPS,
+    people: cache?.people || SEED_PEOPLE,
     plan: cache?.plan || seedPlan(),
+    subs: cache?.subs || {},
     progress: cache?.progress || {},
     entries: cache?.entries || [],
     view: lsGet(LS.view),
     tab: "plan",
     editPlan: false,
   };
-  const allMembers = () => state.groups.flatMap((g) => g.members);
-  const groupOf = (person) => state.groups.find((g) => g.members.includes(person)) || null;
-  const groupById = (id) => state.groups.find((g) => g.id === id) || null;
+  const personById = (id) => state.people.find((p) => p.id === id) || null;
+  const personByName = (n) => state.people.find((p) => p.name === n) || null;
   function me() {
     let m = lsGet(LS.me);
-    if (!m) { // aus der alten App übernehmen (dort standen nur Vornamen)
-      const old = lsGet(LS.legacyMe);
-      if (old) m = allMembers().find((x) => x === old || x.split(" ")[0] === old) || null;
-    }
-    return m && allMembers().includes(m) ? m : "";
+    if (!m) { const old = lsGet(LS.legacyMe); if (old) m = state.people.find((p) => p.name === old || p.name.split(" ")[0] === old)?.name || null; }
+    return personByName(m) ? m : "";
   }
-  const viewGroup = () => groupById(state.view) || groupOf(me()) || state.groups[0];
-  const allSubs = () => state.plan.phases.flatMap((p) => p.subs.map((s) => ({ ...s, phase: p })));
-  const subById = (id) => { if (!id) return null; for (const p of state.plan.phases) { const s = p.subs.find((x) => x.id === id); if (s) return { ...s, phase: p }; } return null; };
-  const pct = (gid, sid) => state.progress[`${gid}:${sid}`] || 0;
+  const meP = () => personByName(me());
+  const viewP = () => personById(state.view) || meP() || state.people[0];
+  // Unterphasen einer Person: eigene Liste, sonst Vorlage aus der Excel
+  const subsMap = (pid) => state.subs[pid] || templateSubs();
+  const subsOf = (pid, ph) => subsMap(pid)[ph.id] || [];
+  const allSubsOf = (pid) => state.plan.phases.flatMap((ph) => subsOf(pid, ph).map((s) => ({ ...s, phase: ph })));
+  const subById = (pid, sid) => { if (!sid) return null; for (const ph of state.plan.phases) { const s = subsOf(pid, ph).find((x) => x.id === sid); if (s) return { ...s, phase: ph }; } return null; };
+  const entrySub = (e) => subById(personByName(e.person)?.id, e.sub);
+  const pct = (pid, sid) => state.progress[`${pid}:${sid}`] || 0;
 
   // ================= Berechnungen =================
-  // Anteil der verstrichenen Zeit einer Phase (Start- und Endtag zählen mit)
   function elapsedFrac(ph, t = today()) {
     if (!ph.start || !ph.end) return 0;
-    const s = parseDate(ph.start), e = parseDate(ph.end);
-    const total = (e - s) / 864e5 + 1;
-    if (total <= 0) return 0;
-    return clamp(((t - s) / 864e5 + 1) / total, 0, 1);
+    const s = parseDate(ph.start), e = parseDate(ph.end), total = (e - s) / 864e5 + 1;
+    return total > 0 ? clamp(((t - s) / 864e5 + 1) / total, 0, 1) : 0;
   }
-  const phasePct = (gid, ph) => avg(ph.subs.map((s) => pct(gid, s.id)));
-  const groupPct = (gid) => avg(allSubs().map((s) => pct(gid, s.id)));
-  const sollPct = () => avg(allSubs().map((s) => elapsedFrac(s.phase) * 100));
-  const doneCount = (gid) => allSubs().filter((s) => pct(gid, s.id) >= 100).length;
+  const phasePct = (pid, ph) => avg(subsOf(pid, ph).map((s) => pct(pid, s.id)));
+  const personPct = (pid) => avg(allSubsOf(pid).map((s) => pct(pid, s.id)));
+  const sollPct = (pid) => avg(allSubsOf(pid).map((s) => elapsedFrac(s.phase) * 100));
+  const doneCount = (pid) => allSubsOf(pid).filter((s) => pct(pid, s.id) >= 100).length;
   const currentPhase = () => { const t = today(); return state.plan.phases.find((p) => p.start && p.end && parseDate(p.start) <= t && t <= parseDate(p.end)) || null; };
-  const groupEntries = (gid) => state.entries.filter((e) => e.group === gid);
+  const entriesOf = (pid) => { const p = personById(pid); return p ? state.entries.filter((e) => e.person === p.name) : []; };
   const sumMin = (list) => list.reduce((a, e) => a + (Number(e.minutes) || 0), 0);
-  function hoursBySub(gid) { const m = {}; groupEntries(gid).forEach((e) => { const k = e.sub || ""; m[k] = (m[k] || 0) + e.minutes; }); return m; }
+  function hoursBySub(pid) { const m = {}; entriesOf(pid).forEach((e) => { const k = e.sub || ""; m[k] = (m[k] || 0) + e.minutes; }); return m; }
   function aheadText(diff) {
     const d = Math.round(diff);
     if (d === 0) return { t: "genau im Zeitplan", c: "pos" };
     return d > 0 ? { t: `${d} ${d === 1 ? "Punkt" : "Punkte"} vor dem Zeitplan`, c: "pos" } : { t: `${-d} ${d === -1 ? "Punkt" : "Punkte"} hinter dem Zeitplan`, c: "neg" };
   }
-  const pbar = (val, soll, lg) => `<span class="pbar${lg ? " lg" : ""}"><span class="fill" style="width:${clamp(val, 0, 100).toFixed(1)}%"></span>${soll != null ? `<i class="soll" style="left:${clamp(soll, 0, 100).toFixed(1)}%" title="Soll: ${Math.round(soll)} %"></i>` : ""}</span>`;
+  const pbar = (val, soll, cls = "") => `<span class="pbar ${cls}"><span class="fill" style="width:${clamp(val, 0, 100).toFixed(1)}%"></span>${soll != null ? `<i class="soll" style="left:${clamp(soll, 0, 100).toFixed(1)}%" title="Soll: ${Math.round(soll)} %"></i>` : ""}</span>`;
 
-  // ================= Speicher-Backends =================
+  // ================= Speicher =================
   // Gemeinsame Google-Tabelle über eine Apps-Script-Web-App (google-apps-script/Code.gs)
   async function sheetCall(cfg, body) {
     const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 30000);
@@ -612,40 +630,75 @@
   }
   function sheetBackend(cfg) {
     // Namen mitschicken, damit die Tabelle auch ohne App lesbar ist
-    const named = (e) => { const s = subById(e.sub), g = groupById(e.group); return { ...e, groupName: g ? g.name : "", phaseName: s ? s.phase.name : "", subName: s ? s.name : "Allgemein" }; };
+    const named = (e) => { const s = entrySub(e); return { ...e, phaseName: s ? s.phase.name : "", subName: s ? s.name : "Allgemein" }; };
     return {
       mode: "sheet",
       async load() {
         const d = await sheetCall(cfg);
-        if (d.version !== 2) throw new Error("In der Google-Tabelle läuft noch das alte Skript – bitte das neue Skript bereitstellen (siehe Anleitung)");
-        const progress = {}; (d.progress || []).forEach((p) => (progress[`${p.g}:${p.s}`] = p.pct));
-        return { groups: d.groups, plan: d.plan, progress, entries: (d.entries || []).map((e) => ({ ...e, date: normDate(e.date) || e.date, start: normTime(e.start), end: normTime(e.end), minutes: Number(e.minutes) || 0 })), legacy: d.legacy };
+        if (!(d.version >= 3)) throw new Error("In der Google-Tabelle läuft noch ein altes Skript – bitte das neue Skript bereitstellen (siehe Anleitung)");
+        const progress = {}; (d.progress || []).forEach((p) => (progress[`${p.g}:${p.s}`] = Number(p.pct) || 0));
+        const entries = (d.entries || []).map((e) => ({ ...e, date: normDate(e.date) || e.date, start: normTime(e.start), end: normTime(e.end), minutes: Number(e.minutes) || 0 }));
+        return { config: d.config || {}, progress, entries, legacy: d.legacy };
       },
       putConfig: (id, data) => sheetCall(cfg, { action: "putConfig", id, data }),
-      putProgress: (list) => sheetCall(cfg, { action: "putProgress", list: list.map((p) => ({ ...p, gName: groupById(p.g)?.name || "", sName: subById(p.s)?.name || "" })) }),
+      putProgress: (list) => sheetCall(cfg, { action: "putProgress", list: list.map((p) => ({ ...p, gName: personById(p.g)?.name || "", sName: subById(p.g, p.s)?.name || "" })) }),
       putEntries: (list) => sheetCall(cfg, { action: "putEntries", list: list.map(named) }),
       delEntry: (id) => sheetCall(cfg, { action: "delEntry", id }),
       renamePerson: (from, to) => sheetCall(cfg, { action: "renamePerson", from, to }),
       archiveLegacy: () => sheetCall(cfg, { action: "archiveLegacy" }),
     };
   }
-  // Ohne Datenbank: nur dieser Browser
+  // Ohne Verbindung: nur dieser Browser
   function localBackend() {
-    const get = () => lsGet(LS.local) || { groups: null, plan: null, progress: {}, entries: [] };
+    const get = () => lsGet(LS.local) || { config: {}, progress: {}, entries: [] };
     const edit = (fn) => { const d = get(); fn(d); lsSet(LS.local, d); };
     return {
       mode: "local",
-      load: async () => JSON.parse(JSON.stringify(get())),
-      putConfig: async (id, data) => edit((d) => (d[id] = data)),
+      load: async () => clone(get()),
+      putConfig: async (id, data) => edit((d) => (d.config[id] = data)),
       putProgress: async (list) => edit((d) => list.forEach((p) => (d.progress[`${p.g}:${p.s}`] = p.pct))),
       putEntries: async (list) => edit((d) => list.forEach((e) => { const i = d.entries.findIndex((x) => x.id === e.id); if (i >= 0) d.entries[i] = e; else d.entries.push(e); })),
       delEntry: async (id) => edit((d) => (d.entries = d.entries.filter((e) => e.id !== id))),
       renamePerson: async (from, to) => edit((d) => d.entries.forEach((e) => { if (e.person === from) e.person = to; })),
+      archiveLegacy: async () => {},
     };
   }
 
+  // ---------- Daten anlegen bzw. aus älteren Versionen übernehmen ----------
+  // Version 2 hatte zwei Gruppen mit gemeinsamem Fortschritt und einen Plan mit Unterphasen.
+  async function setupData(d) {
+    const c = d.config;
+    if (c.people && c.plan) return false;
+    if (c.groups && c.plan && c.plan.phases) {
+      const people = [], progress = [], subs = {};
+      const phaseSubs = Object.fromEntries(c.plan.phases.map((ph) => [ph.id, (ph.subs || []).map((s) => ({ id: s.id, name: s.name, desc: s.desc || "" }))]));
+      c.groups.forEach((g) => g.members.forEach((name) => {
+        const pid = `p${people.length + 1}`;
+        people.push({ id: pid, name });
+        subs[pid] = clone(phaseSubs);
+        Object.entries(d.progress).forEach(([k, v]) => { const i = k.indexOf(":"); if (k.slice(0, i) === g.id && v) progress.push({ g: pid, s: k.slice(i + 1), pct: v }); });
+      }));
+      const plan = { title: c.plan.title || "Doppelhaushälfte", phases: c.plan.phases.map(({ id, name, start, end, desc }) => ({ id, name, start, end, desc: desc || "" })) };
+      await backend.putConfig("people", people);
+      await backend.putConfig("plan", plan);
+      for (const p of people) await backend.putConfig(`subs:${p.id}`, subs[p.id]);
+      if (progress.length) await backend.putProgress(progress);
+      return true;
+    }
+    await backend.putConfig("people", SEED_PEOPLE);
+    await backend.putConfig("plan", seedPlan());
+    if (!Object.keys(d.progress).length) await backend.putProgress(seedProgress());
+    return true;
+  }
+  function applyData(d) {
+    const c = d.config;
+    state.people = c.people; state.plan = c.plan;
+    state.subs = Object.fromEntries(c.people.map((p) => [p.id, c[`subs:${p.id}`] || null]).filter(([, v]) => v));
+    state.progress = d.progress; state.entries = d.entries;
+  }
+
   // ================= Abgleich =================
-  let backend = null, pending = 0, lastSig = "", lastSync = null, syncErr = "";
+  let backend = null, pending = 0, lastSig = "", lastSync = null, syncErr = "", migrating = false;
   function setSync() {
     const s = $("sync");
     s.classList.remove("on", "err");
@@ -658,34 +711,54 @@
     st.textContent = syncErr ? `Abgleich fehlgeschlagen: ${syncErr}. Neuer Versuch in wenigen Sekunden.` : lastSync ? `Verbunden – letzter Abgleich ${hhmm(lastSync)} Uhr, ${state.entries.length} Einträge.` : "Verbinde …";
     st.classList.toggle("err", !!syncErr);
   }
-  // Leere Datenbank: Startplan aus der Excel anlegen
-  async function seedIfEmpty(d) {
-    if (!d.groups) await backend.putConfig("groups", SEED_GROUPS);
-    if (!d.plan) {
-      await backend.putConfig("plan", seedPlan());
-      if (!Object.keys(d.progress || {}).length) await backend.putProgress(seedProgress());
-    }
-  }
   async function refresh() {
     if (!backend || pending > 0) return;
     try {
       let d = await backend.load();
-      if (!d.groups || !d.plan) { await seedIfEmpty(d); d = await backend.load(); }
+      if (await setupData(d)) d = await backend.load();
       syncErr = ""; lastSync = new Date();
       const legacy = d.legacy; delete d.legacy;
       const sig = JSON.stringify(d);
       if (sig !== lastSig && pending === 0) {
         lastSig = sig;
-        Object.assign(state, { groups: d.groups, plan: d.plan, progress: d.progress, entries: d.entries });
-        lsSet(LS.cache, d);
+        applyData(d);
+        lsSet(LS.cache, { people: state.people, plan: state.plan, subs: state.subs, progress: state.progress, entries: state.entries });
         renderAll();
       }
       if (legacy && !migrating) migrateLegacy(legacy);
     } catch (err) { syncErr = err.message || "Fehler"; }
     setSync();
   }
-  // Einträge der alten Stunden-App (Blatt „Einträge“) einmalig übernehmen
-  let migrating = false;
+  // Änderung sofort anzeigen, dann speichern; bei Fehler Meldung und Stand neu laden
+  async function write(apply, op) {
+    apply(); renderAll(); pending++;
+    try { await op(); return true; }
+    catch (err) { $("phases")._html = null; toast(`Nicht gespeichert: ${err.message || "Fehler"}`, true); return false; }
+    finally { pending--; if (pending === 0) { lastSig = ""; refresh(); } }
+  }
+
+  // ---------- Einträge der ersten Stunden-App (Blatt „Einträge“, nur Vornamen) ----------
+  function fromLegacy(list) {
+    const out = [], skipped = [];
+    for (const e of list || []) {
+      const name = String(e.person || "").trim();
+      const p = state.people.find((x) => x.name === name || x.name.split(" ")[0] === name || x.name.split(" ").slice(-1)[0] === name);
+      const date = normDate(e.date), minutes = Math.round(Number(e.minutes));
+      if (!p || !date || !(minutes > 0)) { skipped.push(name || "?"); continue; }
+      const cat = String(e.category || "").trim(), note = String(e.note || "").trim();
+      out.push({ id: String(e.id || uid()), date, start: normTime(e.start), end: normTime(e.end), minutes, person: p.name, group: p.id, sub: "", note: cat ? (note ? `${cat}: ${note}` : cat) : note });
+    }
+    return { out, skipped: [...new Set(skipped)] };
+  }
+  async function importEntries(list) {
+    const have = new Set(state.entries.map((e) => e.id));
+    const fresh = list.filter((e) => !have.has(e.id));
+    if (!fresh.length) return 0;
+    const before = state.entries;
+    const ok = await write(() => (state.entries = before.concat(fresh)), () => backend.putEntries(fresh));
+    if (!ok) { state.entries = before; return -1; }
+    return fresh.length;
+  }
   async function migrateLegacy(list) {
     migrating = true;
     try {
@@ -697,16 +770,9 @@
     } catch (err) { toast(`Alte Stundenliste nicht übernommen: ${err.message}`, true); }
     finally { migrating = false; }
   }
-  // Änderung sofort anzeigen, dann speichern; bei Fehler Meldung und Stand neu laden
-  async function write(apply, op) {
-    apply(); renderAll(); pending++;
-    try { await op(); return true; }
-    catch (err) { $("phases")._html = null; toast(`Nicht gespeichert: ${err.message || "Fehler"}`, true); return false; }
-    finally { pending--; if (pending === 0) { lastSig = ""; refresh(); } }
-  }
 
   // ================= Rendering =================
-  let openPhases = null; // aufgeklappte Phasen
+  let openPhases = null;
   // DOM nur ersetzen, wenn sich der Inhalt geändert hat (sonst gehen Klicks/Fokus verloren)
   function setHTML(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }
   function renderAll() {
@@ -722,47 +788,47 @@
   function renderHeader() {
     const my = me();
     $("projTitle").textContent = state.plan.title || "Doppelhaushälfte";
-    if (document.activeElement !== $("meSel")) {
-      $("meSel").innerHTML = `<option value="">– bitte wählen –</option>` + state.groups.map((g) =>
-        `<optgroup label="${esc(g.name)}">${g.members.map((m) => `<option${m === my ? " selected" : ""}>${esc(m)}</option>`).join("")}</optgroup>`).join("");
-    }
+    if (document.activeElement !== $("meSel"))
+      $("meSel").innerHTML = `<option value="">– bitte wählen –</option>` + state.people.map((p) => `<option${p.name === my ? " selected" : ""}>${esc(p.name)}</option>`).join("");
     $("meBox").classList.toggle("unset", !my);
   }
   function renderCards() {
-    const soll = sollPct(), v = viewGroup(), myG = groupOf(me());
-    $("groupCards").innerHTML = state.groups.map((g) => {
-      const p = groupPct(g.id), h = sumMin(groupEntries(g.id));
-      return `<button type="button" class="gcard${g.id === v.id ? " active" : ""}" data-g="${esc(g.id)}" aria-pressed="${g.id === v.id}">
-        <span class="g-top"><span class="g-name">${esc(g.name)}</span>${myG && myG.id === g.id ? '<span class="tag">Deine Gruppe</span>' : ""}</span>
-        <span class="g-mem">${esc(g.members.join(", "))}</span>
-        <span class="g-nums"><span class="g-pct num">${Math.round(p)} %</span><span class="g-h">${fmtH(h)} h</span></span>
-        ${pbar(p, soll)}
+    const v = viewP(), m = meP();
+    setHTML($("groupCards"), state.people.map((p) => {
+      const pp = personPct(p.id), h = sumMin(entriesOf(p.id));
+      return `<button type="button" class="gcard${p.id === v.id ? " active" : ""}" data-p="${esc(p.id)}" aria-pressed="${p.id === v.id}">
+        <span class="g-top"><span class="g-name">${esc(p.name)}</span>${m && m.id === p.id ? '<span class="tag">Du</span>' : ""}</span>
+        <span class="g-nums"><span class="g-pct num">${Math.round(pp)} %</span><span class="g-h">${fmtH(h)} h</span></span>
+        ${pbar(pp, sollPct(p.id))}
       </button>`;
-    }).join("");
+    }).join(""));
   }
 
   // ---------- Projektplan ----------
   let sliderBusy = false;
+  const isOwn = () => { const m = meP(); return !!m && m.id === viewP().id; };
   const planBusy = () => sliderBusy || (state.editPlan && $("phases").contains(document.activeElement) && /INPUT|TEXTAREA/.test(document.activeElement.tagName));
   function renderPlan() {
-    const g = viewGroup(), my = me(), canEdit = !!my && groupOf(my)?.id === g.id;
-    const subs = allSubs(), p = groupPct(g.id), soll = sollPct(), cur = currentPhase();
+    const v = viewP(), own = isOwn();
+    if (state.editPlan && !own) state.editPlan = false;
+    const subs = allSubsOf(v.id), p = personPct(v.id), soll = sollPct(v.id), cur = currentPhase();
     $("kPct").textContent = `${Math.round(p)} %`;
-    $("kGroup").textContent = g.name;
-    $("kDone").textContent = `${doneCount(g.id)} / ${subs.length}`;
+    $("kGroup").textContent = v.name;
+    $("kDone").textContent = `${doneCount(v.id)} / ${subs.length}`;
     $("kPhase").textContent = cur ? cur.name : "–";
-    $("kPhasePct").textContent = cur && cur.subs.length ? `${Math.round(phasePct(g.id, cur))} % erledigt` : "";
+    $("kPhasePct").textContent = cur && subsOf(v.id, cur).length ? `${Math.round(phasePct(v.id, cur))} % erledigt` : "";
     $("kEnd").textContent = cur ? fmtDate(cur.end) : "–";
     const left = cur ? Math.round((parseDate(cur.end) - today()) / 864e5) : null;
     $("kEndLeft").textContent = cur ? (left === 0 ? "heute" : `noch ${left} ${left === 1 ? "Tag" : "Tage"}`) : "";
-    $("ovName").textContent = `· ${g.name}`;
-    $("ovBar").innerHTML = pbar(p, soll, true);
+    $("ovName").textContent = `· ${v.name}`;
+    $("ovBar").innerHTML = pbar(p, soll, "lg");
     $("ovSoll").textContent = Math.round(soll);
     const a = aheadText(p - soll); $("ovAhead").textContent = a.t; $("ovAhead").className = `ahead ${a.c}`;
-    $("permHint").textContent = state.editPlan ? "Bearbeitungsmodus – Änderungen am Plan gelten für beide Gruppen und werden sofort gespeichert." :
-      !my ? "Wähle oben „Ich bin …“, um den Fortschritt einzustellen." :
-      canEdit ? "Regler loslassen speichert den Fortschritt deiner Gruppe." : `Nur Mitglieder von „${g.name}“ können diesen Fortschritt ändern.`;
-    $("editPlan").textContent = state.editPlan ? "Fertig" : "Plan bearbeiten";
+    $("permHint").textContent = state.editPlan ? "Unterphasen gelten nur für dich. Phasen (Name, Termine) gelten für alle." :
+      !me() ? "Wähle oben „Ich bin …“, um deinen Fortschritt einzustellen." :
+      own ? "Regler loslassen speichert deinen Fortschritt." : `Du siehst den Plan von ${v.name} – ändern kann ihn nur ${v.name.split(" ")[0]}.`;
+    $("editPlan").hidden = !own;
+    $("editPlan").textContent = state.editPlan ? "Fertig" : "Meine Unterphasen bearbeiten";
     $("editPlan").classList.toggle("primary", state.editPlan);
     $("toggleAll").hidden = state.editPlan;
     if (planBusy()) return;
@@ -770,38 +836,40 @@
     $("toggleAll").textContent = openPhases.size >= state.plan.phases.length ? "Alle zuklappen" : "Alle aufklappen";
     if (state.editPlan) return renderPlanEdit();
 
-    const hrs = hoursBySub(g.id);
+    const hrs = hoursBySub(v.id);
     setHTML($("phases"), state.plan.phases.map((ph) => {
-      const isCur = cur && cur.id === ph.id;
-      const pp = phasePct(g.id, ph), done = ph.subs.filter((s) => pct(g.id, s.id) >= 100).length;
-      const phH = ph.subs.reduce((acc, s) => acc + (hrs[s.id] || 0), 0);
+      const isCur = cur && cur.id === ph.id, list = subsOf(v.id, ph);
+      const pp = phasePct(v.id, ph), done = list.filter((s) => pct(v.id, s.id) >= 100).length;
+      const phH = list.reduce((acc, s) => acc + (hrs[s.id] || 0), 0);
       return `<details class="phase${isCur ? " current" : ""}" data-ph="${esc(ph.id)}"${openPhases.has(ph.id) ? " open" : ""}>
         <summary>
           <div class="ph-head"><h3>${esc(ph.name)}</h3>${isCur ? '<span class="tag now">jetzt</span>' : ""}${CHEV}</div>
-          <div class="ph-meta"><span class="num">${fmtDate(ph.start, false)}–${fmtDate(ph.end)}</span><span>${ph.subs.length ? `${done} / ${ph.subs.length} fertig` : "keine Unterphasen"}</span>${phH ? `<span>${fmtH(phH)} h</span>` : ""}</div>
-          ${ph.subs.length ? `<div class="ph-bar">${pbar(pp, elapsedFrac(ph) * 100)}<span class="num">${Math.round(pp)} %</span></div>` : ""}
+          <div class="ph-meta"><span class="num">${fmtDate(ph.start, false)}–${fmtDate(ph.end)}</span><span>${list.length ? `${done} / ${list.length} fertig` : "keine Unterphasen"}</span>${phH ? `<span>${fmtH(phH)} h</span>` : ""}</div>
+          ${list.length ? `<div class="ph-bar">${pbar(pp, elapsedFrac(ph) * 100)}<span class="num">${Math.round(pp)} %</span></div>` : ""}
         </summary>
         <div class="ph-body">
           ${ph.desc ? `<p class="ph-desc">${esc(ph.desc)}</p>` : ""}
-          ${ph.subs.length ? `<ul class="subs">${ph.subs.map((s) => {
-            const v = pct(g.id, s.id), h = hrs[s.id] || 0;
-            return `<li class="sub${v >= 100 ? " done" : ""}">
-              <div class="sub-main"><span class="tick">${v >= 100 ? CHECK : ""}</span>
+          ${list.length ? `<ul class="subs">${list.map((s) => {
+            const val = pct(v.id, s.id), h = hrs[s.id] || 0;
+            return `<li class="sub${val >= 100 ? " done" : ""}">
+              <div class="sub-main"><span class="tick">${val >= 100 ? CHECK : ""}</span>
                 <div><div class="sub-name">${esc(s.name)}</div>${s.desc ? `<div class="sub-desc">${esc(s.desc)}</div>` : ""}</div>
-                <span class="sub-h" title="Stunden von ${esc(g.name)}">${h ? `${fmtMin(h)} h` : "–"}</span></div>
-              <div class="sub-ctl"><input type="range" min="0" max="100" step="5" value="${v}" data-sub="${esc(s.id)}" aria-label="Fortschritt ${esc(s.name)}"${canEdit ? "" : " disabled"}><output>${v} %</output></div>
+                <span class="sub-h" title="Stunden von ${esc(v.name)}">${h ? `${fmtMin(h)} h` : "–"}</span></div>
+              <div class="sub-ctl"><input type="range" min="0" max="100" step="5" value="${val}" data-sub="${esc(s.id)}" aria-label="Fortschritt ${esc(s.name)}"${own ? "" : " disabled"}><output>${val} %</output></div>
             </li>`;
-          }).join("")}</ul>` : `<p class="hint" style="margin:0">Keine Unterphasen – Reservezeit.</p>`}
+          }).join("")}</ul>` : `<p class="hint" style="margin:0">${own ? "Keine Unterphasen – über „Meine Unterphasen bearbeiten“ kannst du welche anlegen." : "Keine Unterphasen."}</p>`}
         </div>
       </details>`;
     }).join(""));
   }
   function renderPlanEdit() {
-    const ph = state.plan.phases;
-    setHTML($("phases"), ph.map((p, i) => `
+    const ph = state.plan.phases, pid = viewP().id;
+    setHTML($("phases"), ph.map((p, i) => {
+      const list = subsOf(pid, p);
+      return `
       <div class="phase edit" data-ph="${esc(p.id)}">
         <div class="ed-grid">
-          <label class="f">Phase <input data-f="name" value="${esc(p.name)}"></label>
+          <label class="f">Phase (für alle) <input data-f="name" value="${esc(p.name)}"></label>
           <label class="f">Start <input type="date" data-f="start" value="${esc(p.start)}"></label>
           <label class="f">Ende <input type="date" data-f="end" value="${esc(p.end)}"></label>
         </div>
@@ -810,28 +878,33 @@
         <div class="btns">
           <button type="button" class="icon" data-act="ph-up" ${i === 0 ? "disabled" : ""} aria-label="Phase nach oben">↑</button>
           <button type="button" class="icon" data-act="ph-down" ${i === ph.length - 1 ? "disabled" : ""} aria-label="Phase nach unten">↓</button>
-          <button type="button" class="icon ghost danger" data-act="ph-del">Phase löschen</button>
+          <button type="button" class="icon ghost danger" data-act="ph-del">Phase für alle löschen</button>
         </div>
-        <div class="label" style="margin-top:4px">Unterphasen (${p.subs.length})</div>
-        ${p.subs.map((s, j) => `
+        <div class="label" style="margin-top:4px">Meine Unterphasen (${list.length})</div>
+        ${list.map((s, j) => `
           <div class="ed-sub" data-sub="${esc(s.id)}">
             <input data-f="name" value="${esc(s.name)}" aria-label="Name der Unterphase">
             <input data-f="desc" value="${esc(s.desc)}" placeholder="Beschreibung (optional)" aria-label="Beschreibung der Unterphase">
             <div class="ed-acts">
               <button type="button" class="icon" data-act="sub-up" ${j === 0 ? "disabled" : ""} aria-label="Unterphase nach oben">↑</button>
-              <button type="button" class="icon" data-act="sub-down" ${j === p.subs.length - 1 ? "disabled" : ""} aria-label="Unterphase nach unten">↓</button>
+              <button type="button" class="icon" data-act="sub-down" ${j === list.length - 1 ? "disabled" : ""} aria-label="Unterphase nach unten">↓</button>
               <button type="button" class="icon ghost danger" data-act="sub-del" aria-label="Unterphase löschen">✕</button>
             </div>
           </div>`).join("")}
         <div><button type="button" class="icon" data-act="sub-add">+ Unterphase</button></div>
-      </div>`).join("") + `<div><button type="button" class="primary" data-act="ph-add">+ Phase hinzufügen</button></div>`);
+      </div>`;
+    }).join("") + `<div class="btns"><button type="button" class="primary" data-act="ph-add">+ Phase für alle hinzufügen</button></div>`);
   }
   function savePlan(mutate) {
-    const plan = JSON.parse(JSON.stringify(state.plan));
-    mutate(plan);
+    const plan = clone(state.plan); mutate(plan);
     return write(() => (state.plan = plan), () => backend.putConfig("plan", plan));
   }
-  $("editPlan").addEventListener("click", () => { state.editPlan = !state.editPlan; if (document.activeElement) document.activeElement.blur(); renderPlan(); });
+  function saveMySubs(mutate) {
+    const m = meP(); if (!m) return Promise.resolve(false);
+    const map = clone(subsMap(m.id)); mutate(map);
+    return write(() => (state.subs = { ...state.subs, [m.id]: map }), () => backend.putConfig(`subs:${m.id}`, map));
+  }
+  $("editPlan").addEventListener("click", () => { state.editPlan = !state.editPlan; document.activeElement?.blur(); renderPlan(); });
   $("toggleAll").addEventListener("click", () => {
     const allOpen = openPhases && openPhases.size >= state.plan.phases.length;
     openPhases = new Set(allOpen ? [] : state.plan.phases.map((p) => p.id)); renderPlan();
@@ -846,64 +919,61 @@
   document.addEventListener("pointerup", () => { if (sliderBusy) setTimeout(() => (sliderBusy = false), 300); });
   $("phases").addEventListener("input", (e) => {
     if (!e.target.matches('input[type="range"]')) return;
-    const v = Number(e.target.value), li = e.target.closest("li.sub");
-    e.target.nextElementSibling.textContent = `${v} %`;
-    li.classList.toggle("done", v >= 100); li.querySelector(".tick").innerHTML = v >= 100 ? CHECK : "";
+    const val = Number(e.target.value), li = e.target.closest("li.sub");
+    e.target.nextElementSibling.textContent = `${val} %`;
+    li.classList.toggle("done", val >= 100); li.querySelector(".tick").innerHTML = val >= 100 ? CHECK : "";
   });
   $("phases").addEventListener("change", (e) => {
     const t = e.target;
     if (t.matches('input[type="range"]')) {
       sliderBusy = false;
-      const g = viewGroup(), v = Number(t.value), sid = t.dataset.sub, my = me();
-      if (!my || groupOf(my)?.id !== g.id) return renderPlan();
-      if (pct(g.id, sid) === v) return;
-      write(() => (state.progress[`${g.id}:${sid}`] = v), () => backend.putProgress([{ g: g.id, s: sid, pct: v, by: my }]))
-        .then((ok) => ok && toast(`${subById(sid)?.name || "Unterphase"}: ${v} % gespeichert`));
+      const m = meP(), val = Number(t.value), sid = t.dataset.sub;
+      if (!m || m.id !== viewP().id) { $("phases")._html = null; return renderPlan(); }
+      if (pct(m.id, sid) === val) return;
+      write(() => (state.progress = { ...state.progress, [`${m.id}:${sid}`]: val }), () => backend.putProgress([{ g: m.id, s: sid, pct: val, by: m.name }]))
+        .then((ok) => ok && toast(`${subById(m.id, sid)?.name || "Unterphase"}: ${val} % gespeichert`));
       return;
     }
     if (state.editPlan && t.dataset.f) {
       const phId = t.closest("[data-ph]").dataset.ph, subEl = t.closest(".ed-sub"), f = t.dataset.f, val = t.value.trim();
-      if (f === "name" && !val) { toast("Der Name darf nicht leer sein.", true); t.value = (subEl ? state.plan.phases.find((x) => x.id === phId).subs.find((x) => x.id === subEl.dataset.sub) : state.plan.phases.find((x) => x.id === phId)).name; return; }
-      const curP = state.plan.phases.find((x) => x.id === phId);
-      const curT = subEl ? curP?.subs.find((x) => x.id === subEl.dataset.sub) : curP;
+      const m = meP(), curP = state.plan.phases.find((x) => x.id === phId);
+      const curT = subEl ? subsOf(m.id, curP).find((x) => x.id === subEl.dataset.sub) : curP;
       if (!curT || (curT[f] || "") === val) return;
-      savePlan((plan) => {
-        const p = plan.phases.find((x) => x.id === phId);
-        const target = subEl ? p.subs.find((x) => x.id === subEl.dataset.sub) : p;
-        if (target) target[f] = val;
-      }).then(() => { if (!subEl && (f === "start" || f === "end")) { t.blur(); renderPlanEdit(); } });
+      if (f === "name" && !val) { toast("Der Name darf nicht leer sein.", true); t.value = curT.name; return; }
+      if (subEl) saveMySubs((map) => { const s = (map[phId] || []).find((x) => x.id === subEl.dataset.sub); if (s) s[f] = val; });
+      else savePlan((plan) => { const p = plan.phases.find((x) => x.id === phId); if (p) p[f] = val; }).then(() => { if (f === "start" || f === "end") { t.blur(); renderPlanEdit(); } });
     }
   });
   $("phases").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-act]"); if (!b) return;
     const act = b.dataset.act, phId = b.closest("[data-ph]")?.dataset.ph, subId = b.closest(".ed-sub")?.dataset.sub;
     const move = (arr, i, d) => { const j = i + d; if (i < 0 || j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; };
-    const run = (fn) => savePlan(fn).then(() => renderPlanEdit());
-    if (act === "ph-add") return run((plan) => {
+    const after = () => renderPlanEdit();
+    if (act === "ph-add") return savePlan((plan) => {
       const last = plan.phases[plan.phases.length - 1];
       const start = last && last.end ? isoDate(new Date(parseDate(last.end).getTime() + 864e5 * 1.5)) : isoDate(today());
-      plan.phases.push({ id: "ph-" + uid(), name: "Neue Phase", start, end: start, desc: "", subs: [] });
-    });
+      plan.phases.push({ id: "ph-" + uid(), name: "Neue Phase", start, end: start, desc: "" });
+    }).then(after);
     const pi = state.plan.phases.findIndex((p) => p.id === phId);
     if (pi < 0) return;
-    if (act === "ph-up" || act === "ph-down") return run((plan) => move(plan.phases, pi, act === "ph-up" ? -1 : 1));
-    if (act === "ph-del") return confirmClick(b, `„${state.plan.phases[pi].name}“ wirklich löschen?`, () => run((plan) => plan.phases.splice(pi, 1)));
-    if (act === "sub-add") return run((plan) => plan.phases[pi].subs.push({ id: "s-" + uid(), name: "Neue Unterphase", desc: "" }));
-    const si = state.plan.phases[pi].subs.findIndex((s) => s.id === subId);
+    if (act === "ph-up" || act === "ph-down") return savePlan((plan) => move(plan.phases, pi, act === "ph-up" ? -1 : 1)).then(after);
+    if (act === "ph-del") return confirmClick(b, `„${state.plan.phases[pi].name}“ für alle löschen?`, () => savePlan((plan) => plan.phases.splice(pi, 1)).then(after));
+    if (act === "sub-add") return saveMySubs((map) => { (map[phId] = map[phId] || []).push({ id: "s-" + uid(), name: "Neue Unterphase", desc: "" }); }).then(after);
+    const list = subsOf(meP().id, state.plan.phases[pi]), si = list.findIndex((s) => s.id === subId);
     if (si < 0) return;
-    if (act === "sub-up" || act === "sub-down") return run((plan) => move(plan.phases[pi].subs, si, act === "sub-up" ? -1 : 1));
-    if (act === "sub-del") return confirmClick(b, "Wirklich?", () => run((plan) => plan.phases[pi].subs.splice(si, 1)));
+    if (act === "sub-up" || act === "sub-down") return saveMySubs((map) => move(map[phId], si, act === "sub-up" ? -1 : 1)).then(after);
+    if (act === "sub-del") return confirmClick(b, "Wirklich?", () => saveMySubs((map) => map[phId].splice(si, 1)).then(after));
   });
 
-  // ---------- Gruppen-Karten & „Ich bin“ ----------
+  // ---------- Personen-Karten & „Ich bin“ ----------
   $("groupCards").addEventListener("click", (e) => {
     const c = e.target.closest(".gcard"); if (!c) return;
-    state.view = c.dataset.g; lsSet(LS.view, state.view); renderAll();
+    state.view = c.dataset.p; lsSet(LS.view, state.view); renderAll();
   });
   $("meSel").addEventListener("change", () => {
     lsSet(LS.me, $("meSel").value || null);
-    const g = groupOf(me()); if (g) { state.view = g.id; lsSet(LS.view, g.id); }
-    if (!editingId && me()) $("fPerson").value = me();
+    const m = meP(); if (m) { state.view = m.id; lsSet(LS.view, m.id); }
+    if (!editingId && m) { $("fPerson").value = m.name; delete $("fPerson").dataset.touched; }
     $("meSel").blur(); renderAll();
   });
 
@@ -920,18 +990,20 @@
   document.querySelector("nav.tabs").addEventListener("click", (e) => { const b = e.target.closest("button[data-tab]"); if (b) showTab(b.dataset.tab, true); });
 
   // ---------- Stunden: Auswahllisten ----------
-  function subOptions() {
-    return `<option value="">Allgemein</option>` + state.plan.phases.filter((p) => p.subs.length).map((p) =>
-      `<optgroup label="${esc(p.name)}">${p.subs.map((s) => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
+  function subOptions(pid) {
+    return `<option value="">Allgemein</option>` + state.plan.phases.filter((ph) => subsOf(pid, ph).length).map((ph) =>
+      `<optgroup label="${esc(ph.name)}">${subsOf(pid, ph).map((s) => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
   }
-  function fillSelect(el, html) { const prev = el.value; el.innerHTML = html; if ([...el.options].some((o) => o.value === prev)) el.value = prev; }
+  function fillSelect(el, html) { const prev = el.value; if (el._html !== html) { el._html = html; el.innerHTML = html; } if ([...el.options].some((o) => o.value === prev)) el.value = prev; }
   function renderHoursForms() {
-    if (document.activeElement !== $("tSub")) fillSelect($("tSub"), subOptions());
-    if (document.activeElement !== $("fSub")) fillSelect($("fSub"), subOptions());
+    const m = meP();
     if (document.activeElement !== $("fPerson")) {
-      fillSelect($("fPerson"), state.groups.map((g) => `<optgroup label="${esc(g.name)}">${g.members.map((m) => `<option>${esc(m)}</option>`).join("")}</optgroup>`).join(""));
-      if (!editingId && !$("fPerson").dataset.touched && me()) $("fPerson").value = me();
+      fillSelect($("fPerson"), state.people.map((p) => `<option>${esc(p.name)}</option>`).join(""));
+      if (!editingId && !$("fPerson").dataset.touched && m) $("fPerson").value = m.name;
     }
+    if (document.activeElement !== $("tSub") && m) fillSelect($("tSub"), subOptions(m.id));
+    const fp = personByName($("fPerson").value);
+    if (document.activeElement !== $("fSub") && fp) fillSelect($("fSub"), subOptions(fp.id));
   }
 
   // ---------- Stoppuhr (pro Person, im Browser gespeichert) ----------
@@ -965,13 +1037,14 @@
   });
   ["tSub", "tNote"].forEach((id) => $(id).addEventListener("change", () => { const t = timerState(); if (t) setTimer({ ...t, sub: $("tSub").value, note: $("tNote").value.trim() }); }));
   $("tStop").addEventListener("click", async () => {
-    const t = timerState(); if (!t) return;
-    const st = new Date(t.startedAt), en = new Date(), my = me(), g = groupOf(my);
+    const t = timerState(), m = meP(); if (!t || !m) return;
+    const st = new Date(t.startedAt), en = new Date();
     const minutes = Math.max(1, Math.round((en - st) / 60000));
-    const entry = { id: uid(), date: isoDate(st), start: hhmm(st), end: hhmm(en), minutes, person: my, group: g.id, sub: $("tSub").value, note: $("tNote").value.trim() };
-    const ok = await write(() => state.entries.push(entry), () => backend.putEntries([entry]));
+    const entry = { id: uid(), date: isoDate(st), start: hhmm(st), end: hhmm(en), minutes, person: m.name, group: m.id, sub: $("tSub").value, note: $("tNote").value.trim() };
+    const before = state.entries;
+    const ok = await write(() => (state.entries = before.concat([entry])), () => backend.putEntries([entry]));
     if (ok) { setTimer(null); $("tNote").value = ""; renderTimer(); toast(`${fmtMin(minutes)} h eingetragen`); }
-    else { state.entries = state.entries.filter((x) => x.id !== entry.id); $("timerSince").textContent = "Nicht gespeichert – nochmal auf Stopp tippen, die Zeit läuft weiter."; }
+    else { state.entries = before; $("timerSince").textContent = "Nicht gespeichert – nochmal auf Stopp tippen, die Zeit läuft weiter."; }
   });
   $("tDiscard").addEventListener("click", (e) => confirmClick(e.currentTarget, "Zeit wirklich verwerfen?", () => { setTimer(null); $("tNote").value = ""; renderTimer(); }));
 
@@ -980,19 +1053,21 @@
   function resetForm() {
     editingId = null; $("entryForm").reset(); delete $("fPerson").dataset.touched;
     $("fDate").value = isoDate(new Date()); $("saveBtn").textContent = "Eintragen"; $("cancelEdit").hidden = true;
-    renderHoursForms(); if (me()) $("fPerson").value = me();
+    if (me()) $("fPerson").value = me();
+    renderHoursForms();
   }
   function startEdit(e) {
     showTab("hours", true);
     editingId = e.id;
+    $("fPerson").value = e.person; $("fPerson").dataset.touched = "1"; renderHoursForms();
     $("fDate").value = e.date; $("fStart").value = e.start || ""; $("fEnd").value = e.end || "";
     $("fDur").value = fmtMin(e.minutes); $("fNote").value = e.note || "";
-    $("fPerson").value = e.person; $("fSub").value = subById(e.sub) ? e.sub : "";
+    $("fSub").value = entrySub(e) ? e.sub : "";
     $("saveBtn").textContent = "Änderungen speichern"; $("cancelEdit").hidden = false;
     $("entryForm").scrollIntoView({ behavior: "smooth", block: "start" });
   }
   $("cancelEdit").addEventListener("click", resetForm);
-  $("fPerson").addEventListener("change", () => ($("fPerson").dataset.touched = "1"));
+  $("fPerson").addEventListener("change", () => { $("fPerson").dataset.touched = "1"; $("fPerson").blur(); renderHoursForms(); });
   const autoDur = () => { const a = toMin($("fStart").value), b = toMin($("fEnd").value); if (a != null && b != null) { let d = b - a; if (d < 0) d += 1440; $("fDur").value = fmtMin(d); } };
   $("fStart").addEventListener("change", autoDur); $("fEnd").addEventListener("change", autoDur);
   $("entryForm").addEventListener("submit", async (ev) => {
@@ -1005,13 +1080,13 @@
     if (minutes == null) return flash(msg, "Bitte Von/Bis oder eine Dauer angeben (z. B. 1:30 oder 1,5).", true);
     if (Number.isNaN(minutes) || minutes <= 0) return flash(msg, "Dauer bitte als h:mm (1:30) oder in Stunden (1,5) eingeben.", true);
     if (minutes > 1440) return flash(msg, "Ein Eintrag kann höchstens 24 Stunden lang sein.", true);
-    const person = $("fPerson").value, g = groupOf(person);
-    if (!g) return flash(msg, "Bitte eine Person wählen.", true);
+    const p = personByName($("fPerson").value);
+    if (!p) return flash(msg, "Bitte eine Person wählen.", true);
     const wasEdit = !!editingId;
-    const entry = { id: editingId || uid(), date: $("fDate").value, start: $("fStart").value, end: $("fEnd").value, minutes, person, group: g.id, sub: $("fSub").value, note: $("fNote").value.trim() };
+    const entry = { id: editingId || uid(), date: $("fDate").value, start: $("fStart").value, end: $("fEnd").value, minutes, person: p.name, group: p.id, sub: $("fSub").value, note: $("fNote").value.trim() };
     const before = state.entries;
     const ok = await write(() => { state.entries = before.filter((x) => x.id !== entry.id).concat([entry]); }, () => backend.putEntries([entry]));
-    if (ok) { resetForm(); flash(msg, wasEdit ? "Änderungen gespeichert." : `${fmtMin(minutes)} h für ${person} eingetragen.`); }
+    if (ok) { resetForm(); flash(msg, wasEdit ? "Änderungen gespeichert." : `${fmtMin(minutes)} h für ${p.name} eingetragen.`); }
     else { state.entries = before; flash(msg, "Nicht gespeichert – bitte nochmal versuchen.", true); }
   });
 
@@ -1022,8 +1097,8 @@
       `<div class="hrow"><span class="name" title="${esc(name)}">${esc(name)}</span><span class="hbar"><span style="width:${(m / max) * 100}%;background:${col}"></span></span><span class="val">${fmtMin(m)} h</span></div>`).join("");
   }
   function renderStats() {
-    const g = viewGroup(), list = groupEntries(g.id), total = sumMin(list);
-    $("stGroup").textContent = g.name;
+    const v = viewP(), list = entriesOf(v.id), total = sumMin(list);
+    $("stGroup").textContent = v.name;
     $("sTotal").textContent = fmtMin(total);
     const mon = mondayOf(new Date());
     $("sWeek").textContent = fmtMin(sumMin(list.filter((e) => parseDate(e.date) >= mon)));
@@ -1031,12 +1106,24 @@
     let a = 0;
     if (list.length) { const first = list.reduce((m, e) => (e.date < m ? e.date : m), list[0].date); a = total / Math.max(1, Math.ceil((new Date() - mondayOf(parseDate(first))) / (7 * 864e5))); }
     $("sAvg").textContent = fmtMin(a);
-    const others = [...new Set(list.map((e) => e.person).filter((p) => !g.members.includes(p)))];
-    renderRows($("sPeople"), g.members.concat(others).map((p, i) => [p, sumMin(list.filter((e) => e.person === p)), `var(--c${(i % 7) + 1})`]));
     renderWeeks($("sWeeks"), list);
-    const rows = state.plan.phases.map((ph, i) => [ph.name, sumMin(list.filter((e) => ph.subs.some((s) => s.id === e.sub))), `var(--c${(i % 7) + 1})`]);
-    rows.push(["Allgemein", sumMin(list.filter((e) => !subById(e.sub))), "var(--c6)"]);
+    const rows = state.plan.phases.map((ph, i) => [ph.name, sumMin(list.filter((e) => subsOf(v.id, ph).some((s) => s.id === e.sub))), `var(--c${(i % 7) + 1})`]);
+    rows.push(["Allgemein", sumMin(list.filter((e) => !entrySub(e))), "var(--c6)"]);
     renderRows($("sPhases"), rows);
+    renderCompare();
+  }
+  function renderCompare() {
+    const P = state.people, cur = currentPhase(), m = meP();
+    const cls = (p) => (m && m.id === p.id ? ' class="me"' : "");
+    const head = `<tr><th>Phase</th>${P.map((p) => `<th${cls(p)}>${esc(p.name)}</th>`).join("")}</tr>`;
+    const body = state.plan.phases.map((ph) => `<tr${cur && cur.id === ph.id ? ' class="now"' : ""}><td>${esc(ph.name)}</td>${P.map((p) => {
+      const n = subsOf(p.id, ph).length, v = phasePct(p.id, ph);
+      return `<td${cls(p)}>${n ? `<span class="cell"><span class="num">${Math.round(v)} %</span>${pbar(v, elapsedFrac(ph) * 100, "mini")}</span>` : '<span class="muted">–</span>'}</td>`;
+    }).join("")}</tr>`).join("");
+    const foot = `<tr><td>Gesamt</td>${P.map((p) => `<td${cls(p)}><span class="num">${Math.round(personPct(p.id))} %</span></td>`).join("")}</tr>
+      <tr><td>Unterphasen fertig</td>${P.map((p) => `<td${cls(p)}><span class="num">${doneCount(p.id)} / ${allSubsOf(p.id).length}</span></td>`).join("")}</tr>
+      <tr><td>Stunden</td>${P.map((p) => `<td${cls(p)}><span class="num">${fmtMin(sumMin(entriesOf(p.id)))}</span></td>`).join("")}</tr>`;
+    $("sCompare").innerHTML = `<table class="cmp"><thead>${head}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table>`;
   }
   function renderWeeks(el, list) {
     const N = 10, W = 340, H = 150, padL = 26, padB = 20, padT = 14, mon = mondayOf(new Date());
@@ -1057,18 +1144,13 @@
 
   // ---------- Protokoll ----------
   function renderLog() {
-    const g = viewGroup();
-    $("logGroup").textContent = g.name;
-    fillSelect($("filterPerson"), `<option value="">Alle Personen</option>` + g.members.map((m) => `<option>${esc(m)}</option>`).join(""));
+    const v = viewP();
+    $("logGroup").textContent = v.name;
     fillSelect($("filterPhase"), `<option value="">Alle Phasen</option>` + state.plan.phases.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("") + `<option value="_none">Allgemein</option>`);
-    const fp = $("filterPerson").value, fph = $("filterPhase").value, all = groupEntries(g.id);
-    const list = all.filter((e) => {
-      if (fp && e.person !== fp) return false;
-      if (!fph) return true;
-      const s = subById(e.sub);
-      return fph === "_none" ? !s : !!s && s.phase.id === fph;
-    }).sort((a, b) => (b.date + (b.start || "")).localeCompare(a.date + (a.start || "")));
-    if (!list.length) { $("log").innerHTML = `<div class="empty">${all.length ? "Keine Einträge für diesen Filter." : "Noch keine Einträge – starte die Stoppuhr oder trag Stunden nach."}</div>`; return; }
+    const fph = $("filterPhase").value, all = entriesOf(v.id), own = isOwn();
+    const list = all.filter((e) => { if (!fph) return true; const s = entrySub(e); return fph === "_none" ? !s : !!s && s.phase.id === fph; })
+      .sort((a, b) => (b.date + (b.start || "")).localeCompare(a.date + (a.start || "")));
+    if (!list.length) { $("log").innerHTML = `<div class="empty">${all.length ? "Keine Einträge für diesen Filter." : "Noch keine Einträge."}</div>`; return; }
     const months = new Map();
     list.forEach((e) => { const k = e.date.slice(0, 7); if (!months.has(k)) months.set(k, []); months.get(k).push(e); });
     let html = "";
@@ -1076,19 +1158,18 @@
       const label = parseDate(k + "-01").toLocaleDateString("de-AT", { month: "long", year: "numeric" });
       html += `<div class="month"><div class="month-head"><h3>${esc(label)}</h3><span class="num">${fmtMin(sumMin(es))} h</span></div>`;
       es.forEach((e) => {
-        const d = parseDate(e.date), s = subById(e.sub);
+        const d = parseDate(e.date), s = entrySub(e);
         html += `<div class="entry" data-id="${esc(e.id)}">
           <div class="d">${d.toLocaleDateString("de-AT", { weekday: "short" })} ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.<span class="t">${e.start && e.end ? `${esc(e.start)}–${esc(e.end)}` : ""}</span></div>
           <div><div class="note">${esc(e.note) || '<span class="muted">(ohne Beschreibung)</span>'}</div>
-            <div class="meta"><span class="chip" title="${s ? esc(s.phase.name + " · " + s.name) : "Allgemein"}"><span>${s ? esc(s.name) : "Allgemein"}</span></span>${s ? `<span>${esc(s.phase.name)}</span>` : ""}<span>· ${esc(e.person)}</span></div></div>
+            <div class="meta"><span class="chip" title="${s ? esc(s.phase.name + " · " + s.name) : "Allgemein"}"><span>${s ? esc(s.name) : "Allgemein"}</span></span>${s ? `<span>${esc(s.phase.name)}</span>` : ""}</div></div>
           <div><div class="dur">${fmtMin(e.minutes)}</div><div class="acts"><button class="ghost" data-act="edit" type="button">Bearbeiten</button><button class="ghost danger" data-act="del" type="button">Löschen</button></div></div>
         </div>`;
       });
       html += "</div>";
     }
-    $("log").innerHTML = html;
+    $("log").innerHTML = html + (own ? "" : `<p class="hint" style="margin-top:12px">Du siehst das Protokoll von ${esc(v.name)}.</p>`);
   }
-  $("filterPerson").addEventListener("change", renderLog);
   $("filterPhase").addEventListener("change", renderLog);
   $("log").addEventListener("click", (ev) => {
     const b = ev.target.closest("button[data-act]"); if (!b) return;
@@ -1100,13 +1181,11 @@
     });
   });
 
-  // ---------- Einstellungen: Gruppen ----------
+  // ---------- Einstellungen: Personen ----------
   function renderSettings() {
     if (!$("groupForm").contains(document.activeElement)) {
-      $("groupForm").innerHTML = state.groups.map((g, i) => `
-        <label class="f wide">Gruppe ${i + 1} – Name <input id="gName-${esc(g.id)}" value="${esc(g.name)}"></label>
-        <label class="f wide">Mitglieder <input id="gMem-${esc(g.id)}" value="${esc(g.members.join(", "))}"></label>`).join("") +
-        `<div class="btns wide"><button class="primary" type="submit">Gruppen speichern</button></div>`;
+      $("groupForm").innerHTML = state.people.map((p, i) => `<label class="f wide">Person ${i + 1} <input id="pName-${esc(p.id)}" value="${esc(p.name)}"></label>`).join("") +
+        `<div class="btns wide"><button class="primary" type="submit">Namen speichern</button></div>`;
     }
     $("dbOff").hidden = !!dbCfg; $("dbOn").hidden = !dbCfg;
     if (dbCfg) $("dbInvite").value = inviteLink(dbCfg);
@@ -1114,33 +1193,31 @@
   }
   $("groupForm").addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    const split = (s) => [...new Set(s.split(",").map((x) => x.trim()).filter(Boolean))];
-    const next = state.groups.map((g) => ({ id: g.id, name: $(`gName-${g.id}`).value.trim() || g.name, members: split($(`gMem-${g.id}`).value) }));
-    if (next.some((g) => !g.members.length)) return flash($("groupMsg"), "Jede Gruppe braucht mindestens ein Mitglied.", true);
-    const flat = next.flatMap((g) => g.members);
-    if (new Set(flat).size !== flat.length) return flash($("groupMsg"), "Eine Person darf nur in einer Gruppe stehen.", true);
-    // Umbenennung = gleiche Position in derselben Gruppe, alter Name kommt nicht mehr vor
+    const next = state.people.map((p) => ({ id: p.id, name: $(`pName-${p.id}`).value.trim().replace(/\s+/g, " ") }));
+    if (next.some((p) => !p.name)) return flash($("groupMsg"), "Bitte für jede Person einen Namen eintragen.", true);
+    if (new Set(next.map((p) => p.name)).size !== next.length) return flash($("groupMsg"), "Jeder Name darf nur einmal vorkommen.", true);
     const renames = {};
-    state.groups.forEach((g, gi) => g.members.forEach((m, i) => { const n = next[gi].members[i]; if (n && n !== m && !flat.includes(m)) renames[m] = n; }));
+    state.people.forEach((p, i) => { if (next[i].name !== p.name) renames[p.name] = next[i].name; });
+    if (!Object.keys(renames).length) return flash($("groupMsg"), "Keine Änderung.");
     const myOld = lsGet(LS.me);
     const ok = await write(() => {
-      state.groups = next;
+      state.people = next;
       state.entries = state.entries.map((e) => (renames[e.person] ? { ...e, person: renames[e.person] } : e));
     }, async () => {
-      await backend.putConfig("groups", next);
+      await backend.putConfig("people", next);
       for (const [from, to] of Object.entries(renames)) await backend.renamePerson(from, to);
     });
     if (!ok) return;
-    if (renames[myOld]) {
-      lsSet(LS.me, renames[myOld]);
-      const all = timers(); if (all[myOld]) { all[renames[myOld]] = all[myOld]; delete all[myOld]; lsSet(LS.timers, all); }
-    }
+    if (renames[myOld]) lsSet(LS.me, renames[myOld]);
+    const all = timers(); let moved = false;
+    Object.entries(renames).forEach(([from, to]) => { if (all[from]) { all[to] = all[from]; delete all[from]; moved = true; } });
+    if (moved) lsSet(LS.timers, all);
     document.activeElement?.blur(); renderAll();
     const n = Object.keys(renames).length;
-    flash($("groupMsg"), n ? `Gespeichert – ${n} ${n === 1 ? "Name" : "Namen"} in den Einträgen umbenannt.` : "Gespeichert.");
+    flash($("groupMsg"), `Gespeichert – ${n} ${n === 1 ? "Name" : "Namen"} geändert, Einträge mit umbenannt.`);
   });
 
-  // ---------- Einstellungen: Datenbank ----------
+  // ---------- Einstellungen: Team-Tabelle ----------
   let dbCfg = null;
   function inviteLink(cfg) { return `${location.origin}${location.pathname}?sheet=${encodeURIComponent(cfg.url)}&key=${encodeURIComponent(cfg.key)}`; }
   // Die Verbindung steht im Einladungslink und bleibt in der Adresszeile (Lesezeichen, Home-Bildschirm)
@@ -1150,10 +1227,7 @@
       if (q.get("sheet") && q.get("key")) { const c = { url: q.get("sheet"), key: q.get("key") }; lsSet(LS.db, c); return c; }
     } catch {}
     const c = lsGet(LS.db);
-    if (c && c.url && c.key) {
-      try { history.replaceState(null, "", inviteLink(c) + location.hash); } catch {}
-      return c;
-    }
+    if (c && c.url && c.key) { try { history.replaceState(null, "", inviteLink(c) + location.hash); } catch {} return c; }
     return null;
   }
   $("dbForm").addEventListener("submit", async (ev) => {
@@ -1162,11 +1236,8 @@
     if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(cfg.url)) return flash($("dbMsg"), "Die Adresse beginnt mit https://script.google.com/ und endet auf /exec.", true);
     if (!cfg.key) return flash($("dbMsg"), "Bitte den Team-Code eingeben, der im Skript steht.", true);
     $("dbConnect").disabled = true;
-    try {
-      await sheetBackend(cfg).load();
-      lsSet(LS.db, cfg);
-      location.href = inviteLink(cfg) + "#settings";
-    } catch (err) { flash($("dbMsg"), `Verbindung fehlgeschlagen: ${err.message}`, true); }
+    try { await sheetBackend(cfg).load(); lsSet(LS.db, cfg); location.href = inviteLink(cfg) + "#settings"; }
+    catch (err) { flash($("dbMsg"), `Verbindung fehlgeschlagen: ${err.message}`, true); }
     finally { $("dbConnect").disabled = false; }
   });
   $("dbCopy").addEventListener("click", async () => {
@@ -1178,40 +1249,6 @@
     lsSet(LS.db, null); location.href = location.pathname + "#settings";
   }));
 
-  // ---------- Einträge der alten Stunden-App ----------
-  const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
-  function normDate(v) {
-    v = String(v ?? "").trim(); let m;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-    if ((m = v.match(/^\w{3},? (\w{3}) (\d{1,2}),? (\d{4})/)) && MONTHS[m[1]]) return `${m[3]}-${pad(MONTHS[m[1]])}-${pad(m[2])}`;
-    if ((m = v.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/))) return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
-    if (/^\d{4}-\d{2}-\d{2}T/.test(v)) { const d = new Date(v); if (!isNaN(d)) return isoDate(d); }
-    return "";
-  }
-  function normTime(v) { v = String(v ?? "").trim(); if (!v) return ""; const m = v.replace(/^\w{3},? \w{3} \d{1,2},? \d{4}/, "").match(/(\d{1,2}):(\d{2})/); return m ? `${pad(m[1])}:${m[2]}` : ""; }
-  function fromLegacy(list) {
-    const out = [], skipped = [];
-    for (const e of list || []) {
-      const name = String(e.person || "").trim();
-      const person = allMembers().find((m) => m === name || m.split(" ")[0] === name || m.split(" ").slice(-1)[0] === name);
-      const date = normDate(e.date), minutes = Math.round(Number(e.minutes));
-      if (!person || !date || !(minutes > 0)) { skipped.push(name || "?"); continue; }
-      const cat = String(e.category || "").trim(), note = String(e.note || "").trim();
-      out.push({ id: String(e.id || uid()), date, start: normTime(e.start), end: normTime(e.end), minutes, person, group: groupOf(person).id, sub: "", note: cat ? (note ? `${cat}: ${note}` : cat) : note });
-    }
-    return { out, skipped: [...new Set(skipped)] };
-  }
-  async function importEntries(list) {
-    const have = new Set(state.entries.map((e) => e.id));
-    const fresh = list.filter((e) => !have.has(e.id));
-    if (!fresh.length) return 0;
-    const before = state.entries;
-    const ok = await write(() => (state.entries = before.concat(fresh)), () => backend.putEntries(fresh));
-    if (!ok) { state.entries = before; return -1; }
-    return fresh.length;
-  }
-  const legacyMsg = (n, skipped, total) => n < 0 ? "Übernahme fehlgeschlagen – bitte nochmal versuchen." :
-    `${n} ${n === 1 ? "Eintrag" : "Einträge"} übernommen${total - n - skipped.length > 0 ? `, ${total - n - skipped.length} waren schon vorhanden` : ""}${skipped.length ? `; übersprungen (Name unbekannt): ${skipped.join(", ")}` : ""}.`;
   // ---------- Export / Import ----------
   function offerFile(filename, data, mime) {
     const url = URL.createObjectURL(new Blob([data], { type: mime }));
@@ -1229,47 +1266,47 @@
     for (let i = from; i <= r.e.r; i++) for (const [c, z] of Object.entries(formats)) { const cell = ws[XLSX.utils.encode_cell({ r: i, c: Number(c) })]; if (cell && cell.t === "n") cell.z = z; }
     return ws;
   }
+  const logRows = (list) => list.slice().sort((a, b) => (a.date + (a.start || "")).localeCompare(b.date + (b.start || "")));
   function buildWorkbook() {
-    const wb = XLSX.utils.book_new(), G = state.groups, soll = sollPct(), nSubs = allSubs().length;
+    const wb = XLSX.utils.book_new(), P = state.people;
     wb.Props = { Title: `Maturaprojekt ${state.plan.title} – Projektplan & Arbeitsprotokoll` };
     // Übersicht
-    const ov = [[`Maturaprojekt ${state.plan.title} – Projektplan & Arbeitsprotokoll`], ["Stand", xlDate(stamp())], ["Soll laut Zeitplan", Math.round(soll) / 100], [],
-      ["Gruppe", "Mitglieder", "Fortschritt", "Unterphasen fertig", "Stunden", "Einträge"]];
-    G.forEach((g) => ov.push([g.name, g.members.join(", "), groupPct(g.id) / 100, `${doneCount(g.id)} / ${nSubs}`, hrs2(sumMin(groupEntries(g.id))), groupEntries(g.id).length]));
-    ov.push([], ["Person", "Gruppe", "Stunden", "Einträge"]);
-    G.forEach((g) => g.members.forEach((m) => { const l = state.entries.filter((e) => e.person === m); ov.push([m, g.name, hrs2(sumMin(l)), l.length]); }));
-    const ovWs = sheet(ov, [26, 34, 12, 18, 10, 10]);
-    ovWs.B2.z = "dd.mm.yyyy"; ovWs.B3.z = "0%";
-    for (let r = 6; r < 6 + G.length; r++) { if (ovWs["C" + r]) ovWs["C" + r].z = "0%"; if (ovWs["E" + r]) ovWs["E" + r].z = "0.00"; }
-    for (let r = 8 + G.length; r <= ov.length; r++) if (ovWs["C" + r]) ovWs["C" + r].z = "0.00";
+    const ov = [[`Maturaprojekt ${state.plan.title} – Projektplan & Arbeitsprotokoll`], ["Stand", xlDate(stamp())], [],
+      ["Person", "Fortschritt", "Soll laut Zeitplan", "Unterphasen fertig", "Stunden", "Einträge"]];
+    P.forEach((p) => ov.push([p.name, personPct(p.id) / 100, sollPct(p.id) / 100, `${doneCount(p.id)} / ${allSubsOf(p.id).length}`, hrs2(sumMin(entriesOf(p.id))), entriesOf(p.id).length]));
+    ov.push(["Summe", "", "", "", { t: "n", f: `SUM(E5:E${4 + P.length})` }, { t: "n", f: `SUM(F5:F${4 + P.length})` }]);
+    const ovWs = sheet(ov, [26, 12, 18, 18, 10, 10], { 1: "0%", 2: "0%", 4: "0.00" }, 4);
+    ovWs.B2.z = "dd.mm.yyyy";
     XLSX.utils.book_append_sheet(wb, ovWs, "Übersicht");
-    // Projektplan
-    const head = ["Phase", "Unterphase", "Beschreibung", "Start", "Ende"]; G.forEach((g) => head.push(`% ${g.name}`, `Std. ${g.name}`));
-    const pl = [head], hb = Object.fromEntries(G.map((g) => [g.id, hoursBySub(g.id)]));
-    state.plan.phases.forEach((ph) => {
-      const row = [ph.name, "", ph.desc || "", ph.start ? xlDate(ph.start) : "", ph.end ? xlDate(ph.end) : ""];
-      G.forEach((g) => row.push(ph.subs.length ? phasePct(g.id, ph) / 100 : "", hrs2(ph.subs.reduce((a, s) => a + (hb[g.id][s.id] || 0), 0))));
-      pl.push(row);
-      ph.subs.forEach((s) => { const r = [ph.name, s.name, s.desc || "", "", ""]; G.forEach((g) => r.push(pct(g.id, s.id) / 100, hrs2(hb[g.id][s.id] || 0))); pl.push(r); });
+    // Projektplan (alle Personen, filterbar)
+    const pl = [["Person", "Phase", "Unterphase", "Beschreibung", "Start", "Ende", "Fortschritt", "Stunden"]];
+    P.forEach((p) => {
+      const hb = hoursBySub(p.id);
+      state.plan.phases.forEach((ph) => {
+        const list = subsOf(p.id, ph);
+        pl.push([p.name, ph.name, "(Phase gesamt)", ph.desc || "", ph.start ? xlDate(ph.start) : "", ph.end ? xlDate(ph.end) : "", list.length ? phasePct(p.id, ph) / 100 : "", hrs2(list.reduce((a, s) => a + (hb[s.id] || 0), 0))]);
+        list.forEach((s) => pl.push([p.name, ph.name, s.name, s.desc || "", "", "", pct(p.id, s.id) / 100, hrs2(hb[s.id] || 0)]));
+      });
     });
-    const gen = ["Allgemein (ohne Unterphase)", "", "", "", ""]; G.forEach((g) => gen.push("", hrs2(sumMin(groupEntries(g.id).filter((e) => !subById(e.sub)))))); pl.push(gen);
-    const fmt = { 3: "dd.mm.yyyy", 4: "dd.mm.yyyy" }; G.forEach((_, i) => { fmt[5 + i * 2] = "0%"; fmt[6 + i * 2] = "0.00"; });
-    const plWs = sheet(pl, [22, 46, 30, 11, 11, ...G.flatMap(() => [14, 14])], fmt, 1);
-    plWs["!autofilter"] = { ref: `A1:${XLSX.utils.encode_col(head.length - 1)}${pl.length}` };
+    const plWs = sheet(pl, [18, 20, 46, 28, 11, 11, 11, 9], { 4: "dd.mm.yyyy", 5: "dd.mm.yyyy", 6: "0%", 7: "0.00" }, 1);
+    plWs["!autofilter"] = { ref: `A1:H${pl.length}` };
     XLSX.utils.book_append_sheet(wb, plWs, "Projektplan");
-    // Protokoll je Gruppe
-    const used = new Set(["übersicht", "projektplan"]);
-    G.forEach((g) => {
-      const list = groupEntries(g.id).slice().sort((a, b) => (a.date + (a.start || "")).localeCompare(b.date + (b.start || "")));
-      const aoa = [["Datum", "Von", "Bis", "Stunden", "Person", "Phase", "Unterphase", "Tätigkeit"],
-        ...list.map((e) => { const s = subById(e.sub); return [xlDate(e.date), xlTime(e.start), xlTime(e.end), hrs2(e.minutes), e.person, s ? s.phase.name : "", s ? s.name : "Allgemein", e.note || ""]; })];
-      aoa.push(["Summe", "", "", { t: "n", f: list.length ? `SUM(D2:D${list.length + 1})` : "0" }]);
+    // Protokoll gesamt + je Person
+    const head = ["Datum", "Von", "Bis", "Stunden", "Person", "Phase", "Unterphase", "Tätigkeit"];
+    const row = (e) => { const s = entrySub(e); return [xlDate(e.date), xlTime(e.start), xlTime(e.end), hrs2(e.minutes), e.person, s ? s.phase.name : "", s ? s.name : "Allgemein", e.note || ""]; };
+    const logSheet = (list) => {
+      const aoa = [head, ...list.map(row), ["Summe", "", "", { t: "n", f: list.length ? `SUM(D2:D${list.length + 1})` : "0" }]];
       const ws = sheet(aoa, [11, 7, 7, 9, 18, 20, 40, 60], { 0: "dd.mm.yyyy", 1: "hh:mm", 2: "hh:mm", 3: "0.00" }, 1);
       ws["!autofilter"] = { ref: `A1:H${list.length + 1}` };
-      let name = `Protokoll ${g.name}`.replace(/[[\]:*?/\\]/g, " ").slice(0, 31), k = 2;
+      return ws;
+    };
+    XLSX.utils.book_append_sheet(wb, logSheet(logRows(state.entries)), "Protokoll gesamt");
+    const used = new Set(["übersicht", "projektplan", "protokoll gesamt"]);
+    P.forEach((p) => {
+      let name = `Protokoll ${p.name}`.replace(/[[\]:*?/\\]/g, " ").slice(0, 31), k = 2;
       while (used.has(name.toLowerCase())) name = `${name.slice(0, 28)} ${k++}`;
       used.add(name.toLowerCase());
-      XLSX.utils.book_append_sheet(wb, ws, name);
+      XLSX.utils.book_append_sheet(wb, logSheet(logRows(entriesOf(p.id))), name);
     });
     return wb;
   }
@@ -1281,9 +1318,10 @@
       flash($("expMsg"), "Excel-Datei erstellt.");
     } catch { flash($("expMsg"), "Excel-Datei konnte nicht erstellt werden.", true); }
   });
+  const progressList = (prog) => Object.entries(prog).map(([k, v]) => { const i = k.indexOf(":"); return { g: k.slice(0, i), s: k.slice(i + 1), pct: v }; });
   $("expJson").addEventListener("click", () => {
-    const progress = Object.entries(state.progress).map(([k, v]) => { const i = k.indexOf(":"); return { g: k.slice(0, i), s: k.slice(i + 1), pct: v }; });
-    offerFile(`Maturaprojekt_Sicherung_${stamp()}.json`, JSON.stringify({ app: "matura-projektplan", version: 2, exportedAt: new Date().toISOString(), groups: state.groups, plan: state.plan, progress, entries: state.entries }, null, 2), "application/json");
+    const subs = Object.fromEntries(state.people.map((p) => [p.id, subsMap(p.id)]));
+    offerFile(`Maturaprojekt_Sicherung_${stamp()}.json`, JSON.stringify({ app: "matura-projektplan", version: 3, exportedAt: new Date().toISOString(), people: state.people, plan: state.plan, subs, progress: progressList(state.progress), entries: state.entries }, null, 2), "application/json");
     flash($("expMsg"), "Sicherung erstellt.");
   });
   $("impBtn").addEventListener("click", () => $("impFile").click());
@@ -1291,10 +1329,10 @@
     const file = ev.target.files[0]; ev.target.value = ""; if (!file) return;
     let d; try { d = JSON.parse(await file.text()); } catch { return flash($("expMsg"), "Diese Datei ist keine gültige Sicherung.", true); }
     const box = $("impConfirm");
-    if (d && d.app === "matura-projektplan" && d.plan && Array.isArray(d.groups)) {
+    if (d && d.app === "matura-projektplan" && d.version >= 3 && Array.isArray(d.people) && d.plan) {
       const entries = Array.isArray(d.entries) ? d.entries : [];
       box.hidden = false;
-      box.innerHTML = `<p style="margin:0 0 8px">Sicherung vom ${esc(new Date(d.exportedAt).toLocaleString("de-AT"))}: <strong>Plan, Gruppen und Fortschritt werden ersetzt</strong>, ${entries.length} Einträge werden ergänzt bzw. aktualisiert.</p>
+      box.innerHTML = `<p style="margin:0 0 8px">Sicherung vom ${esc(new Date(d.exportedAt).toLocaleString("de-AT"))}: <strong>Personen, Plan, Unterphasen und Fortschritt werden ersetzt</strong>, ${entries.length} Einträge werden ergänzt bzw. aktualisiert.</p>
         <div class="btns"><button type="button" class="primary" id="impYes">Ja, importieren</button><button type="button" class="ghost" id="impNo">Abbrechen</button></div>`;
       $("impNo").onclick = () => (box.hidden = true);
       $("impYes").onclick = async () => {
@@ -1302,9 +1340,10 @@
         const prog = {}; (d.progress || []).forEach((p) => (prog[`${p.g}:${p.s}`] = p.pct));
         const ok = await write(() => {
           const ids = new Set(entries.map((e) => e.id));
-          Object.assign(state, { groups: d.groups, plan: d.plan, progress: prog, entries: state.entries.filter((e) => !ids.has(e.id)).concat(entries) });
+          Object.assign(state, { people: d.people, plan: d.plan, subs: d.subs || {}, progress: prog, entries: state.entries.filter((e) => !ids.has(e.id)).concat(entries) });
         }, async () => {
-          await backend.putConfig("groups", d.groups); await backend.putConfig("plan", d.plan);
+          await backend.putConfig("people", d.people); await backend.putConfig("plan", d.plan);
+          for (const [pid, map] of Object.entries(d.subs || {})) await backend.putConfig(`subs:${pid}`, map);
           if (d.progress?.length) await backend.putProgress(d.progress);
           if (entries.length) await backend.putEntries(entries);
         });
@@ -1312,10 +1351,10 @@
       };
       return;
     }
-    if (d && Array.isArray(d.entries)) { // Sicherung der alten Stundenlog-App
-      const { out, skipped } = fromLegacy(d.entries);
+    if (d && Array.isArray(d.entries)) { // Einträge aus älteren Versionen (Personen werden über den Namen zugeordnet)
+      const { out, skipped } = fromLegacy(d.entries.map((e) => ({ ...e, category: e.category || "" })));
       const n = await importEntries(out);
-      flash($("expMsg"), legacyMsg(n, skipped, d.entries.length), n < 0);
+      flash($("expMsg"), n < 0 ? "Import fehlgeschlagen." : `${n} Einträge übernommen${skipped.length ? `; nicht zugeordnet: ${skipped.join(", ")}` : ""}.`, n < 0);
       return;
     }
     flash($("expMsg"), "Diese Datei ist keine gültige Sicherung.", true);
