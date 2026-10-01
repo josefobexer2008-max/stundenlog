@@ -273,7 +273,7 @@
     </div>
   </header>
 
-  <div class="banner warn" id="notLinked" hidden><strong>Nicht mit der Team-Datenbank verbunden.</strong> Änderungen landen nur in diesem Browser. Öffne den Einladungslink aus eurer Gruppe (am besten direkt in Safari/Chrome) oder verbinde die Datenbank unter „Einstellungen“.</div>
+  <div class="banner warn" id="notLinked" hidden><strong>Nicht mit der Team-Tabelle verbunden.</strong> Änderungen landen nur in diesem Browser. Öffne den Einladungslink aus eurer Gruppe (am besten direkt in Safari/Chrome) oder verbinde die Tabelle unter „Einstellungen“.</div>
 
   <section class="groups" id="groupCards" aria-label="Gruppen"></section>
 
@@ -389,12 +389,12 @@
       </section>
 
       <section class="sheet">
-        <h2>Team-Datenbank</h2>
+        <h2>Team-Tabelle</h2>
         <div id="dbOff">
-          <p class="hint">Damit alle vier dieselben Daten sehen, wird die Seite mit eurer Supabase-Datenbank verbunden (Anleitung in der README). Wer den Einladungslink bekommen hat, muss hier nichts tun.</p>
+          <p class="hint">Damit alle vier dieselben Daten sehen, wird die Seite mit eurer Google-Tabelle verbunden (Anleitung in der README). Wer den Einladungslink bekommen hat, muss hier nichts tun.</p>
           <form id="dbForm" class="fields" novalidate>
-            <label class="f wide">Project URL <input id="dbUrl" type="url" placeholder="https://abcd1234.supabase.co" autocomplete="off"></label>
-            <label class="f wide">Publishable key (oder anon key) <input id="dbKey" type="text" autocomplete="off" spellcheck="false"></label>
+            <label class="f wide">Web-App-Adresse <input id="dbUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+            <label class="f wide">Team-Code <input id="dbKey" type="text" autocomplete="off" spellcheck="false"></label>
             <div class="btns wide"><button class="primary" type="submit" id="dbConnect">Verbinden</button></div>
           </form>
         </div>
@@ -422,13 +422,6 @@
         </div>
         <div id="impConfirm" class="banner" hidden style="margin-top:10px"></div>
         <div class="msg" id="expMsg" role="status"></div>
-      </section>
-
-      <section class="sheet" id="legacyBox" hidden>
-        <h2>Alte Stundenliste übernehmen</h2>
-        <p class="hint">Auf diesem Gerät ist noch die Verbindung zur alten Google-Tabelle gespeichert. Ihre Einträge können einmalig übernommen werden – die alte Kategorie wird der Tätigkeit vorangestellt, Unterphase „Allgemein“. Doppelte Einträge werden übersprungen.</p>
-        <button type="button" id="legacyImport">Einträge aus Google-Tabelle übernehmen</button>
-        <div class="msg" id="legacyMsg" role="status"></div>
       </section>
     </div>
   </section>
@@ -532,8 +525,8 @@
     try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); delete mem[k]; }
     catch { mem[k] = v == null ? null : JSON.parse(JSON.stringify(v)); }
   };
-  const LS = { me: "mp-me", view: "mp-view", timers: "mp-timers", db: "mp-db", cache: "mp-cache", local: "mp-local-v2",
-    legacySheet: "matura-stundenlog-sheet", legacyMe: "matura-stundenlog-me" };
+  const LS = { me: "mp-me", view: "mp-view", timers: "mp-timers", db: "matura-stundenlog-sheet", cache: "mp-cache", local: "mp-local-v2",
+    legacyMe: "matura-stundenlog-me" };
 
   let toastT;
   function toast(msg, err) {
@@ -600,53 +593,40 @@
   const pbar = (val, soll, lg) => `<span class="pbar${lg ? " lg" : ""}"><span class="fill" style="width:${clamp(val, 0, 100).toFixed(1)}%"></span>${soll != null ? `<i class="soll" style="left:${clamp(soll, 0, 100).toFixed(1)}%" title="Soll: ${Math.round(soll)} %"></i>` : ""}</span>`;
 
   // ================= Speicher-Backends =================
-  // Supabase über die REST-Schnittstelle (PostgREST) – Tabellen siehe supabase/schema.sql
-  function supabaseBackend(cfg) {
-    const base = cfg.url.replace(/\/+$/, "") + "/rest/v1/";
-    const headers = (prefer) => {
-      const h = { apikey: cfg.key, "Content-Type": "application/json" };
-      if (!cfg.key.startsWith("sb_")) h.Authorization = "Bearer " + cfg.key; // alter anon key (JWT)
-      if (prefer) h.Prefer = prefer;
-      return h;
-    };
-    async function req(method, path, body, prefer) {
-      const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 20000);
-      let res;
-      try { res = await fetch(base + path, { method, headers: headers(prefer), body: body ? JSON.stringify(body) : undefined, signal: ctrl.signal, cache: "no-store" }); }
-      catch (e) { throw new Error(navigator.onLine === false ? "Kein Internet" : e.name === "AbortError" ? "Datenbank antwortet nicht (Zeitüberschreitung)" : "Datenbank nicht erreichbar"); }
-      finally { clearTimeout(t); }
-      const txt = await res.text();
-      if (!res.ok) {
-        let m = txt; try { const j = JSON.parse(txt); m = j.message || j.msg || j.error || txt; } catch {}
-        if (res.status === 401 || res.status === 403) m = `Zugriff verweigert – Schlüssel prüfen (${m})`;
-        else if (res.status === 404) m = `Tabelle fehlt – wurde supabase/schema.sql ausgeführt? (${m})`;
-        throw new Error(m);
-      }
-      return txt ? JSON.parse(txt) : null;
-    }
-    async function all(table, select, order) {
-      let out = [];
-      for (let off = 0; ; off += 1000) {
-        const rows = await req("GET", `${table}?select=${select}${order ? `&order=${order}` : ""}&limit=1000&offset=${off}`);
-        out = out.concat(rows);
-        if (rows.length < 1000) return out;
-      }
-    }
-    const toRow = (e) => ({ id: e.id, date: e.date, start_time: e.start || null, end_time: e.end || null, minutes: e.minutes, person: e.person, group_id: e.group, subphase_id: e.sub || null, note: e.note || "" });
-    const fromRow = (r) => ({ id: r.id, date: r.date, start: r.start_time || "", end: r.end_time || "", minutes: Number(r.minutes) || 0, person: r.person, group: r.group_id, sub: r.subphase_id || "", note: r.note || "" });
-    const upsert = "resolution=merge-duplicates,return=minimal";
+  // Gemeinsame Google-Tabelle über eine Apps-Script-Web-App (google-apps-script/Code.gs)
+  async function sheetCall(cfg, body) {
+    const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 30000);
+    let text;
+    try {
+      const res = body
+        ? await fetch(cfg.url, { method: "POST", body: JSON.stringify({ ...body, key: cfg.key }), signal: ctrl.signal })
+        : await fetch(`${cfg.url}?action=list&key=${encodeURIComponent(cfg.key)}&t=${Date.now()}`, { signal: ctrl.signal, cache: "no-store" });
+      text = await res.text();
+    } catch (e) {
+      throw new Error(navigator.onLine === false ? "Kein Internet" : e.name === "AbortError" ? "Google antwortet nicht (Zeitüberschreitung)" : "Google-Tabelle nicht erreichbar");
+    } finally { clearTimeout(t); }
+    let d;
+    try { d = JSON.parse(text); } catch { throw new Error("Die Web-App antwortet nicht richtig – Bereitstellung prüfen (Zugriff: „Jeder“)"); }
+    if (!d.ok) throw new Error(d.error || "Unbekannter Fehler");
+    return d;
+  }
+  function sheetBackend(cfg) {
+    // Namen mitschicken, damit die Tabelle auch ohne App lesbar ist
+    const named = (e) => { const s = subById(e.sub), g = groupById(e.group); return { ...e, groupName: g ? g.name : "", phaseName: s ? s.phase.name : "", subName: s ? s.name : "Allgemein" }; };
     return {
-      mode: "supabase",
+      mode: "sheet",
       async load() {
-        const [cfgRows, prog, ents] = await Promise.all([all("config", "id,data"), all("progress", "group_id,subphase_id,pct"), all("entries", "*", "date.desc,id.asc")]);
-        const c = Object.fromEntries(cfgRows.map((r) => [r.id, r.data]));
-        return { groups: c.groups || null, plan: c.plan || null, progress: Object.fromEntries(prog.map((p) => [`${p.group_id}:${p.subphase_id}`, p.pct])), entries: ents.map(fromRow) };
+        const d = await sheetCall(cfg);
+        if (d.version !== 2) throw new Error("In der Google-Tabelle läuft noch das alte Skript – bitte das neue Skript bereitstellen (siehe Anleitung)");
+        const progress = {}; (d.progress || []).forEach((p) => (progress[`${p.g}:${p.s}`] = p.pct));
+        return { groups: d.groups, plan: d.plan, progress, entries: (d.entries || []).map((e) => ({ ...e, date: normDate(e.date) || e.date, start: normTime(e.start), end: normTime(e.end), minutes: Number(e.minutes) || 0 })), legacy: d.legacy };
       },
-      putConfig: (id, data) => req("POST", "config?on_conflict=id", [{ id, data, updated_at: new Date().toISOString() }], upsert),
-      putProgress: (list) => req("POST", "progress?on_conflict=group_id,subphase_id", list.map((p) => ({ group_id: p.g, subphase_id: p.s, pct: p.pct, updated_by: p.by || null, updated_at: new Date().toISOString() })), upsert),
-      putEntries: (list) => req("POST", "entries?on_conflict=id", list.map(toRow), upsert),
-      delEntry: (id) => req("DELETE", `entries?id=eq.${encodeURIComponent(id)}`, null, "return=minimal"),
-      renamePerson: (from, to) => req("PATCH", `entries?person=eq.${encodeURIComponent(from)}`, { person: to }, "return=minimal"),
+      putConfig: (id, data) => sheetCall(cfg, { action: "putConfig", id, data }),
+      putProgress: (list) => sheetCall(cfg, { action: "putProgress", list: list.map((p) => ({ ...p, gName: groupById(p.g)?.name || "", sName: subById(p.s)?.name || "" })) }),
+      putEntries: (list) => sheetCall(cfg, { action: "putEntries", list: list.map(named) }),
+      delEntry: (id) => sheetCall(cfg, { action: "delEntry", id }),
+      renamePerson: (from, to) => sheetCall(cfg, { action: "renamePerson", from, to }),
+      archiveLegacy: () => sheetCall(cfg, { action: "archiveLegacy" }),
     };
   }
   // Ohne Datenbank: nur dieser Browser
@@ -672,7 +652,7 @@
     if (!backend) s.textContent = "Lade …";
     else if (backend.mode === "local") s.textContent = "Nur in diesem Browser";
     else if (syncErr) { s.classList.add("err"); s.textContent = `Keine Verbindung: ${syncErr}`; }
-    else if (lastSync) { s.classList.add("on"); s.textContent = `Live · Stand ${hhmm(lastSync)}`; }
+    else if (lastSync) { s.classList.add("on"); s.textContent = `Team-Tabelle · Stand ${hhmm(lastSync)}`; }
     else s.textContent = "Verbinde …";
     const st = $("dbStatus");
     st.textContent = syncErr ? `Abgleich fehlgeschlagen: ${syncErr}. Neuer Versuch in wenigen Sekunden.` : lastSync ? `Verbunden – letzter Abgleich ${hhmm(lastSync)} Uhr, ${state.entries.length} Einträge.` : "Verbinde …";
@@ -692,6 +672,7 @@
       let d = await backend.load();
       if (!d.groups || !d.plan) { await seedIfEmpty(d); d = await backend.load(); }
       syncErr = ""; lastSync = new Date();
+      const legacy = d.legacy; delete d.legacy;
       const sig = JSON.stringify(d);
       if (sig !== lastSig && pending === 0) {
         lastSig = sig;
@@ -699,8 +680,22 @@
         lsSet(LS.cache, d);
         renderAll();
       }
+      if (legacy && !migrating) migrateLegacy(legacy);
     } catch (err) { syncErr = err.message || "Fehler"; }
     setSync();
+  }
+  // Einträge der alten Stunden-App (Blatt „Einträge“) einmalig übernehmen
+  let migrating = false;
+  async function migrateLegacy(list) {
+    migrating = true;
+    try {
+      const { out, skipped } = fromLegacy(list);
+      const n = list.length ? await importEntries(out) : 0;
+      if (n < 0) return;
+      await backend.archiveLegacy();
+      if (n > 0 || skipped.length) toast(`${n} ${n === 1 ? "Eintrag" : "Einträge"} aus der alten Stundenliste übernommen${skipped.length ? ` – nicht zugeordnet: ${skipped.join(", ")} (bleibt im Blatt „Einträge (alt)“)` : ""}`, skipped.length > 0);
+    } catch (err) { toast(`Alte Stundenliste nicht übernommen: ${err.message}`, true); }
+    finally { migrating = false; }
   }
   // Änderung sofort anzeigen, dann speichern; bei Fehler Meldung und Stand neu laden
   async function write(apply, op) {
@@ -1115,8 +1110,6 @@
     }
     $("dbOff").hidden = !!dbCfg; $("dbOn").hidden = !dbCfg;
     if (dbCfg) $("dbInvite").value = inviteLink(dbCfg);
-    const leg = lsGet(LS.legacySheet);
-    $("legacyBox").hidden = !(leg && leg.url && leg.key);
     setSync();
   }
   $("groupForm").addEventListener("submit", async (ev) => {
@@ -1149,13 +1142,12 @@
 
   // ---------- Einstellungen: Datenbank ----------
   let dbCfg = null;
-  function inviteLink(cfg) { return `${location.origin}${location.pathname}?sb=${encodeURIComponent(cfg.url)}&k=${encodeURIComponent(cfg.key)}`; }
+  function inviteLink(cfg) { return `${location.origin}${location.pathname}?sheet=${encodeURIComponent(cfg.url)}&key=${encodeURIComponent(cfg.key)}`; }
   // Die Verbindung steht im Einladungslink und bleibt in der Adresszeile (Lesezeichen, Home-Bildschirm)
   function readDbCfg() {
     try {
       const q = new URLSearchParams(location.search);
-      if (q.get("sheet") && q.get("key")) lsSet(LS.legacySheet, { url: q.get("sheet"), key: q.get("key") }); // alter Einladungslink
-      if (q.get("sb") && q.get("k")) { const c = { url: q.get("sb"), key: q.get("k") }; lsSet(LS.db, c); return c; }
+      if (q.get("sheet") && q.get("key")) { const c = { url: q.get("sheet"), key: q.get("key") }; lsSet(LS.db, c); return c; }
     } catch {}
     const c = lsGet(LS.db);
     if (c && c.url && c.key) {
@@ -1166,12 +1158,12 @@
   }
   $("dbForm").addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    const cfg = { url: $("dbUrl").value.trim().replace(/\/+$/, ""), key: $("dbKey").value.trim() };
-    if (!/^https:\/\/[\w.-]+$/.test(cfg.url)) return flash($("dbMsg"), "Die Project URL sieht so aus: https://abcd1234.supabase.co", true);
-    if (cfg.key.length < 20) return flash($("dbMsg"), "Bitte den Publishable key (sb_publishable_…) oder anon key einfügen.", true);
+    const cfg = { url: $("dbUrl").value.trim(), key: $("dbKey").value.trim() };
+    if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(cfg.url)) return flash($("dbMsg"), "Die Adresse beginnt mit https://script.google.com/ und endet auf /exec.", true);
+    if (!cfg.key) return flash($("dbMsg"), "Bitte den Team-Code eingeben, der im Skript steht.", true);
     $("dbConnect").disabled = true;
     try {
-      await supabaseBackend(cfg).load();
+      await sheetBackend(cfg).load();
       lsSet(LS.db, cfg);
       location.href = inviteLink(cfg) + "#settings";
     } catch (err) { flash($("dbMsg"), `Verbindung fehlgeschlagen: ${err.message}`, true); }
@@ -1182,11 +1174,11 @@
     catch { $("dbInvite").select(); flash($("dbMsg"), "Link markiert – jetzt kopieren."); }
   });
   $("dbRefresh").addEventListener("click", () => { lastSig = ""; refresh(); });
-  $("dbDisconnect").addEventListener("click", (e) => confirmClick(e.currentTarget, "Wirklich trennen? (Daten bleiben in der Datenbank)", () => {
+  $("dbDisconnect").addEventListener("click", (e) => confirmClick(e.currentTarget, "Wirklich trennen? (Daten bleiben in der Tabelle)", () => {
     lsSet(LS.db, null); location.href = location.pathname + "#settings";
   }));
 
-  // ---------- Altdaten aus der alten App / Google-Tabelle ----------
+  // ---------- Einträge der alten Stunden-App ----------
   const MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
   function normDate(v) {
     v = String(v ?? "").trim(); let m;
@@ -1220,20 +1212,6 @@
   }
   const legacyMsg = (n, skipped, total) => n < 0 ? "Übernahme fehlgeschlagen – bitte nochmal versuchen." :
     `${n} ${n === 1 ? "Eintrag" : "Einträge"} übernommen${total - n - skipped.length > 0 ? `, ${total - n - skipped.length} waren schon vorhanden` : ""}${skipped.length ? `; übersprungen (Name unbekannt): ${skipped.join(", ")}` : ""}.`;
-  $("legacyImport").addEventListener("click", async () => {
-    const leg = lsGet(LS.legacySheet), msg = $("legacyMsg");
-    $("legacyImport").disabled = true;
-    try {
-      const res = await fetch(`${leg.url}?action=list&key=${encodeURIComponent(leg.key)}&t=${Date.now()}`, { cache: "no-store" });
-      let d; try { d = JSON.parse(await res.text()); } catch { throw new Error("die alte Web-App antwortet nicht richtig"); }
-      if (!d.ok) throw new Error(d.error || "Fehler");
-      const { out, skipped } = fromLegacy(d.entries);
-      const n = await importEntries(out);
-      flash(msg, legacyMsg(n, skipped, (d.entries || []).length), n < 0);
-    } catch (err) { flash(msg, `Alte Tabelle nicht lesbar: ${err.message === "Failed to fetch" ? "nicht erreichbar" : err.message}`, true); }
-    finally { $("legacyImport").disabled = false; }
-  });
-
   // ---------- Export / Import ----------
   function offerFile(filename, data, mime) {
     const url = URL.createObjectURL(new Blob([data], { type: mime }));
@@ -1345,12 +1323,12 @@
 
   // ================= Start =================
   dbCfg = readDbCfg();
-  backend = dbCfg ? supabaseBackend(dbCfg) : localBackend();
+  backend = dbCfg ? sheetBackend(dbCfg) : localBackend();
   $("notLinked").hidden = !!dbCfg;
   showTab((location.hash || "").slice(1) || "plan");
   resetForm();
   refresh();
-  setInterval(() => { if (document.visibilityState === "visible") refresh(); }, 10000);
+  setInterval(() => { if (document.visibilityState === "visible") refresh(); }, 15000);
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
   window.addEventListener("hashchange", () => { const t = location.hash.slice(1); if (TABS.includes(t) && t !== state.tab) showTab(t); });
 })();
