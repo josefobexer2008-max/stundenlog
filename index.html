@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>Maturaprojekt Doppelhaushälfte</title>
+<title>Maturaprojekt Naturform</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Projektplan mit Fortschritt und Arbeitsprotokoll für das Maturaprojekt Doppelhaushälfte (Bautechnik).">
+<meta name="description" content="Projektplan mit Fortschritt und Arbeitsprotokoll für das Maturaprojekt Naturform – Wohnbau in Reischach (Bautechnik).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -182,6 +182,9 @@
   li.sub.done .tick { background: var(--good); border-color: var(--good); color: var(--sheet); }
   .tick svg { width: 12px; height: 12px; }
   .sub-name { overflow-wrap: anywhere; }
+  .psp { color: var(--muted); font-size: 0.82rem; margin-right: 2px; }
+  .ph-nr { color: var(--muted); font-size: 0.85rem; font-weight: 500; }
+  li.sub.cur { box-shadow: inset 3px 0 0 var(--marker); padding-left: 8px; margin-left: -8px; }
   li.sub.done .sub-name { text-decoration: line-through; color: var(--muted); }
   .sub-desc { font-size: 0.8rem; color: var(--muted); }
   .sub-h { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
@@ -275,7 +278,7 @@
   <header class="top">
     <div>
       <div class="label">Maturaprojekt · Bautechnik</div>
-      <h1 id="projTitle">Doppelhaushälfte</h1>
+      <h1 id="projTitle">Naturform – Wohnbau in Reischach</h1>
       <div class="sub">Projektplan &amp; Arbeitsprotokoll</div>
     </div>
     <div class="whoami">
@@ -449,7 +452,34 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
 
-  // ================= Startdaten (aus Projektzeitplan.xlsx) =================
+  // ================= Projektplan (aus Projektzeitplan_Naturform.xlsx) =================
+  // [Nr, Phase, Ziel/Schwerpunkt, Start, Ende, Nebenphase, [[PSP-Nr, Arbeitspaket, Tätigkeiten, Ergebnis, Start, Ende], …]]
+  const PLAN_VERSION = 4;
+  const NEW_PLAN = [["01", "Vorentwurfsplanung", "Grundlagen, Anforderungen, Varianten und Grundsatzentscheidungen", "2026-09-17", "2026-11-01", false, [["1.1", "Projektauftrag", "Projektziele, Umfang, Zielgruppe und Qualitätsanforderungen festlegen.", "Projektauftrag", "2026-09-17", "2026-09-18"], ["1.2", "Bauherrschaft", "Bedürfnisse, Budget, Lebensstil und Anforderungen junger Familien definieren.", "Bauherrenprofil", "2026-09-19", "2026-09-21"], ["1.3", "Raumprogramm", "Räume, Flächen, Nutzungen und funktionale Beziehungen festlegen.", "Raumprogramm", "2026-09-22", "2026-09-24"], ["1.4", "Grundstücksanalyse", "Grundstücksgrenzen, Gelände, Zufahrt, Orientierung und Nachbarschaft erfassen.", "Grundstücksanalyse", "2026-09-25", "2026-09-26"], ["1.5", "Baurechtliche Grundlagen", "Flächenwidmung, örtliche Planungsinstrumente, Abstände, Höhen und Kennwerte für Bruneck vorprüfen.", "Vorläufiger baurechtlicher Prüfbericht", "2026-09-27", "2026-09-29"], ["1.6", "Standortanalyse", "Besonnung, Verschattung, Klima, Wind, Niederschlag und Schneesituation untersuchen.", "Standortanalyse", "2026-09-30", "2026-10-02"], ["1.7", "Erschließung", "Zufahrt, Stellplätze, Eingänge, Wege sowie Ver- und Entsorgung konzeptionell planen.", "Erschließungskonzept", "2026-10-03", "2026-10-04"], ["1.8", "Bebauungsvarianten", "Ausrichtung, Baukörper, Dachform und Position am Grundstück vergleichen.", "Lage- und Volumenvarianten", "2026-10-05", "2026-10-07"], ["1.9", "Grundrissvarianten", "Funktionale Grundrisslösungen für die Geschosse entwickeln.", "Variantenpläne", "2026-10-08", "2026-10-10"], ["1.10", "Fassadenkonzept", "Gestaltung, Öffnungen, Putzflächen und Holzlamellen festlegen.", "Fassadenkonzept", "2026-10-11", "2026-10-13"], ["1.11", "Bauweisenvergleich", "Massivbau, Holzrahmenbau und Holz-Lehm-Hybridbau bewerten.", "Vergleichsmatrix", "2026-10-14", "2026-10-15"], ["1.12", "Tragwerksprinzip", "Tragende Wände, Decken, Dach und Gebäudetrennung grundsätzlich festlegen.", "Tragwerkskonzept", "2026-10-16", "2026-10-18"], ["1.13", "Energiekonzept", "Wärmeerzeugung, Dämmstandard, Lüftung und erneuerbare Energien vorprüfen.", "Energiekonzept", "2026-10-19", "2026-10-21"], ["1.14", "Nachhaltigkeitskonzept", "Materialherkunft, CO₂, Lebensdauer, Rückbau und Ressourcenverbrauch bewerten.", "Nachhaltigkeitsziele", "2026-10-22", "2026-10-23"], ["1.15", "Kostenschätzung", "Grobe Baukosten anhand von Flächen, Kennwerten und Bauweisen ermitteln.", "Erste Kostenschätzung", "2026-10-24", "2026-10-26"], ["1.16", "Variantenentscheidung", "Varianten nach Funktion, Kosten, Gestaltung, Nachhaltigkeit und Umsetzbarkeit bewerten.", "Entscheidungsmatrix", "2026-10-27", "2026-10-29"], ["1.17", "Vorentwurfsfreigabe", "Bevorzugte Variante, offene Fragen und Risiken dokumentieren.", "Freigegebener Vorentwurf", "2026-10-30", "2026-11-01"]]], ["02", "Entwurfsplanung", "Architektur, Konstruktion, Technik, Bauphysik und Kosten konkretisieren", "2026-11-02", "2026-12-06", false, [["2.1", "Grundrissvertiefung", "Abmessungen, Wandstärken, Öffnungen, Verkehrsflächen und Möblierung abstimmen.", "Bemaßte Grundrisse", "2026-11-02", "2026-11-02"], ["2.2", "Schnittplanung", "Geschosshöhen, Gelände, Dachgeometrie und Aufbauhöhen festlegen.", "Gebäudeschnitte", "2026-11-03", "2026-11-04"], ["2.3", "Fassadenplanung", "Öffnungen, Proportionen, Materialien und Fassadenrhythmus ausarbeiten.", "Ansichten", "2026-11-05", "2026-11-05"], ["2.4", "Flächenberechnung", "Nutzflächen, Geschossflächen und relevante Kennwerte ermitteln.", "Flächenberechnung", "2026-11-06", "2026-11-07"], ["2.5", "Dachplanung", "Dachform, Entwässerung, Dachaufbau und Anschlüsse festlegen.", "Dachkonzept", "2026-11-08", "2026-11-08"], ["2.6", "Tragwerksplanung", "Lastabtragung, Aussteifung, Spannweiten und tragende Bauteile bestimmen.", "Tragwerkskonzept", "2026-11-09", "2026-11-10"], ["2.7", "Vorbemessung", "Wände, Träger, Decken und Dach überschlägig bemessen.", "Vorbemessung", "2026-11-11", "2026-11-12"], ["2.8", "Gründungskonzept", "Gründungsart anhand verfügbarer Baugrundinformationen und Lasten vorplanen.", "Gründungskonzept", "2026-11-13", "2026-11-13"], ["2.9", "Außenwandaufbau", "Tragwerk, Dämmung, Lehm, Installationsebene und Fassade definieren.", "Bauteilaufbau", "2026-11-14", "2026-11-15"], ["2.10", "Dach- und Bodenaufbau", "Dämmung, Abdichtung, Feuchteschutz und Schichtenfolge festlegen.", "Aufbauzeichnungen", "2026-11-16", "2026-11-16"], ["2.11", "Bauphysik", "U-Werte, Wärmebrücken, Feuchteschutz und sommerlichen Wärmeschutz untersuchen.", "Bauphysikalische Berechnungen", "2026-11-17", "2026-11-18"], ["2.12", "Schallschutz", "Trennwand, Geschossdecken und relevante Anschlüsse beurteilen.", "Schallschutzkonzept", "2026-11-19", "2026-11-20"], ["2.13", "Brandschutz", "Bauteile, Trennung, Fluchtwege und Durchdringungen prüfen.", "Brandschutzkonzept", "2026-11-21", "2026-11-21"], ["2.14", "Heizungsplanung", "Wärmeerzeuger und Wärmeabgabesystem festlegen.", "Heizkonzept", "2026-11-22", "2026-11-23"], ["2.15", "Sanitärplanung", "Bäder, Küchen, Steigleitungen und Anschlüsse koordinieren.", "Sanitärkonzept", "2026-11-24", "2026-11-24"], ["2.16", "Lüftungsplanung", "Lüftungsart, Luftführung und Technikflächen festlegen.", "Lüftungskonzept", "2026-11-25", "2026-11-26"], ["2.18", "Energiebilanz", "Energetische Anforderungen und mögliche PV-Anlage untersuchen.", "Energiebewertung", "2026-11-29", "2026-11-29"], ["2.19", "Kostenberechnung", "Mengenansätze und Baukosten nach Bauteilgruppen konkretisieren.", "Aktualisierte Kostenberechnung", "2026-11-30", "2026-12-01"], ["2.20", "Nachhaltigkeitsvergleich", "Bauweisen und Bauteile nach Ressourcen, Lebensdauer und Kosten vergleichen.", "Vergleichsauswertung", "2026-12-02", "2026-12-02"], ["2.21", "Fachkoordination", "Architektur, Tragwerk, Bauphysik und Haustechnik abgleichen.", "Koordinierter Entwurf", "2026-12-03", "2026-12-04"], ["2.22", "Entwurfsfreigabe", "Entscheidungen, offene Punkte und Änderungen dokumentieren.", "Freigegebener Entwurf", "2026-12-05", "2026-12-06"]]], ["03", "Einreichplanung", "Koordiniertes Gebäudemodell, Einreichpläne und erforderliche Nachweise", "2026-12-07", "2027-01-10", false, [["3.2", "Projektstruktur", "Geschosse, Ebenen, Koordinaten, Benennung und Dateistruktur einrichten.", "Projektmodellstruktur", "2026-12-08", "2026-12-09"], ["3.3", "Architekturmodell", "Wände, Decken, Dach, Fenster, Türen und Räume modellieren.", "Architekturmodell", "2026-12-10", "2026-12-10"], ["3.4", "Bauteilbibliothek", "Materialschichten, Bauteiltypen und relevante Eigenschaften definieren.", "Bauteilkatalog", "2026-12-11", "2026-12-12"], ["3.5", "Grundstücksmodell", "Grundstück, Gelände, Gebäudeplatzierung und Erschließung abbilden.", "Lage- und Grundstücksmodell", "2026-12-13", "2026-12-13"], ["3.6", "Tragwerksmodell", "Tragende Bauteile und wesentliche Tragwerkselemente darstellen.", "Tragwerksmodell", "2026-12-14", "2026-12-15"], ["3.8", "Modellparameter", "Räume, Flächen, Materialien und ausgewählte Mengeninformationen hinterlegen.", "Informationsmodell", "2026-12-17", "2026-12-18"], ["3.11", "Bauteilkontrolle", "Wandstärken, Geschosse, Höhen und Bauteilzuordnungen überprüfen.", "Modellprüfprotokoll", "2026-12-22", "2026-12-22"], ["3.12", "Planableitung", "Grundrisse, Schnitte, Ansichten und relevante Details aus dem Modell erstellen.", "Planserie", "2026-12-23", "2026-12-24"], ["3.13", "Flächenkontrolle", "Modellflächen mit den berechneten Flächen abgleichen.", "Flächenprüfbericht", "2026-12-25", "2026-12-25"], ["3.14", "Änderungsmanagement", "Änderungen und Auswirkungen auf Pläne und Mengen dokumentieren.", "Änderungsprotokoll", "2026-12-26", "2026-12-27"], ["3.15", "Lageplan", "Gebäude, Grundstück, Abstände, Zufahrt und Höhen darstellen.", "Einreichlageplan", "2026-12-28", "2026-12-28"], ["3.16", "Grundrisse", "Nutzungen, Raumbezeichnungen, Bemaßungen und relevante Angaben ergänzen.", "Einreichgrundrisse", "2026-12-29", "2026-12-30"], ["3.17", "Schnitte", "Höhen, Gelände, Geschosse und Dach darstellen.", "Einreichschnitte", "2026-12-31", "2026-12-31"], ["3.18", "Ansichten", "Fassaden, relevante Höhen und Gestaltung darstellen.", "Einreichansichten", "2027-01-01", "2027-01-02"], ["3.19", "Flächen- und Kennwertnachweise", "Erforderliche baurechtliche Berechnungen für Bruneck identifizieren und zusammenstellen.", "Berechnungsunterlagen", "2027-01-03", "2027-01-03"], ["3.20", "Technischer Bericht", "Bauweise, Materialien und wesentliche Projektmerkmale erläutern.", "Technischer Bericht", "2027-01-04", "2027-01-05"], ["3.22", "Formale Kontrolle", "Planstände, Maßstäbe, Unterschriften und notwendige Formulare prüfen.", "Geprüftes Einreichpaket", "2027-01-07", "2027-01-08"], ["3.23", "Abschlussprüfung", "Modell, Pläne und Dokumente auf Konsistenz kontrollieren.", "Einreichcheckliste", "2027-01-09", "2027-01-10"]]], ["04", "Detailplanung", "Konstruktive Anschlüsse, Bauteilaufbauten und Ausführungsdetails", "2027-01-11", "2027-02-07", false, [["4.1", "Detailplanung Außenwand", "Tragwerk, Dämmung, Lehm-Innenschicht, Installationsebene und Fassade detaillieren.", "Außenwanddetail", "2027-01-11", "2027-01-11"], ["4.2", "Sockeldetail", "Bodenplatte, Außenwand, Abdichtung und Gelände anschließen.", "Sockeldetail", "2027-01-12", "2027-01-12"], ["4.3", "Fensteranschluss", "Position, Befestigung, Dämmung, Luftdichtheit und Wetterschutz darstellen.", "Fensteranschlussdetail", "2027-01-13", "2027-01-14"], ["4.4", "Dach-Wand-Anschluss", "Dachaufbau, Luftdichtheit, Dämmung und Entwässerung abstimmen.", "Dachranddetail", "2027-01-15", "2027-01-15"], ["4.5", "Deckenanschluss", "Deckenauflager, Schichtenfolge und Gebäudehüllenanschlüsse darstellen.", "Deckendetail", "2027-01-16", "2027-01-17"], ["4.6", "Innenwandanschlüsse", "Anschlüsse nichttragender und tragender Innenwände ausarbeiten.", "Anschlussdetails", "2027-01-18", "2027-01-18"], ["4.7", "Geschossübergänge", "Fußbodenaufbauten, Installationen und Höhen koordinieren.", "Geschossdetail", "2027-01-19", "2027-01-20"], ["4.8", "Trennwand Doppelhaus", "Brand- und Schallschutz sowie konstruktive Trennung detaillieren.", "Trennwanddetail", "2027-01-21", "2027-01-21"], ["4.9", "Dachkonstruktion", "Sparren, Träger, Auflager und Befestigungen konzeptionell darstellen.", "Dachdetail", "2027-01-22", "2027-01-23"], ["4.10", "Terrassenanschluss", "Schwellenhöhe, Abdichtung, Entwässerung und Wärmebrücken berücksichtigen.", "Terrassendetail", "2027-01-24", "2027-01-24"], ["4.13", "Maßstäbe festlegen", "Geeignete Darstellungsmaßstäbe für die Details wählen.", "Detailplanstandard", "2027-01-28", "2027-01-29"], ["4.14", "Detailbemaßung", "Schichtdicken, Höhen, Abstände und relevante Bauteilmaße eintragen.", "Bemaßte Details", "2027-01-30", "2027-01-30"], ["4.15", "Bauphysikalische Prüfung", "Wärmebrücken, Feuchte und Luftdichtheit an ausgewählten Anschlüssen prüfen.", "Detailbewertung", "2027-01-31", "2027-02-01"], ["4.16", "Tragwerksprüfung", "Auflager, Lastübertragung und Befestigungsprinzipien plausibilisieren.", "Konstruktive Prüfung", "2027-02-02", "2027-02-02"], ["4.17", "Brandschutzprüfung", "Anschlüsse und Durchdringungen auf Brandschutzanforderungen abstimmen.", "Brandschutzprüfung", "2027-02-03", "2027-02-04"], ["4.18", "BIM-Integration", "Ausgewählte Details mit Modell und Bauteilaufbauten abgleichen.", "Aktualisiertes Modell", "2027-02-05", "2027-02-05"], ["4.19", "Detailfreigabe", "Planstände, offene Fragen und Annahmen dokumentieren.", "Freigegebene Detailserie", "2027-02-06", "2027-02-07"]]], ["05", "Kostenplanung und Abrechnung", "Mengenermittlung, Ausschreibung, Kostenkontrolle und Abrechnung", "2027-02-08", "2027-03-14", false, [["5.1", "Kostengliederung", "Kosten nach geeigneten Bauteilgruppen oder Gewerken strukturieren.", "Kostenstruktur", "2027-02-08", "2027-02-08"], ["5.2", "Mengenermittlung", "Flächen, Volumen, Längen und Stückzahlen aus Plänen und BIM-Modell ermitteln.", "Mengengerüst", "2027-02-09", "2027-02-10"], ["5.3", "Mengenprüfung", "Mengen mit unabhängigen Berechnungen oder Planmaßen vergleichen.", "Mengenprüfbericht", "2027-02-11", "2027-02-11"], ["5.4", "Einheitspreise", "Plausible Einheitspreise und deren Quelle dokumentieren.", "Einheitspreisliste", "2027-02-12", "2027-02-13"], ["5.5", "Leistungsverzeichnis", "Leistungspositionen, Einheiten, Mengen und Beschreibungen festlegen.", "Leistungsverzeichnis", "2027-02-14", "2027-02-14"], ["5.6", "Kostenberechnung", "Mengen und Einheitspreise zusammenführen.", "Kostenberechnung", "2027-02-15", "2027-02-16"], ["5.7", "Kostenvergleich", "Holz-Lehm-Hybridbau mit geeigneten Alternativbauweisen vergleichen.", "Kostenvergleich", "2027-02-17", "2027-02-18"], ["5.8", "Nebenkosten", "Relevante Planungs-, Anschluss- und weitere Projektkosten berücksichtigen.", "Gesamtkostenübersicht", "2027-02-19", "2027-02-19"], ["5.9", "Kostenreserve", "Risiken und Unsicherheiten gesondert berücksichtigen.", "Kostenreserve", "2027-02-20", "2027-02-21"], ["5.10", "Kostenfreigabe", "Kostenstand und zugrunde liegende Annahmen dokumentieren.", "Freigegebener Kostenstand", "2027-02-22", "2027-02-22"], ["5.11", "Abrechnungsgrundlage", "Abrechnungsregeln, Mengenansätze und Leistungsbeschreibungen festlegen.", "Abrechnungsgrundlage", "2027-02-23", "2027-02-24"], ["5.12", "Aufmaß", "Beispielhaft erbrachte Mengen aus einem fiktiven Baufortschritt bestimmen.", "Aufmaßblatt", "2027-02-25", "2027-02-26"], ["5.15", "Soll-Ist-Vergleich", "Geplante Kosten mit beispielhaften tatsächlichen Kosten vergleichen.", "Kostenabweichungsanalyse", "2027-03-02", "2027-03-02"], ["5.17", "Kostenkennwerte", "Kosten pro Quadratmeter und ausgewählte Bauteilkosten vergleichen.", "Kennwertübersicht", "2027-03-05", "2027-03-06"], ["5.18", "Wirtschaftliche Bewertung", "Ursachen für Mehr- oder Minderkosten erklären und Optimierungen ableiten.", "Wirtschaftlichkeitsbericht", "2027-03-07", "2027-03-07"]]], ["06", "Visualisierung und Präsentation", "Modellbau, Renderings, Diagramme und Präsentationsmaterial", "2027-03-15", "2027-04-25", false, [["6.5", "Außenrenderings", "Perspektiven aus relevanten Blickrichtungen erstellen.", "Außenvisualisierungen", "2027-03-15", "2027-04-25"], ["6.6", "Innenraumvisualisierungen", "Ausgewählte Wohnräume und Materialwirkungen darstellen.", "Innenrenderings", "2027-03-15", "2027-04-25"], ["6.7", "Tageslicht und Atmosphäre", "Licht, Schatten, Umgebung und Maßstab plausibel darstellen.", "Überarbeitete Renderings", "2027-03-15", "2027-04-25"], ["6.8", "Umgebungsdarstellung", "Gelände, Garten, Wege und Nachbarschaft einbinden.", "Situationsvisualisierung", "2027-03-15", "2027-04-25"], ["6.9", "Funktionsdiagramme", "Raumbeziehungen, Erschließung und Nutzungsbereiche darstellen.", "Funktionsgrafiken", "2026-11-02", "2026-12-06"], ["6.10", "Konstruktionsgrafiken", "Schichtenfolge der Holz-Lehm-Hybridwand erklären.", "Explosionszeichnung", "2027-01-11", "2027-02-07"], ["6.11", "BIM-Schnitte", "Tragwerk, Gebäudehülle und Technik räumlich erklären.", "Modellbasierte Schnittgrafiken", "2026-12-07", "2027-01-10"], ["6.12", "Nachhaltigkeitsgrafiken", "Materialwahl, Ressourcen und ausgewählte Kennwerte darstellen.", "Nachhaltigkeitsgrafiken", "2027-02-08", "2027-03-14"], ["6.13", "Kostenvisualisierung", "Kostenanteile und Bauweisenvergleich grafisch darstellen.", "Kostencharts", "2027-02-08", "2027-03-14"], ["6.14", "Prozessvisualisierung", "Entwicklung vom Vorentwurf bis zur Einreichplanung darstellen.", "Projektablaufgrafik", "2026-12-07", "2027-01-10"], ["6.15", "Modellbau", "Maßstab, Fertigungsweise und Darstellung des Gebäudemodells festlegen.", "Präsentationsmodell, falls vorgesehen", "2027-03-15", "2027-04-25"], ["6.16", "Kernaussage festlegen", "Projektproblem, Lösungsansatz und Innovation in einer klaren Erzählung verbinden.", "Präsentationskonzept", "2027-02-08", "2027-03-14"], ["6.17", "Dramaturgie", "Ausgangslage, Entwurf, Konstruktion, Kosten und Ergebnis logisch ordnen.", "Ablaufplan", "2027-02-08", "2027-03-14"], ["6.18", "Folien erstellen", "Texte reduzieren und Zeichnungen sowie Diagramme gezielt einsetzen.", "Präsentationsfolien", "2027-03-15", "2027-04-25"], ["6.19", "Modell und Medien", "Renderings, BIM-Modell und gegebenenfalls physisches Modell vorbereiten.", "Präsentationsmedien", "2027-03-15", "2027-04-25"], ["6.20", "Probepräsentation", "Zeit messen, Übergänge üben und Verständlichkeit prüfen.", "Überarbeitete Präsentation", "2027-04-25", "2027-05-20"], ["6.21", "Fragen vorbereiten", "Begründungen für Bauweise, Kosten, Nachhaltigkeit und Konstruktion erarbeiten.", "Fragen- und Antwortkatalog", "2027-04-25", "2027-05-20"]]], ["07", "Zeitplanung und Projektmanagement", "Termine, Abhängigkeiten, Zuständigkeiten, Meilensteine und Zeitpuffer", "2026-09-17", "2027-05-20", true, [["7.1", "Projektstrukturplan", "Alle Hauptphasen und Arbeitspakete vollständig erfassen.", "Projektstrukturplan", "2026-09-17", "2026-11-01"], ["7.2", "Arbeitspakete definieren", "Aufgaben in klar abgegrenzte, kontrollierbare Einheiten zerlegen.", "Arbeitspaketliste", "2026-09-17", "2026-11-01"]]], ["08", "Qualitätssicherung und Abschluss", "Prüfung, Dokumentation, Modellkontrolle und Vorbereitung der Maturapräsentation", "2027-04-25", "2027-05-20", true, [["8.8", "Abschlussfreigabe", "Korrekturen schließen und Projektunterlagen für die Maturapräsentation freigeben.", "Freigegebener Projektabschluss", "2027-05-17", "2027-05-20"]]]];
+  const PHASE_ID = { "01": "ph1", "02": "ph2", "03": "ph3", "04": "ph4", "05": "ph5", "06": "ph6", "07": "ph-pm", "08": "ph-qs" };
+  const newPlan = () => ({
+    title: "Naturform – Wohnbau in Reischach", version: PLAN_VERSION,
+    phases: NEW_PLAN.map(([nr, name, desc, start, end, side]) => ({ id: PHASE_ID[nr], nr, name, desc, start, end, side })),
+  });
+  const newTemplateSubs = () => Object.fromEntries(NEW_PLAN.map(([nr, , , , , , pk]) =>
+    [PHASE_ID[nr], pk.map(([psp, name, desc, result, start, end]) => ({ id: "ap" + psp, psp, name, desc, result, start, end }))]));
+  // Zuordnung der Unterphasen des ersten Zeitplans zu den neuen Arbeitspaketen (PSP-Nr.).
+  // Nicht zugeordnete Unterphasen mit Fortschritt oder Stunden bleiben als „bisher“ erhalten.
+  const OLD_TO_NEW = {
+    "ph1-01": "1.4", "ph1-02": "1.8", "ph1-03": "1.6", "ph1-04": "1.7", "ph1-05": "1.3", "ph1-10": "1.7", "ph1-12": "1.8",
+    "ph1-13": "1.7", "ph1-14": "1.8", "ph1-15": "1.10", "ph1-16": "1.9", "ph1-17": "1.16", "ph1-21": "1.17",
+    "ph2-01": "2.1", "ph2-02": "2.1", "ph2-03": "2.1", "ph2-04": "2.1", "ph2-06": "2.13", "ph2-07": "2.6", "ph2-08": "2.6",
+    "ph2-09": "2.6", "ph2-10": "2.3", "ph2-11": "2.3", "ph2-13": "2.11", "ph2-14": "2.19", "ph2-17": "2.22",
+    "ph3-01": "3.5", "ph3-02": "3.3", "ph3-03": "3.3", "ph3-04": "3.3", "ph3-05": "3.3", "ph3-06": "3.3", "ph3-07": "3.11",
+    "ph3-08": "3.12", "ph3-09": "3.12", "ph3-10": "3.12", "ph3-11": "3.15", "ph3-12": "3.13", "ph3-13": "3.19", "ph3-14": "3.12",
+    "ph3-15": "3.22", "ph3-16": "3.23",
+    "ph4-01": "4.14", "ph4-02": "4.15", "ph4-03": "4.8", "ph4-04": "4.17", "ph4-05": "4.15", "ph4-06": "4.7", "ph4-07": "2.16",
+    "ph4-08": "2.14", "ph4-09": "2.18",
+    "ph5-01": "5.2", "ph5-02": "5.6",
+    "ph6-01": "6.5", "ph6-02": "6.15", "ph6-03": "6.15", "ph6-04": "6.20", "ph6-05": "8.8",
+  };
+
+  // Erster Zeitplan (Projektzeitplan.xlsx) – nur noch für die Übernahme älterer Daten
   // [Phase, Start, Ende, [[Unterphase, Fortschritt Obexer/Taferner], …]]
   const SEED = [
     ["Vorentwurfsplanung", "2026-09-17", "2026-11-01", [
@@ -489,7 +519,7 @@
   const SEED_PROGRESS_PEOPLE = ["p3", "p4"]; // die Werte aus der Excel gehörten Obexer & Taferner
   const pad = (n) => String(n).padStart(2, "0");
   const seedPlan = () => ({ title: "Doppelhaushälfte", phases: SEED.map(([name, start, end], i) => ({ id: `ph${i + 1}`, name, start, end, desc: "" })) });
-  const templateSubs = () => Object.fromEntries(SEED.map(([, , , subs], i) => [`ph${i + 1}`, subs.map(([n], j) => ({ id: `ph${i + 1}-${pad(j + 1)}`, name: n, desc: "" }))]));
+  const oldTemplateSubs = () => Object.fromEntries(SEED.map(([, , , subs], i) => [`ph${i + 1}`, subs.map(([n], j) => ({ id: `ph${i + 1}-${pad(j + 1)}`, name: n, desc: "" }))]));
   const seedProgress = () => {
     const out = [];
     SEED.forEach(([, , , subs], i) => subs.forEach(([, p], j) => { if (p) SEED_PROGRESS_PEOPLE.forEach((pid) => out.push({ g: pid, s: `ph${i + 1}-${pad(j + 1)}`, pct: p })); }));
@@ -582,7 +612,7 @@
   const meP = () => personByName(me());
   const viewP = () => personById(state.view) || meP() || state.people[0];
   // Unterphasen einer Person: eigene Liste, sonst Vorlage aus der Excel
-  const subsMap = (pid) => state.subs[pid] || templateSubs();
+  const subsMap = (pid) => state.subs[pid] || (state.plan.version >= PLAN_VERSION ? newTemplateSubs() : oldTemplateSubs());
   const subsOf = (pid, ph) => subsMap(pid)[ph.id] || [];
   const allSubsOf = (pid) => state.plan.phases.flatMap((ph) => subsOf(pid, ph).map((s) => ({ ...s, phase: ph })));
   const subById = (pid, sid) => { if (!sid) return null; for (const ph of state.plan.phases) { const s = subsOf(pid, ph).find((x) => x.id === sid); if (s) return { ...s, phase: ph }; } return null; };
@@ -597,9 +627,14 @@
   }
   const phasePct = (pid, ph) => avg(subsOf(pid, ph).map((s) => pct(pid, s.id)));
   const personPct = (pid) => avg(allSubsOf(pid).map((s) => pct(pid, s.id)));
-  const sollPct = (pid) => avg(allSubsOf(pid).map((s) => elapsedFrac(s.phase) * 100));
+  // Soll je Arbeitspaket aus seinem eigenen Zeitraum, sonst aus dem der Phase
+  const subFrac = (s, ph) => (s.start && s.end ? elapsedFrac(s) : elapsedFrac(ph || s.phase));
+  const sollPct = (pid) => avg(allSubsOf(pid).map((s) => subFrac(s) * 100));
+  const phaseSoll = (pid, ph) => { const l = subsOf(pid, ph); return l.length ? avg(l.map((s) => subFrac(s, ph) * 100)) : elapsedFrac(ph) * 100; };
+  const subLabel = (s) => (s.psp ? `${s.psp} ${s.name}` : s.name);
   const doneCount = (pid) => allSubsOf(pid).filter((s) => pct(pid, s.id) >= 100).length;
-  const currentPhase = () => { const t = today(); return state.plan.phases.find((p) => p.start && p.end && parseDate(p.start) <= t && t <= parseDate(p.end)) || null; };
+  const currentPhase = () => { const t = today(); return state.plan.phases.find((p) => !p.side && p.start && p.end && parseDate(p.start) <= t && t <= parseDate(p.end)) || null; };
+  const isNow = (o) => { const t = today(); return !!(o.start && o.end && parseDate(o.start) <= t && t <= parseDate(o.end)); };
   const entriesOf = (pid) => { const p = personById(pid); return p ? state.entries.filter((e) => e.person === p.name) : []; };
   const sumMin = (list) => list.reduce((a, e) => a + (Number(e.minutes) || 0), 0);
   function hoursBySub(pid) { const m = {}; entriesOf(pid).forEach((e) => { const k = e.sub || ""; m[k] = (m[k] || 0) + e.minutes; }); return m; }
@@ -690,6 +725,40 @@
     if (!Object.keys(d.progress).length) await backend.putProgress(seedProgress());
     return true;
   }
+  const needsNewPlan = (d) => !!(d.config.people && d.config.plan && !(d.config.plan.version >= PLAN_VERSION));
+  // Umstellung auf den überarbeiteten Zeitplan – nichts geht verloren:
+  // alter Plan und alte Unterphasen werden archiviert (subs:plan-alt, subs:<id>-alt), Fortschritt und Stunden
+  // zugeordneter Unterphasen wandern zum neuen Arbeitspaket, alles andere mit Fortschritt/Stunden bleibt als „bisher“.
+  async function migrateToNewPlan(d) {
+    const c = d.config, plan = newPlan(), phaseIds = new Set(plan.phases.map((p) => p.id));
+    const maps = {}, progress = [], moved = [];
+    let kept = 0;
+    await backend.putConfig("subs:plan-alt", c.plan);
+    for (const p of c.people) {
+      const old = c[`subs:${p.id}-alt`] || c[`subs:${p.id}`] || oldTemplateSubs();
+      if (!c[`subs:${p.id}-alt`]) await backend.putConfig(`subs:${p.id}-alt`, old);
+      const map = newTemplateSubs(), remap = {}, best = {};
+      const withHours = new Set(d.entries.filter((e) => e.person === p.name && e.sub).map((e) => e.sub));
+      for (const [phId, list] of Object.entries(old)) for (const sub of list || []) {
+        const v = d.progress[`${p.id}:${sub.id}`] || 0, own = String(sub.id).startsWith("s-");
+        const tgt = !own && OLD_TO_NEW[sub.id] ? "ap" + OLD_TO_NEW[sub.id] : null;
+        if (tgt) { remap[sub.id] = tgt; best[tgt] = Math.max(best[tgt] || 0, v); continue; }
+        if (own || v > 0 || withHours.has(sub.id)) {
+          map[phaseIds.has(phId) ? phId : "ph-pm"].push({ id: sub.id, name: sub.name, desc: sub.desc || "", kept: true });
+          kept++;
+        }
+      }
+      Object.entries(best).forEach(([sid, v]) => { if (v > (d.progress[`${p.id}:${sid}`] || 0)) progress.push({ g: p.id, s: sid, pct: v, by: "Umstellung Zeitplan" }); });
+      d.entries.filter((e) => e.person === p.name && remap[e.sub]).forEach((e) => moved.push({ ...e, sub: remap[e.sub] }));
+      maps[p.id] = map;
+    }
+    for (const p of c.people) await backend.putConfig(`subs:${p.id}`, maps[p.id]);
+    state.people = c.people; state.plan = plan; state.subs = { ...maps }; // für die Namen in der Tabelle
+    if (progress.length) await backend.putProgress(progress);
+    if (moved.length) await backend.putEntries(moved);
+    await backend.putConfig("plan", plan); // zuletzt: markiert die Umstellung als abgeschlossen
+    toast(`Neuer Zeitplan übernommen: ${progress.length} Fortschrittswerte und ${moved.length} Einträge zugeordnet${kept ? `, ${kept} bisherige Unterphasen behalten` : ""}.`);
+  }
   function applyData(d) {
     const c = d.config;
     state.people = c.people; state.plan = c.plan;
@@ -698,7 +767,7 @@
   }
 
   // ================= Abgleich =================
-  let backend = null, pending = 0, lastSig = "", lastSync = null, syncErr = "", migrating = false;
+  let backend = null, pending = 0, lastSig = "", lastSync = null, syncErr = "", migrating = false, migratingPlan = false;
   function setSync() {
     const s = $("sync");
     s.classList.remove("on", "err");
@@ -716,6 +785,12 @@
     try {
       let d = await backend.load();
       if (await setupData(d)) d = await backend.load();
+      if (needsNewPlan(d)) {
+        if (migratingPlan) return;
+        migratingPlan = true;
+        try { await migrateToNewPlan(d); } finally { migratingPlan = false; }
+        d = await backend.load();
+      }
       syncErr = ""; lastSync = new Date();
       const legacy = d.legacy; delete d.legacy;
       const sig = JSON.stringify(d);
@@ -843,17 +918,18 @@
       const phH = list.reduce((acc, s) => acc + (hrs[s.id] || 0), 0);
       return `<details class="phase${isCur ? " current" : ""}" data-ph="${esc(ph.id)}"${openPhases.has(ph.id) ? " open" : ""}>
         <summary>
-          <div class="ph-head"><h3>${esc(ph.name)}</h3>${isCur ? '<span class="tag now">jetzt</span>' : ""}${CHEV}</div>
+          <div class="ph-head">${ph.nr ? `<span class="ph-nr num">${esc(ph.nr)}</span>` : ""}<h3>${esc(ph.name)}</h3>${isCur ? '<span class="tag now">jetzt</span>' : ""}${ph.side ? '<span class="tag">Nebenphase</span>' : ""}${CHEV}</div>
           <div class="ph-meta"><span class="num">${fmtDate(ph.start, false)}–${fmtDate(ph.end)}</span><span>${list.length ? `${done} / ${list.length} fertig` : "keine Unterphasen"}</span>${phH ? `<span>${fmtH(phH)} h</span>` : ""}</div>
-          ${list.length ? `<div class="ph-bar">${pbar(pp, elapsedFrac(ph) * 100)}<span class="num">${Math.round(pp)} %</span></div>` : ""}
+          ${list.length ? `<div class="ph-bar">${pbar(pp, phaseSoll(v.id, ph))}<span class="num">${Math.round(pp)} %</span></div>` : ""}
         </summary>
         <div class="ph-body">
           ${ph.desc ? `<p class="ph-desc">${esc(ph.desc)}</p>` : ""}
           ${list.length ? `<ul class="subs">${list.map((s) => {
             const val = pct(v.id, s.id), h = hrs[s.id] || 0;
-            return `<li class="sub${val >= 100 ? " done" : ""}">
+            const meta = [s.result ? `Ergebnis: ${esc(s.result)}` : "", s.start && s.end ? `<span class="num">${fmtDate(s.start, false)}–${fmtDate(s.end, false)}</span>` : ""].filter(Boolean).join(" · ");
+            return `<li class="sub${val >= 100 ? " done" : ""}${isNow(s) && val < 100 ? " cur" : ""}">
               <div class="sub-main"><span class="tick">${val >= 100 ? CHECK : ""}</span>
-                <div><div class="sub-name">${esc(s.name)}</div>${s.desc ? `<div class="sub-desc">${esc(s.desc)}</div>` : ""}</div>
+                <div><div class="sub-name">${s.psp ? `<span class="psp num">${esc(s.psp)}</span> ` : ""}${esc(s.name)}${s.kept ? ' <span class="tag" title="Aus dem bisherigen Zeitplan übernommen">bisher</span>' : ""}</div>${s.desc ? `<div class="sub-desc">${esc(s.desc)}</div>` : ""}${meta ? `<div class="sub-desc">${meta}</div>` : ""}</div>
                 <span class="sub-h" title="Stunden von ${esc(v.name)}">${h ? `${fmtMin(h)} h` : "–"}</span></div>
               <div class="sub-ctl"><input type="range" min="0" max="100" step="5" value="${val}" data-sub="${esc(s.id)}" aria-label="Fortschritt ${esc(s.name)}"${own ? "" : " disabled"}><output>${val} %</output></div>
             </li>`;
@@ -883,7 +959,7 @@
         <div class="label" style="margin-top:4px">Meine Unterphasen (${list.length})</div>
         ${list.map((s, j) => `
           <div class="ed-sub" data-sub="${esc(s.id)}">
-            <input data-f="name" value="${esc(s.name)}" aria-label="Name der Unterphase">
+            <input data-f="name" value="${esc(s.name)}" aria-label="Name der Unterphase${s.psp ? " " + esc(s.psp) : ""}"${s.psp ? ` title="PSP ${esc(s.psp)}"` : ""}>
             <input data-f="desc" value="${esc(s.desc)}" placeholder="Beschreibung (optional)" aria-label="Beschreibung der Unterphase">
             <div class="ed-acts">
               <button type="button" class="icon" data-act="sub-up" ${j === 0 ? "disabled" : ""} aria-label="Unterphase nach oben">↑</button>
@@ -992,7 +1068,7 @@
   // ---------- Stunden: Auswahllisten ----------
   function subOptions(pid) {
     return `<option value="">Allgemein</option>` + state.plan.phases.filter((ph) => subsOf(pid, ph).length).map((ph) =>
-      `<optgroup label="${esc(ph.name)}">${subsOf(pid, ph).map((s) => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
+      `<optgroup label="${esc((ph.nr ? ph.nr + " " : "") + ph.name)}">${subsOf(pid, ph).map((s) => `<option value="${esc(s.id)}">${esc(subLabel(s))}</option>`).join("")}</optgroup>`).join("");
   }
   function fillSelect(el, html) { const prev = el.value; if (el._html !== html) { el._html = html; el.innerHTML = html; } if ([...el.options].some((o) => o.value === prev)) el.value = prev; }
   function renderHoursForms() {
@@ -1118,7 +1194,7 @@
     const head = `<tr><th>Phase</th>${P.map((p) => `<th${cls(p)}>${esc(p.name)}</th>`).join("")}</tr>`;
     const body = state.plan.phases.map((ph) => `<tr${cur && cur.id === ph.id ? ' class="now"' : ""}><td>${esc(ph.name)}</td>${P.map((p) => {
       const n = subsOf(p.id, ph).length, v = phasePct(p.id, ph);
-      return `<td${cls(p)}>${n ? `<span class="cell"><span class="num">${Math.round(v)} %</span>${pbar(v, elapsedFrac(ph) * 100, "mini")}</span>` : '<span class="muted">–</span>'}</td>`;
+      return `<td${cls(p)}>${n ? `<span class="cell"><span class="num">${Math.round(v)} %</span>${pbar(v, phaseSoll(p.id, ph), "mini")}</span>` : '<span class="muted">–</span>'}</td>`;
     }).join("")}</tr>`).join("");
     const foot = `<tr><td>Gesamt</td>${P.map((p) => `<td${cls(p)}><span class="num">${Math.round(personPct(p.id))} %</span></td>`).join("")}</tr>
       <tr><td>Unterphasen fertig</td>${P.map((p) => `<td${cls(p)}><span class="num">${doneCount(p.id)} / ${allSubsOf(p.id).length}</span></td>`).join("")}</tr>
@@ -1162,7 +1238,7 @@
         html += `<div class="entry" data-id="${esc(e.id)}">
           <div class="d">${d.toLocaleDateString("de-AT", { weekday: "short" })} ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.<span class="t">${e.start && e.end ? `${esc(e.start)}–${esc(e.end)}` : ""}</span></div>
           <div><div class="note">${esc(e.note) || '<span class="muted">(ohne Beschreibung)</span>'}</div>
-            <div class="meta"><span class="chip" title="${s ? esc(s.phase.name + " · " + s.name) : "Allgemein"}"><span>${s ? esc(s.name) : "Allgemein"}</span></span>${s ? `<span>${esc(s.phase.name)}</span>` : ""}</div></div>
+            <div class="meta"><span class="chip" title="${s ? esc(s.phase.name + " · " + subLabel(s)) : "Allgemein"}"><span>${s ? esc(subLabel(s)) : "Allgemein"}</span></span>${s ? `<span>${esc(s.phase.name)}</span>` : ""}</div></div>
           <div><div class="dur">${fmtMin(e.minutes)}</div><div class="acts"><button class="ghost" data-act="edit" type="button">Bearbeiten</button><button class="ghost danger" data-act="del" type="button">Löschen</button></div></div>
         </div>`;
       });
@@ -1279,21 +1355,21 @@
     ovWs.B2.z = "dd.mm.yyyy";
     XLSX.utils.book_append_sheet(wb, ovWs, "Übersicht");
     // Projektplan (alle Personen, filterbar)
-    const pl = [["Person", "Phase", "Unterphase", "Beschreibung", "Start", "Ende", "Fortschritt", "Stunden"]];
+    const pl = [["Person", "PSP-Nr.", "Phase", "Arbeitspaket", "Tätigkeiten / Beschreibung", "Ergebnis", "Start", "Ende", "Fortschritt", "Stunden"]];
     P.forEach((p) => {
       const hb = hoursBySub(p.id);
       state.plan.phases.forEach((ph) => {
         const list = subsOf(p.id, ph);
-        pl.push([p.name, ph.name, "(Phase gesamt)", ph.desc || "", ph.start ? xlDate(ph.start) : "", ph.end ? xlDate(ph.end) : "", list.length ? phasePct(p.id, ph) / 100 : "", hrs2(list.reduce((a, s) => a + (hb[s.id] || 0), 0))]);
-        list.forEach((s) => pl.push([p.name, ph.name, s.name, s.desc || "", "", "", pct(p.id, s.id) / 100, hrs2(hb[s.id] || 0)]));
+        pl.push([p.name, ph.nr || "", ph.name, "(Phase gesamt)", ph.desc || "", "", ph.start ? xlDate(ph.start) : "", ph.end ? xlDate(ph.end) : "", list.length ? phasePct(p.id, ph) / 100 : "", hrs2(list.reduce((a, s) => a + (hb[s.id] || 0), 0))]);
+        list.forEach((s) => pl.push([p.name, s.psp || (s.kept ? "bisher" : ""), ph.name, s.name, s.desc || "", s.result || "", s.start ? xlDate(s.start) : "", s.end ? xlDate(s.end) : "", pct(p.id, s.id) / 100, hrs2(hb[s.id] || 0)]));
       });
     });
-    const plWs = sheet(pl, [18, 20, 46, 28, 11, 11, 11, 9], { 4: "dd.mm.yyyy", 5: "dd.mm.yyyy", 6: "0%", 7: "0.00" }, 1);
-    plWs["!autofilter"] = { ref: `A1:H${pl.length}` };
+    const plWs = sheet(pl, [18, 8, 30, 34, 60, 30, 11, 11, 11, 9], { 6: "dd.mm.yyyy", 7: "dd.mm.yyyy", 8: "0%", 9: "0.00" }, 1);
+    plWs["!autofilter"] = { ref: `A1:J${pl.length}` };
     XLSX.utils.book_append_sheet(wb, plWs, "Projektplan");
     // Protokoll gesamt + je Person
     const head = ["Datum", "Von", "Bis", "Stunden", "Person", "Phase", "Unterphase", "Tätigkeit"];
-    const row = (e) => { const s = entrySub(e); return [xlDate(e.date), xlTime(e.start), xlTime(e.end), hrs2(e.minutes), e.person, s ? s.phase.name : "", s ? s.name : "Allgemein", e.note || ""]; };
+    const row = (e) => { const s = entrySub(e); return [xlDate(e.date), xlTime(e.start), xlTime(e.end), hrs2(e.minutes), e.person, s ? s.phase.name : "", s ? subLabel(s) : "Allgemein", e.note || ""]; };
     const logSheet = (list) => {
       const aoa = [head, ...list.map(row), ["Summe", "", "", { t: "n", f: list.length ? `SUM(D2:D${list.length + 1})` : "0" }]];
       const ws = sheet(aoa, [11, 7, 7, 9, 18, 20, 40, 60], { 0: "dd.mm.yyyy", 1: "hh:mm", 2: "hh:mm", 3: "0.00" }, 1);
@@ -1314,7 +1390,7 @@
     if (!window.XLSX) return flash($("expMsg"), "Das Excel-Modul konnte nicht geladen werden – Internet prüfen und Seite neu laden.", true);
     try {
       const buf = XLSX.write(buildWorkbook(), { bookType: "xlsx", type: "array", compression: true });
-      offerFile(`Maturaprojekt_Doppelhaushaelfte_${stamp()}.xlsx`, new Uint8Array(buf), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      offerFile(`Maturaprojekt_Naturform_${stamp()}.xlsx`, new Uint8Array(buf), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
       flash($("expMsg"), "Excel-Datei erstellt.");
     } catch { flash($("expMsg"), "Excel-Datei konnte nicht erstellt werden.", true); }
   });

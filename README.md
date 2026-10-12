@@ -1,4 +1,4 @@
-# Maturaprojekt Doppelhaushälfte – Projektplan & Arbeitsprotokoll
+# Maturaprojekt Naturform – Wohnbau in Reischach
 
 Web-App für das Maturaprojekt (Bautechnik): ein **Projektplan mit Fortschrittsanzeige** und ein
 **Arbeitsprotokoll für Stunden** – für vier Personen auf einer Seite, am Handy und am Laptop.
@@ -6,8 +6,9 @@ Web-App für das Maturaprojekt (Bautechnik): ein **Projektplan mit Fortschrittsa
 - **4 Personen:** Matthias Engl, Paul Bürgstaller, Josef Obexer, Felix Taferner – jede Person trägt Fortschritt und Stunden für sich ein,
   alle sehen den Fortschritt aller (4 Karten oben, „Alle im Vergleich“ in der Auswertung).
 - **Ich bin …:** Jede Person wählt oben einmal ihren Namen (wird im Browser gemerkt, kein Login).
-- **Projektplan:** 7 gemeinsame Phasen mit Terminen (aus `Projektzeitplan.xlsx`). Die **Unterphasen** kann jede Person
-  für sich anpassen („Meine Unterphasen bearbeiten“) – am Anfang hat jeder die 74 Unterphasen aus der Excel.
+- **Projektplan:** 6 Hauptphasen und 2 Nebenphasen mit Terminen (aus `Projektzeitplan_Naturform.xlsx`). Jede Person hat
+  die 108 Arbeitspakete mit PSP-Nr., Tätigkeiten, Ergebnis und Zeitraum und kann ihre Unterphasen für sich anpassen
+  („Meine Unterphasen bearbeiten“). Das Soll ergibt sich aus den Zeiträumen der Arbeitspakete.
   Fortschritt pro Unterphase per Regler in 5-%-Schritten, Soll-Linie aus den Phasendaten („X Punkte vor/hinter dem Zeitplan“).
 - **Stunden:** Stoppuhr (überlebt Neuladen) oder manuell nachtragen, jeweils mit Unterphase.
 - **Auswertung, Protokoll, Excel-Export, JSON-Sicherung.**
@@ -74,3 +75,14 @@ Frühere Stände lassen sich über **Datei → Versionsverlauf** wiederherstelle
 |---|---|
 | `index.html` | die komplette App (HTML, CSS, JavaScript) |
 | `google-apps-script/Code.gs` | Skript für die Google-Tabelle |
+
+## Umstellung auf den überarbeiteten Zeitplan
+
+Beim ersten Öffnen nach dem Update stellt die App automatisch auf den Zeitplan „Naturform“ um – ohne Datenverlust:
+
+- Fortschritt und Stunden alter Unterphasen, die einem neuen Arbeitspaket entsprechen, wandern dorthin
+  (z. B. „Grundstücksanalyse“ → 1.4, „Geländemodell modellieren“ → 3.5; bei mehreren alten gilt der höchste Wert).
+- Alte Unterphasen ohne passendes Arbeitspaket, aber mit Fortschritt oder Stunden, sowie selbst angelegte Unterphasen
+  bleiben als **„bisher“** in ihrer Phase erhalten und können bei Bedarf gelöscht werden.
+- Der alte Plan und die alten Unterphasen jeder Person werden im Blatt „Konfiguration“ archiviert
+  (`subs:plan-alt`, `subs:p1-alt` …), die alten Fortschrittswerte bleiben im Blatt „Fortschritt“ stehen.
